@@ -149,11 +149,12 @@ class FavoritesPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     var appState = context.watch<MyAppState>();
-
-    return ListView(children: [
-      for (var pair in appState.favorites)
-        ListTile(leading: Icon(Icons.favorite), title: Text(pair.asLowerCase))
-    ]);
+    return ListView.builder(
+      itemCount: appState.favorites.length,
+      itemBuilder: (context, index) {
+        return Text(appState.favorites[index].toString());
+      },
+    );
   }
 }
 // ...
