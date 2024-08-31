@@ -1,188 +1,102 @@
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
-import 'package:english_words/english_words.dart';
+import 'package:flutter/services.dart';
+import 'package:custom_navigation_bar/custom_navigation_bar.dart';
+
+import 'utils/theme.dart';
+import 'pages/home.dart';
 
 void main() {
   runApp(const MyApp());
 }
 
+/// App设置
 class MyApp extends StatelessWidget {
-  const MyApp({super.key});
+  const MyApp();
 
-  // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
-    return ChangeNotifierProvider(
-        create: (context) => MyAppState(),
-        child: MaterialApp(
-          title: 'Namer App',
-          theme: ThemeData(
-              useMaterial3: true,
-              colorScheme: ColorScheme.fromSeed(seedColor: Colors.blue)),
-          home: MyHomePage(),
-        ));
-  }
-}
-
-class MyAppState extends ChangeNotifier {
-  var current = WordPair.random();
-
-  void next() {
-    current = WordPair.random();
-    notifyListeners();
-  }
-
-  var favorites = <WordPair>[];
-
-  void toggleFavorite() {
-    if (favorites.contains(current)) {
-      favorites.remove(current);
-    } else {
-      favorites.add(current);
-    }
-    notifyListeners();
-  }
-}
-// ...
-
-class MyHomePage extends StatefulWidget {
-  @override
-  State<MyHomePage> createState() => _MyHomePageState();
-}
-
-class _MyHomePageState extends State<MyHomePage> {
-  var selectedIndex = 0;
-  @override
-  Widget build(BuildContext context) {
-    Widget page;
-    switch (selectedIndex) {
-      case 0:
-        page = GeneratorPage();
-        break;
-      case 1:
-        page = FavoritesPage();
-        break;
-      default:
-        throw UnimplementedError("What");
-    }
-
-    return LayoutBuilder(builder: (context, constraints) {
-      return Scaffold(
-        bottomNavigationBar: NavigationBar(
-          destinations: [
-            NavigationDestination(
-              icon: Icon(Icons.home),
-              label: 'Home'.toUpperCase(),
-            ),
-            NavigationDestination(
-              icon: Icon(Icons.favorite),
-              label: 'Favorites'.toUpperCase(),
-            ),
-          ],
-          selectedIndex: selectedIndex,
-          onDestinationSelected: (value) {
-            setState(() {
-              selectedIndex = value;
-            });
-          },
-        ),
-        body: Column(
-          children: [
-            Expanded(
-              child: Container(
-                color: Theme.of(context).colorScheme.primaryContainer,
-                child: page,
-              ),
-            ),
-          ],
-        ),
-      );
-    });
-  }
-}
-
-class GeneratorPage extends StatelessWidget {
-  @override
-  Widget build(BuildContext context) {
-    var appState = context.watch<MyAppState>();
-    var pair = appState.current;
-
-    IconData icon;
-    if (appState.favorites.contains(pair)) {
-      icon = Icons.favorite;
-    } else {
-      icon = Icons.favorite_border;
-    }
-
-    return Center(
-      child: Column(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: [
-          BigCard(pair: pair),
-          SizedBox(height: 10),
-          Row(
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              ElevatedButton.icon(
-                onPressed: () {
-                  appState.toggleFavorite();
-                },
-                icon: Icon(icon),
-                label: Text('Like'),
-              ),
-              SizedBox(width: 10),
-              ElevatedButton(
-                onPressed: () {
-                  appState.next();
-                },
-                child: Text('Next'),
-              ),
-            ],
-          ),
-        ],
+    SystemChrome.setSystemUIOverlayStyle(SystemUiOverlayStyle(
+      statusBarColor: Colors.transparent,
+      statusBarBrightness: Brightness.dark,
+      statusBarIconBrightness: Brightness.dark,
+    ));
+    return MaterialApp(
+      theme: ThemeData(
+        colorScheme: MaterialTheme.lightScheme(),
       ),
+      home: Home(),
     );
   }
 }
 
-class FavoritesPage extends StatelessWidget {
+/// 页面设置
+class Home extends StatefulWidget {
+  @override
+  State<Home> createState() => _HomeState();
+}
+
+class _HomeState extends State<Home> {
+  // 底部导航 和 组件映射关系
+  final map =
+      {0: HomePage(), 1: Placeholder(), 2: Placeholder()} as Map<int, Widget>;
+  // 当前页面
+  var _currentIndex = 0;
+
   @override
   Widget build(BuildContext context) {
-    var appState = context.watch<MyAppState>();
-    return ListView.builder(
-      itemCount: appState.favorites.length,
-      itemBuilder: (context, index) {
-        return Text(appState.favorites[index].toString());
-      },
+    Widget currentPage = map[_currentIndex] ?? HomePage();
+
+    return Scaffold(
+      extendBody: true,
+      body: currentPage,
+      bottomNavigationBar: bottomBar(),
     );
   }
-}
-// ...
 
-class BigCard extends StatelessWidget {
-  const BigCard({
-    super.key,
-    required this.pair,
-  });
+  final _barContainer = Colors.white;
+  final _onBarContainer = Colors.black;
 
-  final WordPair pair;
+  /// 底部导航栏 完成对selectedPage的控制
+  Widget bottomBar() {
+    onTap(int index) {
+      setState(() {
+        _currentIndex = index;
+      });
+    }
 
-  @override
-  Widget build(BuildContext context) {
-    final theme = Theme.of(context);
-    final style = theme.textTheme.displayMedium!
-        .copyWith(color: theme.colorScheme.surface);
-
-    return Card(
-      color: theme.colorScheme.primary,
-      child: Padding(
-        padding: const EdgeInsets.all(20.0),
-        child: Text(
-          pair.asLowerCase,
-          style: style,
-          semanticsLabel: "${pair.first}${pair.second}",
+    var items = [
+      CustomNavigationBarItem(
+        icon: Icon(Icons.home_outlined),
+        selectedIcon: Icon(Icons.home),
+      ),
+      CustomNavigationBarItem(
+        icon: Icon(
+          Icons.add_circle_outline,
+        ),
+        selectedIcon: Icon(
+          Icons.add_circle,
         ),
       ),
-    );
+      CustomNavigationBarItem(
+        icon: Icon(Icons.person_outline),
+        selectedIcon: Icon(Icons.person),
+      )
+    ];
+
+    return ClipRRect(
+        borderRadius: BorderRadius.vertical(top: Radius.circular(780)),
+        child: CustomNavigationBar(
+            // 动画逻辑
+            scaleCurve: Curves.fastEaseInToSlowEaseOut,
+            scaleFactor: 0.1,
+            iconSize: 32,
+            selectedColor: _onBarContainer,
+            unSelectedColor: _onBarContainer,
+            strokeColor: _barContainer,
+            backgroundColor: _barContainer,
+            // 事项与选择逻辑
+            items: items,
+            currentIndex: _currentIndex,
+            onTap: onTap));
   }
 }

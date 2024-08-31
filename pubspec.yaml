@@ -6,14 +6,12 @@ publish_to: "none" # Remove this line if you wish to publish to pub.dev
 version: 0.0.1+1
 
 environment:
-  sdk: ">=2.19.4 <4.0.0"
+  sdk: ">=3.0.0 <4.0.0"
 
 dependencies:
   flutter:
     sdk: flutter
-
-  english_words: ^4.0.0
-  provider: ^6.0.0
+  custom_navigation_bar: ^0.8.2
 
 dev_dependencies:
   flutter_test:
