@@ -40,9 +40,10 @@ class CalArea extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return SizedBox(
+    return Container(
       width: double.infinity,
       height: 68,
+      padding: EdgeInsets.fromLTRB(8, 0, 8, 0),
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceAround,
         children: getCalWeekItem(context),
@@ -92,7 +93,11 @@ class _CalItemState extends State<CalItem> {
     final now = DateTime.now();
     isSelected = widget.data[1] == now.day.toString();
 
+    var fontColor =
+        isSelected ? onContainerColor(context) : labelColor(context);
+
     return Container(
+      width: 52,
       margin: EdgeInsets.fromLTRB(0, 6, 0, 6),
       padding: EdgeInsets.fromLTRB(4, 2, 4, 2),
       decoration: isSelected
@@ -109,16 +114,14 @@ class _CalItemState extends State<CalItem> {
         children: [
           Text(
             widget.data[0],
-            style:
-                TextStyle(color: labelColor(context), fontSize: 12, height: 1),
+            style: TextStyle(color: fontColor, fontSize: 12, height: 1),
           ),
           SizedBox(
             height: 4,
           ),
           Text(
             widget.data[1],
-            style:
-                TextStyle(color: labelColor(context), fontSize: 21, height: 1),
+            style: TextStyle(color: fontColor, fontSize: 21, height: 1),
           ),
         ],
       ),
