@@ -15,7 +15,7 @@ class HeadArea extends StatelessWidget {
       height: 100,
       child: Text(
         "你好",
-        style: TextStyle(fontSize: 24),
+        style: TextStyle(fontSize: 22),
       ),
     );
   }
@@ -42,8 +42,8 @@ class CalArea extends StatelessWidget {
   Widget build(BuildContext context) {
     return Container(
       width: double.infinity,
-      height: 68,
-      padding: EdgeInsets.fromLTRB(8, 0, 8, 0),
+      height: 48,
+      padding: EdgeInsets.fromLTRB(24, 0, 24, 0),
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceAround,
         children: getCalWeekItem(context),
@@ -97,9 +97,8 @@ class _CalItemState extends State<CalItem> {
         isSelected ? onContainerColor(context) : labelColor(context);
 
     return Container(
-      width: 52,
+      width: 36,
       margin: EdgeInsets.fromLTRB(0, 6, 0, 6),
-      padding: EdgeInsets.fromLTRB(4, 2, 4, 2),
       decoration: isSelected
           ? BoxDecoration(
               color: containerColor(context),
@@ -114,14 +113,14 @@ class _CalItemState extends State<CalItem> {
         children: [
           Text(
             widget.data[0],
-            style: TextStyle(color: fontColor, fontSize: 12, height: 1),
+            style: TextStyle(color: fontColor, fontSize: 8, height: 1),
           ),
           SizedBox(
             height: 4,
           ),
           Text(
             widget.data[1],
-            style: TextStyle(color: fontColor, fontSize: 21, height: 1),
+            style: TextStyle(color: fontColor, fontSize: 12, height: 1),
           ),
         ],
       ),
@@ -151,7 +150,7 @@ class TimeLine extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      margin: EdgeInsets.fromLTRB(64, 164, 0, 0),
+      margin: EdgeInsets.fromLTRB(64, 148, 0, 0),
       width: 4,
       height: double.infinity,
       color: middleContainerColor(context),
@@ -169,7 +168,7 @@ class TopPage extends StatelessWidget {
             borderRadius: BorderRadius.vertical(top: Radius.circular(64)),
             color: topContainerColor(context),
           ),
-          margin: EdgeInsets.fromLTRB(0, 164, 0, 0),
+          margin: EdgeInsets.fromLTRB(0, 148, 0, 0),
           width: double.infinity,
           height: double.infinity,
         ),
