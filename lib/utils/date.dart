@@ -14,6 +14,13 @@ List<List<int>> generateWeeksDates(int num) {
   int startWeekDay = now.weekday;
   day = day - startWeekDay + 1; // 当前周的周一
 
+  if (day < 0) {
+    DateTime lastMonthEnd = DateTime(now.year, now.month, 0, 23, 59, 59);
+    int lastMonthlastDay = lastMonthEnd.day;
+    day += lastMonthlastDay;
+    lastDay = lastMonthlastDay;
+  }
+
   for (int i = 0; i < num; i++) {
     List<int> weekDays = [];
     for (int j = 0; j < 7; j++) {
@@ -28,6 +35,11 @@ List<List<int>> generateWeeksDates(int num) {
     weeks.add(weekDays);
   }
   return weeks;
+}
+
+// 生成最近1周的日期数组
+List<int> generateOneWeeksDates() {
+  return generateWeeksDates(1)[0];
 }
 
 // 生成最近四周的日期数组

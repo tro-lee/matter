@@ -1,3 +1,5 @@
+import 'dart:core';
+
 import 'package:flutter/material.dart';
 import 'package:namer_app/utils/colors.dart';
 import 'package:namer_app/utils/date.dart';
@@ -13,7 +15,7 @@ class HeadArea extends StatelessWidget {
       height: 100,
       child: Text(
         "你好",
-        style: TextStyle(fontSize: 32),
+        style: TextStyle(fontSize: 24),
       ),
     );
   }
@@ -40,7 +42,7 @@ class CalArea extends StatelessWidget {
   Widget build(BuildContext context) {
     return SizedBox(
       width: double.infinity,
-      height: 64,
+      height: 68,
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceAround,
         children: getCalWeekItem(context),
@@ -50,36 +52,77 @@ class CalArea extends StatelessWidget {
 
   List<Widget> getCalWeekItem(BuildContext context) {
     final weekNum = ["一", "二", "三", "四", "五", "六", "日"];
-    final weeks = generateFourWeeksDates();
+    final week = generateOneWeeksDates();
 
     List<List<String>> datas = [];
 
     for (var a = 0; a < 7; a++) {
       List<String> data = [];
       data.add(weekNum[a]);
-      for (var week in weeks) {
-        data.add(week[a].toString());
-      }
+      data.add(week[a].toString());
       datas.add(data);
     }
 
     return datas
-        .map((data) => Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                Text(
-                  data[0],
-                  style: TextStyle(
-                      color: labelColor(context), fontSize: 16, height: 1),
-                ),
-                Text(
-                  data[1],
-                  style: TextStyle(
-                      color: labelColor(context), fontSize: 28, height: 1),
-                ),
-              ],
-            ))
+        .map(
+          (data) => CalItem(data: data),
+        )
         .toList();
+  }
+}
+
+class CalItem extends StatefulWidget {
+  final List<String> data;
+
+  CalItem({super.key, this.data = const []});
+
+  @override
+  State<CalItem> createState() => _CalItemState();
+}
+
+class _CalItemState extends State<CalItem> {
+  var isSelected = false;
+
+  @override
+  Widget build(BuildContext context) {
+    if (widget.data.isEmpty) {
+      throw Exception("数据异常");
+    }
+
+    final now = DateTime.now();
+    isSelected = widget.data[1] == now.day.toString();
+
+    return Container(
+      margin: EdgeInsets.fromLTRB(0, 6, 0, 6),
+      padding: EdgeInsets.fromLTRB(4, 2, 4, 2),
+      decoration: isSelected
+          ? BoxDecoration(
+              color: containerColor(context),
+              borderRadius: BorderRadius.only(
+                  topLeft: Radius.circular(20),
+                  topRight: Radius.circular(20),
+                  bottomLeft: Radius.circular(12),
+                  bottomRight: Radius.circular(12)))
+          : null,
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          Text(
+            widget.data[0],
+            style:
+                TextStyle(color: labelColor(context), fontSize: 12, height: 1),
+          ),
+          SizedBox(
+            height: 4,
+          ),
+          Text(
+            widget.data[1],
+            style:
+                TextStyle(color: labelColor(context), fontSize: 21, height: 1),
+          ),
+        ],
+      ),
+    );
   }
 }
 
