@@ -1,3 +1,4 @@
+import 'package:buhuiwangshi/utils/standard.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:custom_navigation_bar/custom_navigation_bar.dart';
@@ -6,7 +7,7 @@ import 'package:jiffy/jiffy.dart';
 
 import 'utils/theme.dart';
 import 'pages/home.dart';
-import 'pages/add.dart';
+import 'pages/add/add.dart';
 
 void main() {
   runApp(const MyApp());
@@ -31,11 +32,7 @@ class MyApp extends StatelessWidget {
       builder: FlutterSmartDialog.init(),
       theme: ThemeData(
           colorScheme: MaterialTheme.lightScheme(), fontFamily: "PingFang"),
-      home: MediaQuery(
-          data: MediaQuery.of(context).copyWith(
-            textScaler: TextScaler.linear(1),
-          ),
-          child: Home()),
+      home: standardContainer(context: context, child: Home()),
     );
   }
 }

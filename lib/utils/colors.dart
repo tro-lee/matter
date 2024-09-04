@@ -12,6 +12,10 @@ Color primaryColor(context) {
   return Theme.of(context).colorScheme.primary;
 }
 
+Color onPrimaryColor(context) {
+  return Theme.of(context).colorScheme.onPrimary;
+}
+
 Color textColor(context) {
   return Colors.black87;
 }

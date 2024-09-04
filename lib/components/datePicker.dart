@@ -31,10 +31,10 @@ class _DatePickerState extends State<DatePicker> {
   @override
   Widget build(BuildContext context) {
     var commonTextStyle = DayStyle(
-        dayStrStyle: TextStyle(color: labelColor(context), fontSize: 14),
+        dayStrStyle: TextStyle(color: labelColor(context), fontSize: 18),
         dayNumStyle: TextStyle(
             color: textColor(context),
-            fontSize: 18,
+            fontSize: 24,
             fontWeight: FontWeight.bold),
         monthStrStyle: TextStyle(
           color: labelColor(context),
@@ -89,11 +89,11 @@ class _DatePickerState extends State<DatePicker> {
         },
         style: ElevatedButton.styleFrom(
             backgroundColor: middleContainerColor(context)),
-        child: Text("更新"));
+        child: Text("更新", style: TextStyle(fontSize: 18)));
 
     return AnimatedContainer(
       curve: Curves.fastOutSlowIn,
-      height: widget.isRepeatWeek ? 312 : 252,
+      height: widget.isRepeatWeek ? 272 : 230,
       duration: Duration(milliseconds: 500),
       onEnd: () {
         setState(() {
@@ -122,7 +122,13 @@ class _DatePickerState extends State<DatePicker> {
       padding: const EdgeInsets.fromLTRB(8, 0, 8, 0),
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
-        children: [Text(text), child],
+        children: [
+          Text(
+            text,
+            style: TextStyle(fontSize: 18),
+          ),
+          child
+        ],
       ),
     );
   }

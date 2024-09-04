@@ -32,7 +32,7 @@ class Label extends StatelessWidget {
   Widget build(BuildContext context) {
     var _labelStyle = labelStyle ??
         LabelStyle(
-            labelTextStyle: TextStyle(fontSize: 24),
+            labelTextStyle: TextStyle(fontSize: 18),
             labelPadding: EdgeInsets.fromLTRB(24, 16, 0, 16),
             labelWidth: 96,
             safeWidth: 64);

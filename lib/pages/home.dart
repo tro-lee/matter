@@ -15,7 +15,7 @@ class HeadArea extends StatelessWidget {
       height: 100,
       child: Text(
         "你好",
-        style: TextStyle(fontSize: 28, color: textColor(context)),
+        style: TextStyle(fontSize: 24, color: textColor(context)),
       ),
     );
   }
