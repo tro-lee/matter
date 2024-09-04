@@ -72,6 +72,7 @@ class CalArea extends StatelessWidget {
   }
 }
 
+/// 需要存储当前是否选中状态
 class CalItem extends StatefulWidget {
   final List<String> data;
 

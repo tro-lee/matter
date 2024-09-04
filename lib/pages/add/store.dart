@@ -21,7 +21,25 @@ class FormStore extends ChangeNotifier {
     notifyListeners();
   }
 
-  int color = 0xF5F8FF; // 颜色
+  int color = 0xFFEBF1FF; // 颜色
+  void setColor(color) {
+    this.color = color;
+    notifyListeners();
+  }
+
+  int fontColor = 0xff415f91; // 字体颜色
+  void setFontColor(color) {
+    fontColor = color;
+    notifyListeners();
+  }
+
+  /// 重置颜色
+  void resetColor() {
+    fontColor = 0xff415f91;
+    color = 0xFFEBF1FF;
+    notifyListeners();
+  }
+
   String remark = ""; // 备注
 
   DateTime? datetime; // 时间
@@ -45,7 +63,7 @@ class FormStore extends ChangeNotifier {
     }
   }
 
-  IconData? icon; // 图标
+  IconData icon = Icons.edit; // 图标
 
   String? name; // 名称
   void setName(newName) {
@@ -56,11 +74,8 @@ class FormStore extends ChangeNotifier {
   MatterTypeItem? type; // 类型
   void setType(MatterTypeItem mti) {
     type = mti;
+    icon = mti.iconData;
     notifyListeners();
-  }
-
-  bool get isEdited {
-    return (datetime ?? icon ?? name ?? type) != null;
   }
 
   // 修改日期相关配置，例如日期、是否天重复、是否周重复

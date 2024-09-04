@@ -12,7 +12,13 @@ class TemplateArea extends StatelessWidget {
     final formStore = Provider.of<FormStore>(context);
     final name = formStore.name ?? '';
     final time = formStore.datetime;
-    final icon = formStore.type?.iconData ?? Icons.edit;
+    final icon = formStore.icon;
+    final levelIcon = formStore.level == 'low'
+        ? Icons.notifications_off_outlined
+        : Icons.notifications_outlined;
+
+    final color = Color(formStore.color);
+    final fontColor = Color(formStore.fontColor);
 
     return Container(
       height: 120,
@@ -21,13 +27,30 @@ class TemplateArea extends StatelessWidget {
           color: topContainerColor(context),
           borderRadius: BorderRadius.all(Radius.circular(16))),
       child: Row(
-        children: [line(context, icon), content(context, name, time)],
+        children: [
+          line(
+              context: context,
+              icon: icon,
+              backgroundColor: color,
+              fontColor: fontColor),
+          content(
+              context: context,
+              templateName: name,
+              datetime: time,
+              levelIcon: levelIcon,
+              color: color,
+              fontColor: fontColor)
+        ],
       ),
     );
   }
 
   /// 线
-  Widget line(context, IconData icon) {
+  Widget line(
+      {context,
+      required IconData icon,
+      required Color backgroundColor,
+      required Color fontColor}) {
     return Padding(
       padding: const EdgeInsets.fromLTRB(12, 0, 12, 0),
       child: Stack(
@@ -40,12 +63,12 @@ class TemplateArea extends StatelessWidget {
           ),
           Container(
             decoration: BoxDecoration(
-              color: middleContainerColor(context),
+              color: backgroundColor,
               borderRadius: BorderRadius.all(Radius.circular(180)),
             ),
             width: 64,
             height: 64,
-            child: Icon(icon, size: 32, color: primaryColor(context)),
+            child: Icon(icon, size: 32, color: fontColor),
           ),
         ],
       ),
@@ -53,12 +76,18 @@ class TemplateArea extends StatelessWidget {
   }
 
   /// 内容
-  Widget content(context, templateName, datetime) {
+  Widget content(
+      {required context,
+      required String templateName,
+      required DateTime? datetime,
+      required IconData levelIcon,
+      required Color color,
+      required Color fontColor}) {
     var name = templateName.isEmpty ? "点我选择模板" : templateName;
 
     String time = '00:00';
     if (datetime != null) {
-      var timeJiffy = Jiffy.parseFromDateTime(datetime!);
+      var timeJiffy = Jiffy.parseFromDateTime(datetime);
       time = timeJiffy.format(pattern: "HH:mm a");
     }
 
@@ -66,8 +95,7 @@ class TemplateArea extends StatelessWidget {
       child: Container(
         margin: const EdgeInsets.fromLTRB(0, 8, 12, 8),
         decoration: BoxDecoration(
-            color: middleContainerColor(context),
-            borderRadius: BorderRadius.all(Radius.circular(120))),
+            color: color, borderRadius: BorderRadius.all(Radius.circular(120))),
         child: Padding(
           padding: const EdgeInsets.fromLTRB(12, 0, 12, 0),
           child: Row(
@@ -82,7 +110,7 @@ class TemplateArea extends StatelessWidget {
                         maxLines: 1,
                         overflow: TextOverflow.ellipsis,
                         style: TextStyle(
-                          color: primaryColor(context),
+                          color: fontColor,
                           fontSize: 24,
                         )),
                     time.isEmpty
@@ -90,14 +118,14 @@ class TemplateArea extends StatelessWidget {
                         : Text(time,
                             style: TextStyle(
                               fontSize: 18,
-                              color: primaryColor(context),
+                              color: fontColor,
                             ))
                   ],
                 ),
               ),
               Icon(
-                Icons.notifications_none,
-                color: primaryColor(context),
+                levelIcon,
+                color: fontColor,
                 size: 24,
               )
             ],

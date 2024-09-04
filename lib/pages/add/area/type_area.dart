@@ -9,15 +9,9 @@ import 'package:flutter_smart_dialog/flutter_smart_dialog.dart';
 import 'package:provider/provider.dart';
 
 // ignore: must_be_immutable
-class TypeArea extends StatefulWidget {
-  var isPopup = false;
+class TypeArea extends StatelessWidget {
   TypeArea({key});
 
-  @override
-  State<TypeArea> createState() => _TypeAreaState();
-}
-
-class _TypeAreaState extends State<TypeArea> {
   @override
   Widget build(BuildContext context) {
     var formStore = Provider.of<FormStore>(context);

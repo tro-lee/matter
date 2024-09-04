@@ -1,4 +1,5 @@
 import 'package:buhuiwangshi/pages/add/area/reminder_level_area.dart';
+import 'package:buhuiwangshi/pages/add/area/style_area.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
@@ -79,7 +80,8 @@ class Body extends StatelessWidget {
         NameArea(),
         TimeArea(),
         TypeArea(),
-        ReminderLevelArea()
+        ReminderLevelArea(),
+        StyleArea(),
       ],
     );
 
