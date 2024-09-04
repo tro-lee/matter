@@ -8,6 +8,14 @@ Color onContainerColor(context) {
   return Theme.of(context).colorScheme.onPrimaryContainer;
 }
 
+Color primaryColor(context) {
+  return Theme.of(context).colorScheme.primary;
+}
+
+Color textColor(context) {
+  return Colors.black87;
+}
+
 Color middleContainerColor(context) {
   return Color(0xFFEBF1FF);
 }

@@ -1,8 +1,8 @@
 import 'dart:core';
 
 import 'package:flutter/material.dart';
-import 'package:namer_app/utils/colors.dart';
-import 'package:namer_app/utils/date.dart';
+import 'package:buhuiwangshi/utils/colors.dart';
+import 'package:buhuiwangshi/utils/date.dart';
 
 /// 头部区域
 class HeadArea extends StatelessWidget {
@@ -15,7 +15,7 @@ class HeadArea extends StatelessWidget {
       height: 100,
       child: Text(
         "你好",
-        style: TextStyle(fontSize: 22),
+        style: TextStyle(fontSize: 28, color: textColor(context)),
       ),
     );
   }
@@ -93,8 +93,7 @@ class _CalItemState extends State<CalItem> {
     final now = DateTime.now();
     isSelected = widget.data[1] == now.day.toString();
 
-    var fontColor =
-        isSelected ? onContainerColor(context) : labelColor(context);
+    var fontColor = isSelected ? textColor(context) : labelColor(context);
 
     return Container(
       width: 36,
@@ -102,25 +101,21 @@ class _CalItemState extends State<CalItem> {
       decoration: isSelected
           ? BoxDecoration(
               color: containerColor(context),
-              borderRadius: BorderRadius.only(
-                  topLeft: Radius.circular(20),
-                  topRight: Radius.circular(20),
-                  bottomLeft: Radius.circular(12),
-                  bottomRight: Radius.circular(12)))
+              borderRadius: BorderRadius.all(Radius.circular(12)))
           : null,
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
           Text(
             widget.data[0],
-            style: TextStyle(color: fontColor, fontSize: 8, height: 1),
+            style: TextStyle(color: fontColor, fontSize: 12, height: 1),
           ),
           SizedBox(
             height: 4,
           ),
           Text(
             widget.data[1],
-            style: TextStyle(color: fontColor, fontSize: 12, height: 1),
+            style: TextStyle(color: fontColor, fontSize: 18, height: 1),
           ),
         ],
       ),

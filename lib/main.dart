@@ -1,9 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:custom_navigation_bar/custom_navigation_bar.dart';
+import 'package:flutter_smart_dialog/flutter_smart_dialog.dart';
+import 'package:jiffy/jiffy.dart';
 
 import 'utils/theme.dart';
 import 'pages/home.dart';
+import 'pages/add.dart';
 
 void main() {
   runApp(const MyApp());
@@ -20,11 +23,19 @@ class MyApp extends StatelessWidget {
       statusBarBrightness: Brightness.dark,
       statusBarIconBrightness: Brightness.dark,
     ));
+
+    Jiffy.setLocale('zh_CN');
+
     return MaterialApp(
+      navigatorObservers: [FlutterSmartDialog.observer],
+      builder: FlutterSmartDialog.init(),
       theme: ThemeData(
-        colorScheme: MaterialTheme.lightScheme(),
-      ),
-      home: Home(),
+          colorScheme: MaterialTheme.lightScheme(), fontFamily: "PingFang"),
+      home: MediaQuery(
+          data: MediaQuery.of(context).copyWith(
+            textScaler: TextScaler.linear(1),
+          ),
+          child: Home()),
     );
   }
 }
@@ -53,12 +64,37 @@ class _HomeState extends State<Home> {
     );
   }
 
-  final _barContainer = Colors.white;
-  final _onBarContainer = Colors.black;
+  Route animateRoute({required Widget child}) {
+    return PageRouteBuilder(
+      pageBuilder: (context, animation, secondaryAnimation) {
+        const begin = Offset(0.0, 1.0);
+        const end = Offset.zero;
+        const curve = Curves.ease;
+
+        final tween =
+            Tween(begin: begin, end: end).chain(CurveTween(curve: curve));
+        final offsetAnimation = animation.drive(tween);
+
+        return SlideTransition(position: offsetAnimation, child: child);
+      },
+      transitionsBuilder: (context, animation, secondaryAnimation, child) {
+        return child;
+      },
+    );
+  }
 
   /// 底部导航栏 完成对selectedPage的控制
   Widget bottomBar() {
+    const barContainer = Colors.white;
+    const onBarContainer = Colors.black;
+
     onTap(int index) {
+      if (index == 1) {
+        Future.delayed(Duration.zero, () {
+          Navigator.push(context, animateRoute(child: AddPage()));
+        });
+        index = _currentIndex;
+      }
       setState(() {
         _currentIndex = index;
       });
@@ -83,20 +119,22 @@ class _HomeState extends State<Home> {
       )
     ];
 
+    var customNavigationBar = CustomNavigationBar(
+        // 动画逻辑
+        scaleCurve: Curves.fastEaseInToSlowEaseOut,
+        scaleFactor: 0.1,
+        iconSize: 28,
+        selectedColor: onBarContainer,
+        unSelectedColor: onBarContainer,
+        strokeColor: barContainer,
+        backgroundColor: barContainer,
+        // 事项与选择逻辑
+        items: items,
+        currentIndex: _currentIndex,
+        onTap: onTap);
+
     return ClipRRect(
         borderRadius: BorderRadius.vertical(top: Radius.circular(780)),
-        child: CustomNavigationBar(
-            // 动画逻辑
-            scaleCurve: Curves.fastEaseInToSlowEaseOut,
-            scaleFactor: 0.1,
-            iconSize: 32,
-            selectedColor: _onBarContainer,
-            unSelectedColor: _onBarContainer,
-            strokeColor: _barContainer,
-            backgroundColor: _barContainer,
-            // 事项与选择逻辑
-            items: items,
-            currentIndex: _currentIndex,
-            onTap: onTap));
+        child: customNavigationBar);
   }
 }
