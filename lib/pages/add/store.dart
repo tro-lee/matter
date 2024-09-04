@@ -2,9 +2,6 @@ import 'package:buhuiwangshi/constant/candidates.dart';
 import 'package:day_night_time_picker/day_night_time_picker.dart';
 import 'package:flutter/material.dart';
 
-/// 以下是数据部分
-enum ReminderLevel { low, high }
-
 class FormStore extends ChangeNotifier {
   bool isRepeatWeek = false; // 是否周重复
   void setIsRepeatWeek(newIsRepeatWeek) {
@@ -18,7 +15,11 @@ class FormStore extends ChangeNotifier {
     notifyListeners();
   }
 
-  ReminderLevel level = ReminderLevel.low; // 提醒强度
+  String level = "low"; // 提醒强度
+  void setLevel(level) {
+    this.level = level;
+    notifyListeners();
+  }
 
   int color = 0xF5F8FF; // 颜色
   String remark = ""; // 备注

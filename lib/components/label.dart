@@ -1,16 +1,16 @@
 import 'package:flutter/material.dart';
 
 class LabelStyle {
-  TextStyle? labelTextStyle;
-  EdgeInsets? labelPadding;
-  double? labelWidth;
-  double? safeWidth;
+  TextStyle labelTextStyle;
+  EdgeInsets labelPadding;
+  double labelWidth;
+  double safeWidth;
 
   LabelStyle(
-      {this.labelTextStyle,
-      this.labelWidth,
-      this.labelPadding,
-      this.safeWidth});
+      {this.labelTextStyle = const TextStyle(fontSize: 18),
+      this.labelWidth = 96,
+      this.labelPadding = const EdgeInsets.fromLTRB(24, 16, 0, 16),
+      this.safeWidth = 64});
 }
 
 class Label extends StatelessWidget {
@@ -30,12 +30,7 @@ class Label extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    var _labelStyle = labelStyle ??
-        LabelStyle(
-            labelTextStyle: TextStyle(fontSize: 18),
-            labelPadding: EdgeInsets.fromLTRB(24, 16, 0, 16),
-            labelWidth: 96,
-            safeWidth: 64);
+    var _labelStyle = labelStyle ?? LabelStyle();
 
     return SizedBox(
       height: height,
