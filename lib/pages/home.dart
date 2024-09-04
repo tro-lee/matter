@@ -22,14 +22,16 @@ class HeadArea extends StatelessWidget {
 }
 
 class UnderPage extends StatelessWidget {
+  const UnderPage({super.key});
+
   @override
   Widget build(BuildContext context) {
     return Container(
-      padding: EdgeInsets.fromLTRB(16, 0, 16, 0),
+      padding: const EdgeInsets.fromLTRB(16, 0, 16, 0),
       width: double.infinity,
       height: double.infinity,
       alignment: Alignment.topLeft,
-      child: HeadArea(),
+      child: const HeadArea(),
     );
   }
 }
@@ -43,7 +45,7 @@ class CalArea extends StatelessWidget {
     return Container(
       width: double.infinity,
       height: 48,
-      padding: EdgeInsets.fromLTRB(24, 0, 24, 0),
+      padding: const EdgeInsets.fromLTRB(24, 0, 24, 0),
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceAround,
         children: getCalWeekItem(context),
@@ -72,11 +74,11 @@ class CalArea extends StatelessWidget {
   }
 }
 
-/// 需要存储当前是否选中状态
+/// 需要存储当前是否选中状态, 需要Stateful
 class CalItem extends StatefulWidget {
   final List<String> data;
 
-  CalItem({super.key, this.data = const []});
+  const CalItem({super.key, this.data = const []});
 
   @override
   State<CalItem> createState() => _CalItemState();
@@ -98,11 +100,11 @@ class _CalItemState extends State<CalItem> {
 
     return Container(
       width: 36,
-      margin: EdgeInsets.fromLTRB(0, 6, 0, 6),
+      margin: const EdgeInsets.fromLTRB(0, 6, 0, 6),
       decoration: isSelected
           ? BoxDecoration(
               color: containerColor(context),
-              borderRadius: BorderRadius.all(Radius.circular(12)))
+              borderRadius: const BorderRadius.all(Radius.circular(12)))
           : null,
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
@@ -111,7 +113,7 @@ class _CalItemState extends State<CalItem> {
             widget.data[0],
             style: TextStyle(color: fontColor, fontSize: 12, height: 1),
           ),
-          SizedBox(
+          const SizedBox(
             height: 4,
           ),
           Text(
@@ -125,28 +127,32 @@ class _CalItemState extends State<CalItem> {
 }
 
 class MiddlePage extends StatelessWidget {
+  const MiddlePage({super.key});
+
   @override
   Widget build(BuildContext context) {
     return Container(
       decoration: BoxDecoration(
-        borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
+        borderRadius: const BorderRadius.vertical(top: Radius.circular(20)),
         color: middleContainerColor(context),
       ),
-      margin: EdgeInsets.fromLTRB(0, 100, 0, 0),
+      margin: const EdgeInsets.fromLTRB(0, 100, 0, 0),
       alignment: Alignment.topCenter,
       width: double.infinity,
       height: double.infinity,
-      child: CalArea(),
+      child: const CalArea(),
     );
   }
 }
 
 /// 时间线
 class TimeLine extends StatelessWidget {
+  const TimeLine({super.key});
+
   @override
   Widget build(BuildContext context) {
     return Container(
-      margin: EdgeInsets.fromLTRB(64, 148, 0, 0),
+      margin: const EdgeInsets.fromLTRB(64, 148, 0, 0),
       width: 4,
       height: double.infinity,
       color: middleContainerColor(context),
@@ -155,33 +161,37 @@ class TimeLine extends StatelessWidget {
 }
 
 class TopPage extends StatelessWidget {
+  const TopPage({super.key});
+
   @override
   Widget build(BuildContext context) {
     return Stack(
       children: [
         Container(
           decoration: BoxDecoration(
-            borderRadius: BorderRadius.vertical(top: Radius.circular(64)),
+            borderRadius: const BorderRadius.vertical(top: Radius.circular(64)),
             color: topContainerColor(context),
           ),
-          margin: EdgeInsets.fromLTRB(0, 148, 0, 0),
+          margin: const EdgeInsets.fromLTRB(0, 148, 0, 0),
           width: double.infinity,
           height: double.infinity,
         ),
-        TimeLine()
+        const TimeLine()
       ],
     );
   }
 }
 
 class HomePage extends StatelessWidget {
+  const HomePage({super.key});
+
   @override
   Widget build(BuildContext context) {
     return Container(
       color: containerColor(context),
       height: double.infinity,
       width: double.infinity,
-      child: Stack(
+      child: const Stack(
         children: [UnderPage(), MiddlePage(), TopPage()],
       ),
     );

@@ -21,7 +21,7 @@ class AddPage extends StatelessWidget {
     return standardContainer(
       context: context,
       child: Scaffold(
-        appBar: TopAppBar(),
+        appBar: const TopAppBar(),
         body: Body(),
       ),
     );
@@ -30,7 +30,7 @@ class AddPage extends StatelessWidget {
 
 /// 以下是头部部分
 class TopAppBar extends StatelessWidget implements PreferredSizeWidget {
-  TopAppBar({super.key});
+  const TopAppBar({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -66,7 +66,7 @@ class TopAppBar extends StatelessWidget implements PreferredSizeWidget {
   }
 
   @override
-  Size get preferredSize => Size(double.infinity, 64);
+  Size get preferredSize => const Size(double.infinity, 64);
 }
 
 /// 以下是内容部分
@@ -74,7 +74,7 @@ class Body extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     /// 各个区域
-    var column = Column(
+    var column = const Column(
       children: [
         TemplateArea(),
         NameArea(),

@@ -16,8 +16,8 @@ class NameArea extends StatelessWidget {
           padding: const EdgeInsets.fromLTRB(8.0, 0, 0, 0),
           child: TextField(
             onChanged: setName,
-            style: TextStyle(fontSize: 18),
-            decoration: InputDecoration.collapsed(
+            style: const TextStyle(fontSize: 18),
+            decoration: const InputDecoration.collapsed(
                 hintText: "请输入名称", hintStyle: TextStyle(color: Colors.black38)),
           ),
         ));

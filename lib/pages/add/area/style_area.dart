@@ -21,7 +21,7 @@ class StyleArea extends StatelessWidget {
       onPressed: () async {
         if (SystemUtils.hasFocus) {
           SystemUtils.hideKeyShowUnfocus();
-          await Future.delayed(Duration(milliseconds: 100));
+          await Future.delayed(const Duration(milliseconds: 100));
         }
         SmartDialog.show(
             builder: (context) => ColorPicker(
@@ -40,7 +40,7 @@ class StyleArea extends StatelessWidget {
       onPressed: () async {
         if (SystemUtils.hasFocus) {
           SystemUtils.hideKeyShowUnfocus();
-          await Future.delayed(Duration(milliseconds: 100));
+          await Future.delayed(const Duration(milliseconds: 100));
         }
         SmartDialog.show(
             builder: (context) => ColorPicker(
@@ -55,11 +55,11 @@ class StyleArea extends StatelessWidget {
         text: "样式",
         child: Row(
           children: [
-            SizedBox(
+            const SizedBox(
               width: 8,
             ),
             textButton,
-            SizedBox(
+            const SizedBox(
               width: 16,
             ),
             elevatedButton,
@@ -67,7 +67,7 @@ class StyleArea extends StatelessWidget {
                 onPressed: () {
                   formStore.resetColor();
                 },
-                icon: Icon(Icons.restart_alt_outlined))
+                icon: const Icon(Icons.restart_alt_outlined))
           ],
         ));
   }

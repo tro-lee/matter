@@ -44,7 +44,7 @@ class _DatePickerState extends State<DatePicker> {
 
     final focusDate = widget.dateTime ?? DateTime.now();
     final fristDate = DateTime.now();
-    final lastDate = focusDate.add(Duration(days: 365));
+    final lastDate = focusDate.add(const Duration(days: 365));
 
     final EasyInfiniteDateTimelineController _controller =
         EasyInfiniteDateTimelineController();
@@ -78,7 +78,7 @@ class _DatePickerState extends State<DatePicker> {
               },
             ),
           )
-        : SizedBox();
+        : const SizedBox();
 
     final easyDatePicker = getEasyDatePicker(
         _controller, focusDate, fristDate, lastDate, commonTextStyle, context);
@@ -90,12 +90,12 @@ class _DatePickerState extends State<DatePicker> {
         },
         style: ElevatedButton.styleFrom(
             backgroundColor: middleContainerColor(context)),
-        child: Text("更新", style: TextStyle(fontSize: 18)));
+        child: const Text("更新", style: TextStyle(fontSize: 18)));
 
     return AnimatedContainer(
       curve: Curves.fastOutSlowIn,
       height: widget.isRepeatWeek ? 272 : 230,
-      duration: Duration(milliseconds: 500),
+      duration: const Duration(milliseconds: 500),
       onEnd: () {
         setState(() {
           widget.finsihAnimated = widget.isRepeatWeek;
@@ -126,7 +126,7 @@ class _DatePickerState extends State<DatePicker> {
         children: [
           Text(
             text,
-            style: TextStyle(fontSize: 18),
+            style: const TextStyle(fontSize: 18),
           ),
           child
         ],
@@ -149,7 +149,7 @@ class _DatePickerState extends State<DatePicker> {
           widget.dateTime = selectedDate;
         });
       },
-      selectionMode: SelectionMode.none(),
+      selectionMode: const SelectionMode.none(),
       controller: _controller,
       focusDate: focusDate,
       firstDate: fristDate,
@@ -170,7 +170,7 @@ class _DatePickerState extends State<DatePicker> {
           borderRadius: 16,
           decoration: BoxDecoration(
             color: middleContainerColor(context),
-            borderRadius: BorderRadius.all(Radius.circular(18)),
+            borderRadius: const BorderRadius.all(Radius.circular(18)),
           ),
         ),
         activeDayStyle: DayStyle(
@@ -178,7 +178,7 @@ class _DatePickerState extends State<DatePicker> {
           dayNumStyle: commonTextStyle.dayNumStyle,
           monthStrStyle: commonTextStyle.monthStrStyle,
           decoration: BoxDecoration(
-              borderRadius: BorderRadius.all(Radius.circular(18)),
+              borderRadius: const BorderRadius.all(Radius.circular(18)),
               color: containerColor(context)),
         ),
       ),

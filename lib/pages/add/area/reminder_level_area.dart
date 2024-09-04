@@ -6,16 +6,19 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
 class ReminderLevelArea extends StatelessWidget {
+  const ReminderLevelArea({super.key});
+
   @override
   Widget build(BuildContext context) {
     final level = Provider.of<FormStore>(context).level;
     final setLevel = Provider.of<FormStore>(context).setLevel;
 
-    final backgroundColor =
-        level == 'low' ? middleContainerColor(context) : Color(0xffDECBD5);
+    final backgroundColor = level == 'low'
+        ? middleContainerColor(context)
+        : const Color(0xffDECBD5);
     final indicatorColor = level == 'low'
         ? primaryColor(context)
-        : Color.fromARGB(255, 155, 115, 137);
+        : const Color.fromARGB(255, 155, 115, 137);
     final text = level == 'low' ? "静音提醒" : "响铃提醒";
     final icon = level == 'low' ? Icons.notifications_off : Icons.notifications;
 

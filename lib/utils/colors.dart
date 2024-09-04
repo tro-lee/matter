@@ -21,11 +21,11 @@ Color textColor(context) {
 }
 
 Color middleContainerColor(context) {
-  return Color(0xFFEBF1FF);
+  return const Color(0xFFEBF1FF);
 }
 
 Color topContainerColor(context) {
-  return Color(0xFFF5F8FF);
+  return const Color(0xFFF5F8FF);
 }
 
 Color labelColor(context) {

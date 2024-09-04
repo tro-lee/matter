@@ -8,7 +8,7 @@ Widget placeholder({onPressed, text}) {
       onPressed: onPressed,
       child: Align(
         alignment: Alignment.centerLeft,
-        child:
-            Text(text, style: TextStyle(fontSize: 18, color: Colors.black38)),
+        child: Text(text,
+            style: const TextStyle(fontSize: 18, color: Colors.black38)),
       ));
 }

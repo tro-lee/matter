@@ -25,7 +25,7 @@ class TemplateArea extends StatelessWidget {
       width: double.infinity,
       decoration: BoxDecoration(
           color: topContainerColor(context),
-          borderRadius: BorderRadius.all(Radius.circular(16))),
+          borderRadius: const BorderRadius.all(Radius.circular(16))),
       child: Row(
         children: [
           line(
@@ -64,7 +64,7 @@ class TemplateArea extends StatelessWidget {
           Container(
             decoration: BoxDecoration(
               color: backgroundColor,
-              borderRadius: BorderRadius.all(Radius.circular(180)),
+              borderRadius: const BorderRadius.all(Radius.circular(180)),
             ),
             width: 64,
             height: 64,
@@ -95,7 +95,8 @@ class TemplateArea extends StatelessWidget {
       child: Container(
         margin: const EdgeInsets.fromLTRB(0, 8, 12, 8),
         decoration: BoxDecoration(
-            color: color, borderRadius: BorderRadius.all(Radius.circular(120))),
+            color: color,
+            borderRadius: const BorderRadius.all(Radius.circular(120))),
         child: Padding(
           padding: const EdgeInsets.fromLTRB(12, 0, 12, 0),
           child: Row(
@@ -114,7 +115,7 @@ class TemplateArea extends StatelessWidget {
                           fontSize: 24,
                         )),
                     time.isEmpty
-                        ? SizedBox()
+                        ? const SizedBox()
                         : Text(time,
                             style: TextStyle(
                               fontSize: 18,

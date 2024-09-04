@@ -19,7 +19,7 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    SystemChrome.setSystemUIOverlayStyle(SystemUiOverlayStyle(
+    SystemChrome.setSystemUIOverlayStyle(const SystemUiOverlayStyle(
       statusBarColor: Colors.transparent,
       statusBarBrightness: Brightness.dark,
       statusBarIconBrightness: Brightness.dark,
@@ -45,8 +45,8 @@ class Home extends StatefulWidget {
 
 class _HomeState extends State<Home> {
   // 底部导航 和 组件映射关系
-  final map =
-      {0: HomePage(), 1: Placeholder(), 2: Placeholder()} as Map<int, Widget>;
+  final map = {0: HomePage(), 1: const Placeholder(), 2: const Placeholder()}
+      as Map<int, Widget>;
   // 当前页面
   var _currentIndex = 0;
 
@@ -88,7 +88,7 @@ class _HomeState extends State<Home> {
     onTap(int index) {
       if (index == 1) {
         Future.delayed(Duration.zero, () {
-          Navigator.push(context, animateRoute(child: AddPage()));
+          Navigator.push(context, animateRoute(child: const AddPage()));
         });
         index = _currentIndex;
       }
@@ -99,20 +99,20 @@ class _HomeState extends State<Home> {
 
     var items = [
       CustomNavigationBarItem(
-        icon: Icon(Icons.home_outlined),
-        selectedIcon: Icon(Icons.home),
+        icon: const Icon(Icons.home_outlined),
+        selectedIcon: const Icon(Icons.home),
       ),
       CustomNavigationBarItem(
-        icon: Icon(
+        icon: const Icon(
           Icons.add_circle_outline,
         ),
-        selectedIcon: Icon(
+        selectedIcon: const Icon(
           Icons.add_circle,
         ),
       ),
       CustomNavigationBarItem(
-        icon: Icon(Icons.person_outline),
-        selectedIcon: Icon(Icons.person),
+        icon: const Icon(Icons.person_outline),
+        selectedIcon: const Icon(Icons.person),
       )
     ];
 
@@ -131,7 +131,7 @@ class _HomeState extends State<Home> {
         onTap: onTap);
 
     return ClipRRect(
-        borderRadius: BorderRadius.vertical(top: Radius.circular(780)),
+        borderRadius: const BorderRadius.vertical(top: Radius.circular(780)),
         child: customNavigationBar);
   }
 }

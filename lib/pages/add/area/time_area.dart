@@ -12,7 +12,7 @@ import 'package:jiffy/jiffy.dart';
 import 'package:provider/provider.dart';
 
 class TimeArea extends StatelessWidget {
-  TimeArea({super.key});
+  const TimeArea({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -34,7 +34,7 @@ class TimeArea extends StatelessWidget {
                         isRepeatWeek: formStore.isRepeatWeek,
                         isRepeatDay: formStore.isRepeatDay),
                     onPressed: popupDatePicker),
-                SizedBox(
+                const SizedBox(
                   width: 8,
                 ),
                 bubbleLabel(context,
@@ -49,7 +49,7 @@ class TimeArea extends StatelessWidget {
   showTimePicker(context, FormStore formStore) async {
     if (SystemUtils.hasFocus) {
       SystemUtils.hideKeyShowUnfocus();
-      await Future.delayed(Duration(milliseconds: 100));
+      await Future.delayed(const Duration(milliseconds: 100));
     }
 
     final datetime = formStore.datetime ?? DateTime.now();
@@ -75,7 +75,7 @@ class TimeArea extends StatelessWidget {
   showDatePicker(FormStore formStore) async {
     if (SystemUtils.hasFocus) {
       SystemUtils.hideKeyShowUnfocus();
-      await Future.delayed(Duration(milliseconds: 100));
+      await Future.delayed(const Duration(milliseconds: 100));
     }
 
     SmartDialog.show(
@@ -85,7 +85,7 @@ class TimeArea extends StatelessWidget {
           isRepeatDay: formStore.isRepeatDay,
           isRepeatWeek: formStore.isRepeatWeek,
           onFinish: (datetime, isRepeatWeek, isRepeatDay) async {
-            await Future.delayed(Duration(milliseconds: 200));
+            await Future.delayed(const Duration(milliseconds: 200));
             SmartDialog.dismiss();
             formStore.setDateConfig(
                 datetime: datetime,
@@ -96,11 +96,11 @@ class TimeArea extends StatelessWidget {
         return standardContainer(
           context: context,
           child: Container(
-            margin: EdgeInsets.fromLTRB(16, 0, 16, 0),
-            padding: EdgeInsets.all(6),
+            margin: const EdgeInsets.fromLTRB(16, 0, 16, 0),
+            padding: const EdgeInsets.all(6),
             decoration: BoxDecoration(
                 color: topContainerColor(context),
-                borderRadius: BorderRadius.all(Radius.circular(16))),
+                borderRadius: const BorderRadius.all(Radius.circular(16))),
             child: datePicker,
           ),
         );
@@ -151,7 +151,7 @@ class TimeArea extends StatelessWidget {
           padding: const EdgeInsets.fromLTRB(8.0, 0, 0, 0),
         ),
         onPressed: onPressed,
-        child: Align(
+        child: const Align(
           alignment: Alignment.centerLeft,
           child: Text("请输入时间",
               style: TextStyle(fontSize: 18, color: Colors.black38)),
@@ -164,9 +164,9 @@ class TimeArea extends StatelessWidget {
     return FilledButton(
       onPressed: onPressed,
       style: FilledButton.styleFrom(
-          padding: EdgeInsets.fromLTRB(16, 8, 16, 8),
+          padding: const EdgeInsets.fromLTRB(16, 8, 16, 8),
           backgroundColor: middleContainerColor(context),
-          shape: RoundedRectangleBorder(
+          shape: const RoundedRectangleBorder(
               borderRadius: BorderRadius.all(Radius.circular(8)))),
       child: Text(text,
           style: TextStyle(fontSize: 18, color: primaryColor(context))),

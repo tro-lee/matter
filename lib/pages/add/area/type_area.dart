@@ -10,7 +10,9 @@ import 'package:provider/provider.dart';
 
 // ignore: must_be_immutable
 class TypeArea extends StatelessWidget {
-  TypeArea({key});
+  const TypeArea({
+    super.key,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -30,12 +32,12 @@ class TypeArea extends StatelessWidget {
                   type.iconData,
                   size: 24,
                 ),
-                SizedBox(
+                const SizedBox(
                   width: 4,
                 ),
                 Text(
                   type.name,
-                  style: TextStyle(fontSize: 18),
+                  style: const TextStyle(fontSize: 18),
                 )
               ],
             ),
@@ -54,13 +56,13 @@ class TypeArea extends StatelessWidget {
         child: Container(
           decoration: BoxDecoration(
               color: topContainerColor(context),
-              borderRadius: BorderRadius.all(Radius.circular(24))),
-          padding: EdgeInsets.fromLTRB(28, 16, 28, 16),
+              borderRadius: const BorderRadius.all(Radius.circular(24))),
+          padding: const EdgeInsets.fromLTRB(28, 16, 28, 16),
           width: 256,
           child: Wrap(alignment: WrapAlignment.spaceBetween, children: [
             for (var item in matterTypeItems)
               typeLabel(context, matterTypeItem: item, onPressed: (type) async {
-                await Future.delayed(Duration(milliseconds: 200));
+                await Future.delayed(const Duration(milliseconds: 200));
                 SmartDialog.dismiss();
                 formStore.setType(type);
               })
@@ -90,7 +92,7 @@ class TypeArea extends StatelessWidget {
                 size: 24,
                 color: primaryColor(context),
               ),
-              SizedBox(width: 4),
+              const SizedBox(width: 4),
               Text(text,
                   style: TextStyle(fontSize: 18, color: primaryColor(context))),
             ],

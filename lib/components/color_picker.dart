@@ -6,7 +6,7 @@ import 'package:flutter_smart_dialog/flutter_smart_dialog.dart';
 
 /// 用于弹窗，需要Stateful
 class ColorPicker extends StatefulWidget {
-  ColorPicker({
+  const ColorPicker({
     super.key,
     required this.onFinish,
   });
@@ -28,10 +28,10 @@ class _ColorPickerState extends State<ColorPicker> {
           alignment: Alignment.center,
           children: [
             Container(
-              padding: EdgeInsets.all(16),
+              padding: const EdgeInsets.all(16),
               decoration: BoxDecoration(
                   color: topContainerColor(context),
-                  borderRadius: BorderRadius.all(Radius.circular(16))),
+                  borderRadius: const BorderRadius.all(Radius.circular(16))),
               height: 256,
               child: MaterialColorPicker(onColorChange: (Color color) {
                 selectedColor = color;
