@@ -19,6 +19,7 @@ class FormStore extends ChangeNotifier {
   }
 
   ReminderLevel level = ReminderLevel.low; // 提醒强度
+
   int color = 0xF5F8FF; // 颜色
   String remark = ""; // 备注
 
