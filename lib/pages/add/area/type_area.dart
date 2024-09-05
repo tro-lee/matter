@@ -64,7 +64,7 @@ class TypeArea extends StatelessWidget {
           width: 256,
           child: Wrap(alignment: WrapAlignment.spaceBetween, children: [
             for (var item in matterTypeItems)
-              typeLabel(context, matterTypeItem: item, onPressed: (type) async {
+              typeLabel(context, matterType: item, onPressed: (type) async {
                 await Future.delayed(const Duration(milliseconds: 200));
                 SmartDialog.dismiss();
                 formStore.setType(type);
@@ -77,13 +77,13 @@ class TypeArea extends StatelessWidget {
 
   // 标签
   Widget typeLabel(BuildContext context,
-      {required MatterTypeItem matterTypeItem,
-      required Function(MatterTypeItem) onPressed}) {
-    final icon = matterTypeItem.iconData;
-    final text = matterTypeItem.name;
+      {required MatterType matterType,
+      required Function(MatterType) onPressed}) {
+    final icon = matterType.iconData;
+    final text = matterType.name;
     return TextButton(
       onPressed: () async {
-        onPressed(matterTypeItem);
+        onPressed(matterType);
       },
       child: Padding(
         padding: const EdgeInsets.fromLTRB(0, 8, 0, 8),

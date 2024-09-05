@@ -2,7 +2,6 @@ import 'package:buhuiwangshi/pages/add/area/remark_area.dart';
 import 'package:buhuiwangshi/pages/add/area/reminder_level_area.dart';
 import 'package:buhuiwangshi/pages/add/area/style_area.dart';
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
 
 import 'package:buhuiwangshi/pages/add/area/name_area.dart';
 import 'package:buhuiwangshi/pages/add/area/time_area.dart';
@@ -11,7 +10,6 @@ import 'package:buhuiwangshi/pages/add/area/type_area.dart';
 
 import 'package:buhuiwangshi/utils/colors.dart';
 import 'package:buhuiwangshi/utils/standard.dart';
-import 'package:buhuiwangshi/pages/add/store.dart';
 
 // 添加页
 class AddPage extends StatelessWidget {
@@ -92,12 +90,9 @@ class Body extends StatelessWidget {
       ],
     );
 
-    return ChangeNotifierProvider(
-      child: Container(
-        color: Colors.white,
-        child: column,
-      ),
-      create: (context) => FormStore(),
+    return Container(
+      color: Colors.white,
+      child: column,
     );
   }
 }

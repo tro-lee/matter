@@ -27,7 +27,7 @@ class FormStore extends ChangeNotifier {
     notifyListeners();
   }
 
-  int fontColor = 0xff415f91; // 字体颜色
+  int fontColor = Colors.black54.value; // 字体颜色
   void setFontColor(color) {
     fontColor = color;
     notifyListeners();
@@ -35,7 +35,7 @@ class FormStore extends ChangeNotifier {
 
   /// 重置颜色
   void resetColor() {
-    fontColor = 0xff415f91;
+    fontColor = Colors.black54.value;
     color = 0xFFEBF1FF;
     notifyListeners();
   }
@@ -68,18 +68,15 @@ class FormStore extends ChangeNotifier {
     }
   }
 
-  IconData icon = Icons.edit; // 图标
-
   String? name; // 名称
   void setName(newName) {
     name = newName;
     notifyListeners();
   }
 
-  MatterTypeItem? type; // 类型
-  void setType(MatterTypeItem mti) {
+  MatterType? type; // 类型
+  void setType(MatterType mti) {
     type = mti;
-    icon = mti.iconData;
     notifyListeners();
   }
 
@@ -88,6 +85,16 @@ class FormStore extends ChangeNotifier {
     setDate(datetime);
     this.isRepeatDay = isRepeatDay;
     this.isRepeatWeek = isRepeatWeek;
+    notifyListeners();
+  }
+
+  // 套用模板
+  void setCustom({fontColor, color, type, time, name}) {
+    this.fontColor = fontColor;
+    this.color = color;
+    this.type = type;
+    datetime = time;
+    this.name = name;
     notifyListeners();
   }
 }
