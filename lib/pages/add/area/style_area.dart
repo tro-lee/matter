@@ -67,7 +67,10 @@ class StyleArea extends StatelessWidget {
                 onPressed: () {
                   formStore.resetColor();
                 },
-                icon: const Icon(Icons.restart_alt_outlined))
+                icon: Icon(
+                  Icons.restart_alt_outlined,
+                  color: Color(formStore.fontColor),
+                ))
           ],
         ));
   }

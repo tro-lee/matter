@@ -20,7 +20,7 @@ class Label extends StatelessWidget {
   final String text;
   final LabelStyle? labelStyle;
 
-  Label(
+  const Label(
       {super.key,
       this.height = 64,
       this.width = double.infinity,

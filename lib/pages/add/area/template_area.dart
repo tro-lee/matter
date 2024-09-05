@@ -94,6 +94,7 @@ class TemplateArea extends StatelessWidget {
     return Expanded(
       child: Container(
         margin: const EdgeInsets.fromLTRB(0, 8, 12, 8),
+        padding: const EdgeInsets.fromLTRB(8, 0, 8, 0),
         decoration: BoxDecoration(
             color: color,
             borderRadius: const BorderRadius.all(Radius.circular(120))),

@@ -95,7 +95,7 @@ class _DatePickerState extends State<DatePicker> {
     return AnimatedContainer(
       curve: Curves.fastOutSlowIn,
       height: widget.isRepeatWeek ? 272 : 230,
-      duration: const Duration(milliseconds: 500),
+      duration: const Duration(milliseconds: 200),
       onEnd: () {
         setState(() {
           widget.finsihAnimated = widget.isRepeatWeek;

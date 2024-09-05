@@ -4,6 +4,7 @@ import 'package:buhuiwangshi/constant/candidates.dart';
 import 'package:buhuiwangshi/pages/add/store.dart';
 import 'package:buhuiwangshi/utils/colors.dart';
 import 'package:buhuiwangshi/utils/standard.dart';
+import 'package:buhuiwangshi/utils/system.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_smart_dialog/flutter_smart_dialog.dart';
 import 'package:provider/provider.dart';
@@ -18,14 +19,11 @@ class TypeArea extends StatelessWidget {
   Widget build(BuildContext context) {
     var formStore = Provider.of<FormStore>(context);
     var type = formStore.type;
-    popupTypePicker() {
-      showTypePicker(formStore);
-    }
 
     var content = type == null
-        ? placeholder(onPressed: popupTypePicker, text: "请选择类型")
+        ? placeholder(onPressed: () => showTypePicker(formStore), text: "请选择类型")
         : TextButton(
-            onPressed: popupTypePicker,
+            onPressed: () => showTypePicker(formStore),
             child: Row(
               children: [
                 Icon(
@@ -49,7 +47,12 @@ class TypeArea extends StatelessWidget {
     );
   }
 
-  void showTypePicker(FormStore formStore) {
+  void showTypePicker(FormStore formStore) async {
+    if (SystemUtils.hasFocus) {
+      SystemUtils.hideKeyShowUnfocus();
+      await Future.delayed(const Duration(milliseconds: 100));
+    }
+
     SmartDialog.show(builder: (context) {
       return standardContainer(
         context: context,

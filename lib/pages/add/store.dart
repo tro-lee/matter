@@ -41,6 +41,11 @@ class FormStore extends ChangeNotifier {
   }
 
   String remark = ""; // 备注
+  /// 修改备注
+  void setRemark(newValue) {
+    remark = newValue;
+    notifyListeners();
+  }
 
   DateTime? datetime; // 时间
   // 只修改日期

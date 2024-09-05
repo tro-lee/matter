@@ -1,3 +1,4 @@
+import 'package:buhuiwangshi/pages/add/area/remark_area.dart';
 import 'package:buhuiwangshi/pages/add/area/reminder_level_area.dart';
 import 'package:buhuiwangshi/pages/add/area/style_area.dart';
 import 'package:flutter/material.dart';
@@ -20,8 +21,9 @@ class AddPage extends StatelessWidget {
   Widget build(BuildContext context) {
     return standardContainer(
       context: context,
-      child: Scaffold(
-        appBar: const TopAppBar(),
+      child: const Scaffold(
+        resizeToAvoidBottomInset: false,
+        appBar: TopAppBar(),
         body: Body(),
       ),
     );
@@ -51,8 +53,10 @@ class TopAppBar extends StatelessWidget implements PreferredSizeWidget {
     );
     // w右侧保存
     var textButton = TextButton(
-        onPressed: () {},
-        child: Text("保存",
+        onPressed: () {
+          Navigator.of(context).pop();
+        },
+        child: Text("完成",
             style: TextStyle(fontSize: 18, color: textColor(context))));
 
     return AppBar(
@@ -71,6 +75,8 @@ class TopAppBar extends StatelessWidget implements PreferredSizeWidget {
 
 /// 以下是内容部分
 class Body extends StatelessWidget {
+  const Body({super.key});
+
   @override
   Widget build(BuildContext context) {
     /// 各个区域
@@ -82,6 +88,7 @@ class Body extends StatelessWidget {
         TypeArea(),
         ReminderLevelArea(),
         StyleArea(),
+        RemarkArea(),
       ],
     );
 

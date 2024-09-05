@@ -7,7 +7,7 @@ import 'package:jiffy/jiffy.dart';
 
 import 'utils/theme.dart';
 import 'pages/home.dart';
-import 'pages/add/add.dart';
+import 'pages/add/page.dart';
 
 void main() {
   runApp(const MyApp());
@@ -15,7 +15,7 @@ void main() {
 
 /// App设置
 class MyApp extends StatelessWidget {
-  const MyApp();
+  const MyApp({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -32,27 +32,32 @@ class MyApp extends StatelessWidget {
       builder: FlutterSmartDialog.init(),
       theme: ThemeData(
           colorScheme: MaterialTheme.lightScheme(), fontFamily: "PingFang"),
-      home: standardContainer(context: context, child: Home()),
+      home: standardContainer(context: context, child: const Home()),
     );
   }
 }
 
 /// 页面设置
 class Home extends StatefulWidget {
+  const Home({super.key});
+
   @override
   State<Home> createState() => _HomeState();
 }
 
 class _HomeState extends State<Home> {
   // 底部导航 和 组件映射关系
-  final map = {0: HomePage(), 1: const Placeholder(), 2: const Placeholder()}
-      as Map<int, Widget>;
+  final map = {
+    0: const HomePage(),
+    1: const Placeholder(),
+    2: const Placeholder()
+  } as Map<int, Widget>;
   // 当前页面
   var _currentIndex = 0;
 
   @override
   Widget build(BuildContext context) {
-    Widget currentPage = map[_currentIndex] ?? HomePage();
+    Widget currentPage = map[_currentIndex] ?? const HomePage();
 
     return Scaffold(
       extendBody: true,
