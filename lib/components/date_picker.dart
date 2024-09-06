@@ -46,7 +46,7 @@ class _DatePickerState extends State<DatePicker> {
     final fristDate = DateTime.now();
     final lastDate = focusDate.add(const Duration(days: 365));
 
-    final EasyInfiniteDateTimelineController _controller =
+    final EasyInfiniteDateTimelineController controller =
         EasyInfiniteDateTimelineController();
 
     var weekLabel = label(
@@ -81,7 +81,7 @@ class _DatePickerState extends State<DatePicker> {
         : const SizedBox();
 
     final easyDatePicker = getEasyDatePicker(
-        _controller, focusDate, fristDate, lastDate, commonTextStyle, context);
+        controller, focusDate, fristDate, lastDate, commonTextStyle, context);
 
     final elevatedButton = ElevatedButton(
         onPressed: () {
@@ -136,7 +136,7 @@ class _DatePickerState extends State<DatePicker> {
 
   /// 日期选择器
   EasyInfiniteDateTimeLine getEasyDatePicker(
-      EasyInfiniteDateTimelineController _controller,
+      EasyInfiniteDateTimelineController controller,
       DateTime focusDate,
       DateTime fristDate,
       DateTime lastDate,
@@ -150,7 +150,7 @@ class _DatePickerState extends State<DatePicker> {
         });
       },
       selectionMode: const SelectionMode.none(),
-      controller: _controller,
+      controller: controller,
       focusDate: focusDate,
       firstDate: fristDate,
       lastDate: lastDate,

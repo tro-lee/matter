@@ -93,6 +93,7 @@ class _HomeState extends State<Home> {
     onTap(int index) {
       if (index == 1) {
         Future.delayed(Duration.zero, () {
+          // ignore: use_build_context_synchronously
           Navigator.push(context, animateRoute(child: const AddPage()));
         });
         index = _currentIndex;

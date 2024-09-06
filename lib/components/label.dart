@@ -30,7 +30,7 @@ class Label extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    var _labelStyle = labelStyle ?? LabelStyle();
+    var newLabelStyle = labelStyle ?? LabelStyle();
 
     return SizedBox(
       height: height,
@@ -38,12 +38,12 @@ class Label extends StatelessWidget {
       child: Row(
         children: [
           Container(
-            width: _labelStyle.labelWidth,
-            padding: _labelStyle.labelPadding,
-            child: Text(text, style: _labelStyle.labelTextStyle),
+            width: newLabelStyle.labelWidth,
+            padding: newLabelStyle.labelPadding,
+            child: Text(text, style: newLabelStyle.labelTextStyle),
           ),
           SizedBox(
-            width: _labelStyle.safeWidth,
+            width: newLabelStyle.safeWidth,
           ),
           Expanded(child: child),
         ],
