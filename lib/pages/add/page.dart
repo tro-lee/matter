@@ -1,6 +1,8 @@
 import 'package:buhuiwangshi/pages/add/area/remark_area.dart';
 import 'package:buhuiwangshi/pages/add/area/reminder_level_area.dart';
 import 'package:buhuiwangshi/pages/add/area/style_area.dart';
+import 'package:buhuiwangshi/store/add/store.dart';
+import 'package:buhuiwangshi/store/add/wrapper.dart';
 import 'package:flutter/material.dart';
 
 import 'package:buhuiwangshi/pages/add/area/name_area.dart';
@@ -12,19 +14,32 @@ import 'package:buhuiwangshi/utils/colors.dart';
 import 'package:buhuiwangshi/utils/standard.dart';
 
 // 添加页
-class AddPage extends StatelessWidget {
+class AddPage extends StatefulWidget {
   const AddPage({super.key});
 
   @override
+  State<AddPage> createState() => _AddPageState();
+}
+
+class _AddPageState extends State<AddPage> {
+  @override
   Widget build(BuildContext context) {
-    return standardContainer(
-      context: context,
-      child: const Scaffold(
-        resizeToAvoidBottomInset: false,
-        appBar: TopAppBar(),
-        body: Body(),
+    return AddStoreWrapper(
+      child: standardContainer(
+        context: context,
+        child: const Scaffold(
+          resizeToAvoidBottomInset: false,
+          appBar: TopAppBar(),
+          body: Body(),
+        ),
       ),
     );
+  }
+
+  @override
+  void dispose() {
+    FormStore.reset();
+    super.dispose();
   }
 }
 
@@ -77,15 +92,23 @@ class Body extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    const height = 12.0;
+
     /// 各个区域
     var column = const Column(
       children: [
         TemplateArea(),
+        SizedBox(height: height),
         NameArea(),
+        SizedBox(height: height),
         TimeArea(),
+        SizedBox(height: height),
         TypeArea(),
+        SizedBox(height: height),
         ReminderLevelArea(),
+        SizedBox(height: height),
         StyleArea(),
+        SizedBox(height: height),
         RemarkArea(),
       ],
     );

@@ -1,6 +1,6 @@
 import 'package:animated_toggle_switch/animated_toggle_switch.dart';
 import 'package:buhuiwangshi/components/label.dart';
-import 'package:buhuiwangshi/pages/add/store.dart';
+import 'package:buhuiwangshi/store/add/store.dart';
 import 'package:buhuiwangshi/utils/colors.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -10,20 +10,21 @@ class ReminderLevelArea extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final level = Provider.of<FormStore>(context).level;
-    final setLevel = Provider.of<FormStore>(context).setLevel;
+    final formStore = Provider.of<FormStore>(context);
+    final level = formStore.level;
+    final setLevel = formStore.setLevel;
 
-    final backgroundColor = level == 'low'
-        ? middleContainerColor(context)
-        : const Color(0xffDECBD5);
+    final backgroundColor =
+        level == 'low' ? Color(formStore.color) : const Color(0xffDECBD5);
     final indicatorColor = level == 'low'
-        ? primaryColor(context)
+        ? Color(formStore.fontColor)
         : const Color.fromARGB(255, 155, 115, 137);
+
     final text = level == 'low' ? "静音提醒" : "响铃提醒";
     final icon = level == 'low' ? Icons.notifications_off : Icons.notifications;
 
     return Label(
-        text: "提醒强度",
+        text: "强度",
         labelStyle: LabelStyle(labelWidth: 110, safeWidth: 50),
         child: Padding(
           padding: const EdgeInsets.fromLTRB(8, 8, 16, 8),

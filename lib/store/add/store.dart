@@ -3,6 +3,16 @@ import 'package:day_night_time_picker/day_night_time_picker.dart';
 import 'package:flutter/material.dart';
 
 class FormStore extends ChangeNotifier {
+  static FormStore? _instance;
+  static FormStore get instance {
+    _instance ??= FormStore();
+    return _instance!;
+  }
+
+  static reset() {
+    _instance = FormStore();
+  }
+
   bool isRepeatWeek = false; // 是否周重复
   void setIsRepeatWeek(newIsRepeatWeek) {
     isRepeatWeek = newIsRepeatWeek;

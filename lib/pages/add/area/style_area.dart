@@ -1,6 +1,6 @@
 import 'package:buhuiwangshi/components/color_picker.dart';
 import 'package:buhuiwangshi/components/label.dart';
-import 'package:buhuiwangshi/pages/add/store.dart';
+import 'package:buhuiwangshi/store/add/store.dart';
 import 'package:buhuiwangshi/utils/system.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_smart_dialog/flutter_smart_dialog.dart';
@@ -24,6 +24,7 @@ class StyleArea extends StatelessWidget {
           await Future.delayed(const Duration(milliseconds: 100));
         }
         SmartDialog.show(
+            animationTime: const Duration(milliseconds: 120),
             builder: (context) => ColorPicker(
                   onFinish: formStore.setFontColor,
                 ));
@@ -43,6 +44,7 @@ class StyleArea extends StatelessWidget {
           await Future.delayed(const Duration(milliseconds: 100));
         }
         SmartDialog.show(
+            animationTime: const Duration(milliseconds: 120),
             builder: (context) => ColorPicker(
                   onFinish: formStore.setColor,
                 ));

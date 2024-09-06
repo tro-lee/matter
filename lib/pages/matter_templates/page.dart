@@ -1,6 +1,7 @@
 import 'package:buhuiwangshi/constant/candidates.dart';
-import 'package:buhuiwangshi/pages/add/store.dart';
+import 'package:buhuiwangshi/store/add/store.dart';
 import 'package:buhuiwangshi/pages/matter_templates/templates.dart';
+import 'package:buhuiwangshi/store/add/wrapper.dart';
 import 'package:buhuiwangshi/utils/colors.dart';
 import 'package:buhuiwangshi/utils/standard.dart';
 import 'package:flutter/material.dart';
@@ -12,12 +13,11 @@ class MatterTemplates extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final formStore = Provider.of<FormStore>(context);
-
-    return standardContainer(
-        context: context,
-        child: Scaffold(
-            appBar: const TopAppBar(), body: Body(formStore: formStore)));
+    return AddStoreWrapper(
+      child: standardContainer(
+          context: context,
+          child: const Scaffold(appBar: TopAppBar(), body: Body())),
+    );
   }
 }
 
@@ -58,13 +58,12 @@ class TopAppBar extends StatelessWidget implements PreferredSizeWidget {
 class Body extends StatelessWidget {
   const Body({
     super.key,
-    required this.formStore,
   });
-
-  final FormStore formStore;
 
   @override
   Widget build(BuildContext context) {
+    final formStore = Provider.of<FormStore>(context);
+
     final templates = getTemplates();
 
     onFinish(MatterType type, time, name) {

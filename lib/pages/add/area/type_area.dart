@@ -1,7 +1,7 @@
 import 'package:buhuiwangshi/components/label.dart';
 import 'package:buhuiwangshi/components/place_holder.dart';
 import 'package:buhuiwangshi/constant/candidates.dart';
-import 'package:buhuiwangshi/pages/add/store.dart';
+import 'package:buhuiwangshi/store/add/store.dart';
 import 'package:buhuiwangshi/utils/colors.dart';
 import 'package:buhuiwangshi/utils/standard.dart';
 import 'package:buhuiwangshi/utils/system.dart';
@@ -29,13 +29,17 @@ class TypeArea extends StatelessWidget {
                 Icon(
                   type.iconData,
                   size: 24,
+                  color: Color(formStore.fontColor),
                 ),
                 const SizedBox(
                   width: 4,
                 ),
                 Text(
                   type.name,
-                  style: const TextStyle(fontSize: 18),
+                  style: TextStyle(
+                    fontSize: 18,
+                    color: Color(formStore.fontColor),
+                  ),
                 )
               ],
             ),
@@ -53,26 +57,28 @@ class TypeArea extends StatelessWidget {
       await Future.delayed(const Duration(milliseconds: 100));
     }
 
-    SmartDialog.show(builder: (context) {
-      return standardContainer(
-        context: context,
-        child: Container(
-          decoration: BoxDecoration(
-              color: topContainerColor(context),
-              borderRadius: const BorderRadius.all(Radius.circular(24))),
-          padding: const EdgeInsets.fromLTRB(28, 16, 28, 16),
-          width: 256,
-          child: Wrap(alignment: WrapAlignment.spaceBetween, children: [
-            for (var item in matterTypeItems)
-              typeLabel(context, matterType: item, onPressed: (type) async {
-                await Future.delayed(const Duration(milliseconds: 200));
-                SmartDialog.dismiss();
-                formStore.setType(type);
-              })
-          ]),
-        ),
-      );
-    });
+    SmartDialog.show(
+        animationTime: const Duration(milliseconds: 120),
+        builder: (context) {
+          return standardContainer(
+            context: context,
+            child: Container(
+              decoration: BoxDecoration(
+                  color: topContainerColor(context),
+                  borderRadius: const BorderRadius.all(Radius.circular(24))),
+              padding: const EdgeInsets.fromLTRB(28, 16, 28, 16),
+              width: 256,
+              child: Wrap(alignment: WrapAlignment.spaceBetween, children: [
+                for (var item in matterTypeItems)
+                  typeLabel(context, matterType: item, onPressed: (type) async {
+                    await Future.delayed(const Duration(milliseconds: 200));
+                    SmartDialog.dismiss();
+                    formStore.setType(type);
+                  })
+              ]),
+            ),
+          );
+        });
   }
 
   // 标签

@@ -1,7 +1,7 @@
 import 'package:buhuiwangshi/components/date_picker.dart';
 import 'package:buhuiwangshi/components/label.dart';
 import 'package:buhuiwangshi/components/place_holder.dart';
-import 'package:buhuiwangshi/pages/add/store.dart';
+import 'package:buhuiwangshi/store/add/store.dart';
 import 'package:buhuiwangshi/utils/colors.dart';
 import 'package:buhuiwangshi/utils/standard.dart';
 import 'package:buhuiwangshi/utils/system.dart';
@@ -30,6 +30,8 @@ class TimeArea extends StatelessWidget {
             child: Row(
               children: [
                 bubbleLabel(context,
+                    color: Color(formStore.color),
+                    fontColor: Color(formStore.fontColor),
                     text: getDateText(datetime,
                         isRepeatWeek: formStore.isRepeatWeek,
                         isRepeatDay: formStore.isRepeatDay),
@@ -38,6 +40,8 @@ class TimeArea extends StatelessWidget {
                   width: 8,
                 ),
                 bubbleLabel(context,
+                    color: Color(formStore.color),
+                    fontColor: Color(formStore.fontColor),
                     text: getTimeText(datetime),
                     onPressed: () => showTimePicker(context, formStore)),
               ],
@@ -79,6 +83,7 @@ class TimeArea extends StatelessWidget {
     }
 
     SmartDialog.show(
+      animationTime: const Duration(milliseconds: 120),
       builder: (context) {
         var datePicker = DatePicker(
           dateTime: formStore.datetime,
@@ -160,16 +165,16 @@ class TimeArea extends StatelessWidget {
 
   /// 工具
   /// 气泡标签
-  Widget bubbleLabel(BuildContext context, {text, onPressed}) {
+  Widget bubbleLabel(BuildContext context,
+      {text, onPressed, color, fontColor}) {
     return FilledButton(
       onPressed: onPressed,
       style: FilledButton.styleFrom(
           padding: const EdgeInsets.fromLTRB(16, 8, 16, 8),
-          backgroundColor: middleContainerColor(context),
+          backgroundColor: color,
           shape: const RoundedRectangleBorder(
               borderRadius: BorderRadius.all(Radius.circular(8)))),
-      child: Text(text,
-          style: TextStyle(fontSize: 18, color: primaryColor(context))),
+      child: Text(text, style: TextStyle(fontSize: 18, color: fontColor)),
     );
   }
 }
