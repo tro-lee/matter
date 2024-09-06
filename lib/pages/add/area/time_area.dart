@@ -24,7 +24,7 @@ class TimeArea extends StatelessWidget {
     }
 
     var content = formStore.datetime == null
-        ? placeholder(
+        ? CustomPlaceholder(
             onPressed: popupDatePicker,
             text: "请选择时间",
             isWarning: formStore.isTimeWarning)

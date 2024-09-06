@@ -21,7 +21,7 @@ class TypeArea extends StatelessWidget {
     var type = formStore.type;
 
     var content = type == null
-        ? placeholder(
+        ? CustomPlaceholder(
             onPressed: () => showTypePicker(formStore),
             text: "请选择类型",
             isWarning: formStore.isTypeWarning,

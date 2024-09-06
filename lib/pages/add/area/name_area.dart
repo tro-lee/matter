@@ -15,7 +15,7 @@ class NameArea extends StatelessWidget {
     final name = Provider.of<FormStore>(context).name ?? '';
 
     var content = name.isEmpty
-        ? placeholder(
+        ? CustomPlaceholder(
             isWarning: formStore.isNameWarning,
             onPressed: () =>
                 showTextInput(context: context, setValue: setName, value: name),

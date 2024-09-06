@@ -16,7 +16,7 @@ class RemarkArea extends StatelessWidget {
 
     /// 核心内容判断
     var content = remark.isEmpty
-        ? placeholder(
+        ? CustomPlaceholder(
             onPressed: () => showTextInput(
                 context: context, setValue: setRemark, value: remark),
             text: "可输入备注")
