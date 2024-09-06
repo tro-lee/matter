@@ -12,6 +12,7 @@ import 'package:buhuiwangshi/pages/add/area/type_area.dart';
 
 import 'package:buhuiwangshi/utils/colors.dart';
 import 'package:buhuiwangshi/utils/standard.dart';
+import 'package:provider/provider.dart';
 
 // 添加页
 class AddPage extends StatefulWidget {
@@ -49,6 +50,8 @@ class TopAppBar extends StatelessWidget implements PreferredSizeWidget {
 
   @override
   Widget build(BuildContext context) {
+    final formStore = Provider.of<FormStore>(context);
+
     // 左侧按钮
     var iconButton = IconButton(
       onPressed: () {
@@ -64,11 +67,25 @@ class TopAppBar extends StatelessWidget implements PreferredSizeWidget {
       "添加日程",
       style: TextStyle(fontSize: 24, color: textColor(context)),
     );
-    // w右侧保存
+
+    onSave() {
+      formStore
+          .setIsNameWarning(formStore.name == null || formStore.name!.isEmpty);
+      formStore.setIsTimeWarning(formStore.datetime == null);
+      formStore.setIsTypeWarning(formStore.type == null);
+
+      if (formStore.isNameWarning ||
+          formStore.isTimeWarning ||
+          formStore.isTypeWarning) {
+        return;
+      }
+
+      Navigator.of(context).pop();
+    }
+
+    // 右侧保存
     var textButton = TextButton(
-        onPressed: () {
-          Navigator.of(context).pop();
-        },
+        onPressed: onSave,
         child: Text("完成",
             style: TextStyle(fontSize: 18, color: textColor(context))));
 

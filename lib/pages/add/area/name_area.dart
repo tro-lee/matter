@@ -16,6 +16,7 @@ class NameArea extends StatelessWidget {
 
     var content = name.isEmpty
         ? placeholder(
+            isWarning: formStore.isNameWarning,
             onPressed: () =>
                 showTextInput(context: context, setValue: setName, value: name),
             text: "请输入名称")
@@ -34,11 +35,6 @@ class NameArea extends StatelessWidget {
                     TextStyle(fontSize: 18, color: Color(formStore.fontColor))),
           );
 
-    return Label(
-        text: "名称",
-        child: Padding(
-          padding: const EdgeInsets.fromLTRB(8.0, 0, 0, 0),
-          child: content,
-        ));
+    return Label(text: "名称", child: content);
   }
 }

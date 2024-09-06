@@ -13,6 +13,25 @@ class FormStore extends ChangeNotifier {
     _instance = FormStore();
   }
 
+  /// 警告部分
+  bool isNameWarning = false;
+  setIsNameWarning(bool value) {
+    isNameWarning = value;
+    notifyListeners();
+  }
+
+  bool isTimeWarning = false;
+  setIsTimeWarning(bool value) {
+    isTimeWarning = value;
+    notifyListeners();
+  }
+
+  bool isTypeWarning = false;
+  setIsTypeWarning(bool value) {
+    isTypeWarning = value;
+    notifyListeners();
+  }
+
   bool isRepeatWeek = false; // 是否周重复
   void setIsRepeatWeek(newIsRepeatWeek) {
     isRepeatWeek = newIsRepeatWeek;

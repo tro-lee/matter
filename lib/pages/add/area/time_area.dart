@@ -24,7 +24,10 @@ class TimeArea extends StatelessWidget {
     }
 
     var content = formStore.datetime == null
-        ? placeholder(onPressed: popupDatePicker, text: "请选择时间")
+        ? placeholder(
+            onPressed: popupDatePicker,
+            text: "请选择时间",
+            isWarning: formStore.isTimeWarning)
         : Padding(
             padding: const EdgeInsets.fromLTRB(8.0, 0, 0, 0),
             child: Row(
