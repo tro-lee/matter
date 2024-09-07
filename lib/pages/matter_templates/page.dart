@@ -1,6 +1,6 @@
 import 'package:buhuiwangshi/constant/candidates.dart';
+import 'package:buhuiwangshi/constant/templates.dart';
 import 'package:buhuiwangshi/store/add/store.dart';
-import 'package:buhuiwangshi/pages/matter_templates/templates.dart';
 import 'package:buhuiwangshi/store/add/wrapper.dart';
 import 'package:buhuiwangshi/utils/colors.dart';
 import 'package:buhuiwangshi/utils/standard.dart';
@@ -63,8 +63,6 @@ class Body extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final formStore = Provider.of<FormStore>(context);
-
-    final templates = getTemplates();
 
     onFinish(MatterType type, time, name) {
       formStore.setCustom(
