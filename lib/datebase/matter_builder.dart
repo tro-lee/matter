@@ -1,3 +1,4 @@
+import 'package:buhuiwangshi/constant/candidates.dart';
 import 'package:buhuiwangshi/datebase/db.dart';
 import 'package:flutter/material.dart';
 
@@ -9,9 +10,9 @@ import 'package:flutter/material.dart';
 ///
 /// 生命周期是 添加页创建 -> 首页创建Matter
 class MatterBuilderModel {
-  final int id; // 事项的唯一标识符
+  final String id; // 事项的唯一标识符
   final String name; // 事项的名称
-  final String type; // 事项的类型（如工作、学习、娱乐等）
+  final MatterType type; // 事项的类型（如工作、学习、娱乐等）
   final IconData typeIcon; // 事项的类型（如工作、学习、娱乐等）
   final DateTime time; // 事项的时间
   final String level; // 事项的重要程度
@@ -50,7 +51,7 @@ class MatterBuilderModel {
     return {
       'id': id,
       'name': name,
-      'type': type,
+      'type': type.name,
       'typeIcon': typeIcon.codePoint,
       'time': time.toIso8601String(),
       'color': color,
@@ -71,7 +72,11 @@ class MatterBuilderModel {
     return MatterBuilderModel(
       id: map['id'],
       name: map['name'],
-      type: map['type'],
+      type: MatterType(
+          iconData: IconData(map['typeIcon'], fontFamily: 'MaterialIcons'),
+          name: map['type'],
+          color: map['color'],
+          fontColor: map['fontColor']),
       typeIcon: IconData(map['typeIcon'], fontFamily: 'MaterialIcons'),
       time: DateTime.parse(map['time']),
       color: map['color'],
@@ -94,11 +99,13 @@ class MatterBuilderModel {
   }
 }
 
+/// MatterBuilderTable 类用于处理 matter_builder 表的数据库操作
 class MatterBuilderTable {
+  /// 创建 matter_builder 表的 SQL 语句
   static String createTableSql() {
     return '''
       CREATE TABLE matter_builder (
-        id INTEGER PRIMARY KEY AUTOINCREMENT,
+        id TEXT PRIMARY KEY,
         name TEXT,
         type TEXT,
         typeIcon INTEGER,
@@ -117,11 +124,33 @@ class MatterBuilderTable {
     ''';
   }
 
+  /// 插入一条 MatterBuilderModel 记录
+  ///
+  /// [model] 要插入的 MatterBuilderModel 对象
+  /// 返回插入的行 ID
   static Future<int> insert(MatterBuilderModel model) async {
     final db = await DB.instance;
     return await db.insert('matter_builder', model.toMap());
   }
 
+  /// 获取指定日期的所有 MatterBuilderModel 记录
+  ///
+  /// [date] 指定的日期
+  /// 返回符合条件的 MatterBuilderModel 列表
+  static Future<List<MatterBuilderModel>> getByDay(DateTime date) async {
+    final db = await DB.instance;
+    final formattedDate =
+        '${date.year}-${date.month.toString().padLeft(2, '0')}-${date.day.toString().padLeft(2, '0')}';
+    final List<Map<String, dynamic>> maps = await db.query('matter_builder',
+        where: 'time LIKE ?', whereArgs: ['%$formattedDate%']);
+    return List.generate(maps.length, (i) {
+      return MatterBuilderModel.fromMap(maps[i]);
+    });
+  }
+
+  /// 获取所有 MatterBuilderModel 记录
+  ///
+  /// 返回所有 MatterBuilderModel 对象的列表
   static Future<List<MatterBuilderModel>> getAll() async {
     final db = await DB.instance;
     final List<Map<String, dynamic>> maps = await db.query('matter_builder');
@@ -130,6 +159,10 @@ class MatterBuilderTable {
     });
   }
 
+  /// 根据 ID 获取单个 MatterBuilderModel 记录
+  ///
+  /// [id] 要查询的记录 ID
+  /// 返回对应的 MatterBuilderModel 对象，如果不存在则返回 null
   static Future<MatterBuilderModel?> getById(int id) async {
     final db = await DB.instance;
     final List<Map<String, dynamic>> maps = await db.query(
@@ -143,6 +176,10 @@ class MatterBuilderTable {
     return null;
   }
 
+  /// 更新一条 MatterBuilderModel 记录
+  ///
+  /// [model] 要更新的 MatterBuilderModel 对象
+  /// 返回更新的行数
   static Future<int> update(MatterBuilderModel model) async {
     final db = await DB.instance;
     return await db.update(
@@ -153,6 +190,10 @@ class MatterBuilderTable {
     );
   }
 
+  /// 删除一条 MatterBuilderModel 记录
+  ///
+  /// [id] 要删除的记录 ID
+  /// 返回删除的行数
   static Future<int> delete(int id) async {
     final db = await DB.instance;
     return await db.delete(

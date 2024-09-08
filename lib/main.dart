@@ -1,16 +1,25 @@
+import 'package:buhuiwangshi/store/home_page_store.dart';
 import 'package:buhuiwangshi/utils/standard.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:custom_navigation_bar/custom_navigation_bar.dart';
 import 'package:flutter_smart_dialog/flutter_smart_dialog.dart';
 import 'package:jiffy/jiffy.dart';
+import 'package:provider/provider.dart';
 
 import 'utils/theme.dart';
-import 'pages/home.dart';
+import 'pages/home/page.dart';
 import 'pages/add/page.dart';
 
 void main() {
-  runApp(const MyApp());
+  runApp(
+    MultiProvider(
+      providers: [
+        ChangeNotifierProvider(create: (_) => HomePageStore.instance),
+      ],
+      child: const MyApp(),
+    ),
+  );
 }
 
 /// App设置

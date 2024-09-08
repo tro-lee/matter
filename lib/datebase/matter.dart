@@ -1,3 +1,4 @@
+import 'package:buhuiwangshi/constant/candidates.dart';
 import 'package:buhuiwangshi/datebase/db.dart';
 import 'package:buhuiwangshi/datebase/matter_builder.dart';
 import 'package:buhuiwangshi/utils/uuid.dart';
@@ -7,7 +8,7 @@ import 'package:flutter/material.dart';
 ///
 /// 生命周期是 首页被MatterBuilder构建 -> 被完成/被删除/被延期-> 被完成/被延期
 class MatterModel extends MatterBuilderModel {
-  final int builderId; // 所用构建器id
+  final String builderId; // 所用构建器id
 
   final bool isDone; // 是否完成
   final DateTime? doneAt; // 完成时间
@@ -90,7 +91,11 @@ class MatterModel extends MatterBuilderModel {
     return MatterModel(
       id: map['id'],
       name: map['name'],
-      type: map['type'],
+      type: MatterType(
+          iconData: IconData(map['typeIcon'], fontFamily: 'MaterialIcons'),
+          name: map['type'],
+          color: map['color'],
+          fontColor: map['fontColor']),
       typeIcon: IconData(map['typeIcon'], fontFamily: 'MaterialIcons'),
       time: DateTime.parse(map['time']),
       color: map['color'],
@@ -186,6 +191,16 @@ class MatterTable {
     await db.insert('matter', matter.toMap());
   }
 
+  // 批量插入 Matter 记录
+  static Future<void> batchInsert(List<MatterModel> matters) async {
+    final db = await DB.instance;
+    await db.transaction((txn) async {
+      for (var matter in matters) {
+        await txn.insert('matter', matter.toMap());
+      }
+    });
+  }
+
   // 根据 ID 查询一条 Matter 记录
   static Future<MatterModel?> queryById(String id) async {
     final db = await DB.instance;
@@ -199,6 +214,18 @@ class MatterTable {
       return MatterModel.fromMap(maps.first);
     }
     return null;
+  }
+
+  // 根据日期查询 Matter 记录
+  static Future<List<MatterModel>> getByDay(DateTime date) async {
+    final db = await DB.instance;
+    final formattedDate =
+        '${date.year}-${date.month.toString().padLeft(2, '0')}-${date.day.toString().padLeft(2, '0')}';
+    final List<Map<String, dynamic>> maps = await db
+        .query('matter', where: 'time LIKE ?', whereArgs: ['%$formattedDate%']);
+    return List.generate(maps.length, (i) {
+      return MatterModel.fromMap(maps[i]);
+    });
   }
 
   // 查询所有 Matter 记录
@@ -227,5 +254,19 @@ class MatterTable {
       where: 'id = ?',
       whereArgs: [id],
     );
+  }
+
+  // 批量删除 Matter 记录
+  static Future<void> batchDelete(List<String> ids) async {
+    final db = await DB.instance;
+    await db.transaction((txn) async {
+      for (String id in ids) {
+        await txn.delete(
+          'matter',
+          where: 'id = ?',
+          whereArgs: [id],
+        );
+      }
+    });
   }
 }

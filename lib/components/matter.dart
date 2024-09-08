@@ -1,4 +1,5 @@
 import 'package:buhuiwangshi/constant/candidates.dart';
+import 'package:buhuiwangshi/datebase/matter.dart';
 import 'package:buhuiwangshi/utils/colors.dart';
 import 'package:flutter/material.dart';
 import 'package:jiffy/jiffy.dart';
@@ -19,6 +20,17 @@ class Matter extends StatelessWidget {
       required this.time,
       required this.name,
       required this.levelIcon});
+
+  factory Matter.fromMatterModel(MatterModel model) {
+    return Matter(
+      type: model.type,
+      color: Color(model.color),
+      fontColor: Color(model.fontColor),
+      time: model.time,
+      name: model.name,
+      levelIcon: model.levelIcon,
+    );
+  }
 
   @override
   Widget build(BuildContext context) {

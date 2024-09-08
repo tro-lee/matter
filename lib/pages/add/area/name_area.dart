@@ -1,6 +1,6 @@
 import 'package:buhuiwangshi/components/label.dart';
 import 'package:buhuiwangshi/components/place_holder.dart';
-import 'package:buhuiwangshi/store/add/store.dart';
+import 'package:buhuiwangshi/store/add_page_store.dart';
 import 'package:buhuiwangshi/utils/input_bottom_sheet.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -10,9 +10,9 @@ class NameArea extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final formStore = Provider.of<FormStore>(context);
-    final setName = Provider.of<FormStore>(context).setName;
-    final name = Provider.of<FormStore>(context).name ?? '';
+    final formStore = Provider.of<AddPageStore>(context);
+    final setName = Provider.of<AddPageStore>(context).setName;
+    final name = Provider.of<AddPageStore>(context).name ?? '';
 
     var content = name.isEmpty
         ? CustomPlaceholder(

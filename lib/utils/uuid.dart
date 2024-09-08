@@ -1,6 +1,6 @@
 import 'package:uuid/uuid.dart';
 
-genUuid() {
+String genUuid() {
   // 创建一个 Uuid 实例
   var uuid = const Uuid();
 

@@ -1,5 +1,5 @@
 import 'package:buhuiwangshi/components/place_holder.dart';
-import 'package:buhuiwangshi/store/add/store.dart';
+import 'package:buhuiwangshi/store/add_page_store.dart';
 import 'package:buhuiwangshi/utils/colors.dart';
 import 'package:buhuiwangshi/utils/input_bottom_sheet.dart';
 import 'package:flutter/material.dart';
@@ -10,7 +10,7 @@ class RemarkArea extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final formStore = Provider.of<FormStore>(context);
+    final formStore = Provider.of<AddPageStore>(context);
     final remark = formStore.remark;
     final setRemark = formStore.setRemark;
 
