@@ -11,6 +11,10 @@ class Matter extends StatelessWidget {
   final MatterType type;
   final String name;
   final IconData levelIcon;
+  final bool showTopLine;
+  final bool showBottomLine;
+  final Color? topLineColor;
+  final Color? bottomLineColor;
 
   const Matter(
       {super.key,
@@ -19,9 +23,17 @@ class Matter extends StatelessWidget {
       required this.fontColor,
       required this.time,
       required this.name,
-      required this.levelIcon});
+      required this.levelIcon,
+      this.showTopLine = false,
+      this.showBottomLine = false,
+      this.topLineColor,
+      this.bottomLineColor});
 
-  factory Matter.fromMatterModel(MatterModel model) {
+  factory Matter.fromMatterModel(MatterModel model,
+      {bool showTopLine = false,
+      bool showBottomLine = false,
+      Color? topLineColor,
+      Color? bottomLineColor}) {
     return Matter(
       type: model.type,
       color: Color(model.color),
@@ -29,6 +41,10 @@ class Matter extends StatelessWidget {
       time: model.time,
       name: model.name,
       levelIcon: model.levelIcon,
+      showTopLine: showTopLine,
+      showBottomLine: showBottomLine,
+      topLineColor: topLineColor,
+      bottomLineColor: bottomLineColor,
     );
   }
 
@@ -40,10 +56,15 @@ class Matter extends StatelessWidget {
       child: Row(
         children: [
           line(
-              context: context,
-              icon: type.iconData,
-              backgroundColor: color,
-              fontColor: fontColor),
+            context: context,
+            icon: type.iconData,
+            backgroundColor: color,
+            fontColor: fontColor,
+            showTopLine: showTopLine,
+            showBottomLine: showBottomLine,
+            topLineColor: topLineColor,
+            bottomLineColor: bottomLineColor,
+          ),
           content(
               context: context,
               templateName: name,
@@ -57,31 +78,66 @@ class Matter extends StatelessWidget {
   }
 
   /// 线
-  Widget line(
-      {context,
-      required IconData icon,
-      required Color backgroundColor,
-      required Color fontColor}) {
+  Widget line({
+    BuildContext? context,
+    required IconData icon,
+    required Color backgroundColor,
+    required Color fontColor,
+    required bool showTopLine,
+    required bool showBottomLine,
+    required Color? topLineColor,
+    required Color? bottomLineColor,
+  }) {
     return Padding(
-      padding: const EdgeInsets.fromLTRB(12, 0, 12, 0),
+      padding: const EdgeInsets.symmetric(horizontal: 12),
       child: Stack(
         alignment: Alignment.center,
         children: [
-          Container(
-            width: 8,
+          SizedBox(
             height: double.infinity,
-            color: middleContainerColor(context),
+            child: Column(
+              children: [
+                _buildLine(showTopLine, backgroundColor, topLineColor, true),
+                _buildLine(
+                    showBottomLine, backgroundColor, bottomLineColor, false),
+              ],
+            ),
           ),
           Container(
             decoration: BoxDecoration(
               color: backgroundColor,
-              borderRadius: const BorderRadius.all(Radius.circular(180)),
+              shape: BoxShape.circle,
             ),
             width: 64,
             height: 64,
             child: Icon(icon, size: 32, color: fontColor),
           ),
         ],
+      ),
+    );
+  }
+
+  Widget _buildLine(
+      bool showLine, Color backgroundColor, Color? lineColor, bool isTopLine) {
+    return Expanded(
+      child: Container(
+        width: 8,
+        decoration: BoxDecoration(
+          gradient: showLine
+              ? LinearGradient(
+                  begin:
+                      isTopLine ? Alignment.bottomCenter : Alignment.topCenter,
+                  end: isTopLine ? Alignment.topCenter : Alignment.bottomCenter,
+                  colors: [
+                    backgroundColor,
+                    backgroundColor,
+                    blendColors(
+                        lineColor ?? backgroundColor, backgroundColor, 0.5),
+                  ],
+                  stops: const [0.1, 0.8, 1.0],
+                )
+              : null,
+        ),
       ),
     );
   }

@@ -159,7 +159,7 @@ class HomePage extends StatelessWidget {
           color: containerColor(context),
           height: double.infinity,
           width: double.infinity,
-          child: const Stack(
+          child: Stack(
             children: [UnderPage(), MiddlePage(), TopLayer()],
           ),
         ),

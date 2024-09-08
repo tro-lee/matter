@@ -35,9 +35,19 @@ class _TopLayerState extends State<TopLayer> {
             return Consumer<HomePageStore>(
               builder: (context, store, child) {
                 return ListView.builder(
+                  padding: const EdgeInsets.only(top: 8),
                   itemCount: store.mattersList.length,
                   itemBuilder: (context, index) {
-                    return Matter.fromMatterModel(store.mattersList[index]);
+                    return Matter.fromMatterModel(store.mattersList[index],
+                        showTopLine: index != 0,
+                        showBottomLine: index != store.mattersList.length - 1,
+                        topLineColor: Color(index - 1 >= 0
+                            ? store.mattersList[index - 1].color
+                            : 0),
+                        bottomLineColor: Color(
+                            index + 1 < store.mattersList.length
+                                ? store.mattersList[index + 1].color
+                                : 0));
                   },
                 );
               },
