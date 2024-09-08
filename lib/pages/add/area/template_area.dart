@@ -24,7 +24,7 @@ class TemplateArea extends StatelessWidget {
     final fontColor = Color(formStore.fontColor);
 
     return OpenContainer(
-        openBuilder: (context, action) => const MatterTemplates(),
+        openBuilder: (context, action) => const MatterTemplatesPage(),
         transitionDuration: const Duration(milliseconds: 400),
         transitionType: ContainerTransitionType.fadeThrough,
         closedElevation: 0,

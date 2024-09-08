@@ -6,9 +6,9 @@ import 'package:buhuiwangshi/utils/standard.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
-class MatterTemplates extends StatelessWidget {
+class MatterTemplatesPage extends StatelessWidget {
   // 回调函数
-  const MatterTemplates({super.key});
+  const MatterTemplatesPage({super.key});
 
   @override
   Widget build(BuildContext context) {

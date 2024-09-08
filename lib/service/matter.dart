@@ -64,8 +64,7 @@ class MatterService {
   }
 
   /// 根据表单数据创建新的 MatterBuilderModel 实例并插入数据库
-  static Future<void> insertMatterByForm(
-      AddPageStore formStore, HomePageStore homePageStore) async {
+  static Future<void> insertMatterByForm(AddPageStore formStore) async {
     // 创建新的 MatterBuilderModel 实例
     final matterBuilder = MatterBuilderModel(
       id: genUuid(),
@@ -99,6 +98,6 @@ class MatterService {
     AddPageStore.reset();
 
     // 刷新主页
-    await homePageStore.refresh();
+    HomePageStore.refresh();
   }
 }

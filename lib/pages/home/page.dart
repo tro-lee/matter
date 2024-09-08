@@ -1,6 +1,8 @@
 import 'dart:core';
 
 import 'package:buhuiwangshi/pages/home/top_layer.dart';
+import 'package:buhuiwangshi/store/home_page_store.dart';
+import 'package:buhuiwangshi/utils/standard.dart';
 import 'package:flutter/material.dart';
 import 'package:buhuiwangshi/utils/colors.dart';
 import 'package:buhuiwangshi/utils/date.dart';
@@ -151,12 +153,17 @@ class HomePage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      color: containerColor(context),
-      height: double.infinity,
-      width: double.infinity,
-      child: const Stack(
-        children: [UnderPage(), MiddlePage(), TopLayer()],
+    return HomePageStoreWrapper(
+      child: standardContainer(
+        child: Container(
+          color: containerColor(context),
+          height: double.infinity,
+          width: double.infinity,
+          child: const Stack(
+            children: [UnderPage(), MiddlePage(), TopLayer()],
+          ),
+        ),
+        context: context,
       ),
     );
   }

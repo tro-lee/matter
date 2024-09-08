@@ -3,7 +3,7 @@ import 'package:buhuiwangshi/pages/add/area/reminder_level_area.dart';
 import 'package:buhuiwangshi/pages/add/area/style_area.dart';
 import 'package:buhuiwangshi/service/matter.dart';
 import 'package:buhuiwangshi/store/add_page_store.dart';
-import 'package:buhuiwangshi/store/home_page_store.dart';
+import 'package:buhuiwangshi/store/system_store.dart';
 import 'package:flutter/material.dart';
 
 import 'package:buhuiwangshi/pages/add/area/name_area.dart';
@@ -13,7 +13,6 @@ import 'package:buhuiwangshi/pages/add/area/type_area.dart';
 
 import 'package:buhuiwangshi/utils/colors.dart';
 import 'package:buhuiwangshi/utils/standard.dart';
-import 'package:provider/provider.dart';
 
 // 添加页
 class AddPage extends StatefulWidget {
@@ -24,6 +23,12 @@ class AddPage extends StatefulWidget {
 }
 
 class _AddPageState extends State<AddPage> {
+  @override
+  void initState() {
+    super.initState();
+    AddPageStore.reset();
+  }
+
   @override
   Widget build(BuildContext context) {
     return AddPageStoreWrapper(
@@ -37,12 +42,6 @@ class _AddPageState extends State<AddPage> {
       ),
     );
   }
-
-  @override
-  void dispose() {
-    AddPageStore.reset();
-    super.dispose();
-  }
 }
 
 /// 以下是头部部分
@@ -51,9 +50,6 @@ class TopAppBar extends StatelessWidget implements PreferredSizeWidget {
 
   @override
   Widget build(BuildContext context) {
-    final formStore = Provider.of<AddPageStore>(context);
-    final homePageStore = Provider.of<HomePageStore>(context);
-
     // 左侧按钮
     var iconButton = IconButton(
       onPressed: () {
@@ -71,6 +67,8 @@ class TopAppBar extends StatelessWidget implements PreferredSizeWidget {
     );
 
     onSave() async {
+      final formStore = AddPageStore.instance;
+
       // 验证表单数据
       formStore
           .setIsNameWarning(formStore.name == null || formStore.name!.isEmpty);
@@ -85,11 +83,13 @@ class TopAppBar extends StatelessWidget implements PreferredSizeWidget {
       }
 
       // 保存数据
-      await MatterService.insertMatterByForm(formStore, homePageStore);
+      await MatterService.insertMatterByForm(formStore);
 
-      // 返回上一页
+      // 只跳转到首页
       // ignore: use_build_context_synchronously
       Navigator.of(context).pop();
+
+      SystemStore.instance.setCurrentIndex(0);
     }
 
     // 右侧保存

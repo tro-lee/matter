@@ -11,7 +11,25 @@ class AddPageStore extends ChangeNotifier {
   }
 
   static reset() {
-    _instance = AddPageStore();
+    if (_instance != null) {
+      _instance!.clearState();
+    }
+  }
+
+  void clearState() {
+    name = null;
+    datetime = null;
+    type = null;
+    isNameWarning = false;
+    isTimeWarning = false;
+    isTypeWarning = false;
+    isRepeatWeek = false;
+    isRepeatDay = false;
+    level = "low";
+    color = 0xFFEBF1FF;
+    fontColor = Colors.black54.value;
+    remark = '';
+    notifyListeners();
   }
 
   /// 警告部分

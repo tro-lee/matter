@@ -24,4 +24,12 @@ class DB {
     );
     return _instance!;
   }
+
+  /// 关闭数据库连接
+  static Future<void> close() async {
+    if (_instance != null) {
+      await _instance!.close();
+      _instance = null;
+    }
+  }
 }
