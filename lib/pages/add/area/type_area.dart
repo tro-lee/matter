@@ -1,7 +1,7 @@
 import 'package:buhuiwangshi/components/label.dart';
 import 'package:buhuiwangshi/components/place_holder.dart';
 import 'package:buhuiwangshi/constant/candidates.dart';
-import 'package:buhuiwangshi/store/add/store.dart';
+import 'package:buhuiwangshi/store/add_page_store.dart';
 import 'package:buhuiwangshi/utils/colors.dart';
 import 'package:buhuiwangshi/utils/standard.dart';
 import 'package:buhuiwangshi/utils/system.dart';
@@ -17,11 +17,15 @@ class TypeArea extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    var formStore = Provider.of<FormStore>(context);
+    var formStore = Provider.of<AddPageStore>(context);
     var type = formStore.type;
 
     var content = type == null
-        ? placeholder(onPressed: () => showTypePicker(formStore), text: "请选择类型")
+        ? CustomPlaceholder(
+            onPressed: () => showTypePicker(formStore),
+            text: "请选择类型",
+            isWarning: formStore.isTypeWarning,
+          )
         : TextButton(
             onPressed: () => showTypePicker(formStore),
             child: Row(
@@ -51,7 +55,7 @@ class TypeArea extends StatelessWidget {
     );
   }
 
-  void showTypePicker(FormStore formStore) async {
+  void showTypePicker(AddPageStore formStore) async {
     if (SystemUtils.hasFocus) {
       SystemUtils.hideKeyShowUnfocus();
       await Future.delayed(const Duration(milliseconds: 100));

@@ -1,6 +1,6 @@
 import 'package:animated_toggle_switch/animated_toggle_switch.dart';
 import 'package:buhuiwangshi/components/label.dart';
-import 'package:buhuiwangshi/store/add/store.dart';
+import 'package:buhuiwangshi/store/add_page_store.dart';
 import 'package:buhuiwangshi/utils/colors.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -10,7 +10,7 @@ class ReminderLevelArea extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final formStore = Provider.of<FormStore>(context);
+    final formStore = Provider.of<AddPageStore>(context);
     final level = formStore.level;
     final setLevel = formStore.setLevel;
 

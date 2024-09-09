@@ -1,16 +1,54 @@
 import 'package:buhuiwangshi/constant/candidates.dart';
 import 'package:day_night_time_picker/day_night_time_picker.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
-class FormStore extends ChangeNotifier {
-  static FormStore? _instance;
-  static FormStore get instance {
-    _instance ??= FormStore();
+class AddPageStore extends ChangeNotifier {
+  static AddPageStore? _instance;
+  static AddPageStore get instance {
+    _instance ??= AddPageStore();
     return _instance!;
   }
 
   static reset() {
-    _instance = FormStore();
+    if (_instance != null) {
+      _instance!.clearState();
+    }
+  }
+
+  void clearState() {
+    name = null;
+    datetime = null;
+    type = null;
+    isNameWarning = false;
+    isTimeWarning = false;
+    isTypeWarning = false;
+    isRepeatWeek = false;
+    isRepeatDay = false;
+    level = "low";
+    color = 0xFFEBF1FF;
+    fontColor = Colors.black54.value;
+    remark = '';
+    notifyListeners();
+  }
+
+  /// 警告部分
+  bool isNameWarning = false;
+  setIsNameWarning(bool value) {
+    isNameWarning = value;
+    notifyListeners();
+  }
+
+  bool isTimeWarning = false;
+  setIsTimeWarning(bool value) {
+    isTimeWarning = value;
+    notifyListeners();
+  }
+
+  bool isTypeWarning = false;
+  setIsTypeWarning(bool value) {
+    isTypeWarning = value;
+    notifyListeners();
   }
 
   bool isRepeatWeek = false; // 是否周重复
@@ -106,5 +144,29 @@ class FormStore extends ChangeNotifier {
     datetime = time;
     this.name = name;
     notifyListeners();
+  }
+
+  IconData get levelIcon => level == 'low'
+      ? Icons.notifications_off_outlined
+      : Icons.notifications_outlined;
+
+  List<int> get weeklyRepeatDays {
+    if (!isRepeatWeek || datetime == null) {
+      return [];
+    }
+
+    int dayOfWeek = datetime!.weekday % 7; // 0-6, where 0 is Sunday
+    return [dayOfWeek];
+  }
+}
+
+class AddPageStoreWrapper extends StatelessWidget {
+  final Widget child;
+  const AddPageStoreWrapper({super.key, required this.child});
+
+  @override
+  Widget build(BuildContext context) {
+    return ChangeNotifierProvider.value(
+        value: AddPageStore.instance, child: child);
   }
 }

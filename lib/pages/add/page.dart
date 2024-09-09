@@ -1,8 +1,9 @@
 import 'package:buhuiwangshi/pages/add/area/remark_area.dart';
 import 'package:buhuiwangshi/pages/add/area/reminder_level_area.dart';
 import 'package:buhuiwangshi/pages/add/area/style_area.dart';
-import 'package:buhuiwangshi/store/add/store.dart';
-import 'package:buhuiwangshi/store/add/wrapper.dart';
+import 'package:buhuiwangshi/service/matter.dart';
+import 'package:buhuiwangshi/store/add_page_store.dart';
+import 'package:buhuiwangshi/store/system_store.dart';
 import 'package:flutter/material.dart';
 
 import 'package:buhuiwangshi/pages/add/area/name_area.dart';
@@ -23,8 +24,14 @@ class AddPage extends StatefulWidget {
 
 class _AddPageState extends State<AddPage> {
   @override
+  void initState() {
+    super.initState();
+    AddPageStore.reset();
+  }
+
+  @override
   Widget build(BuildContext context) {
-    return AddStoreWrapper(
+    return AddPageStoreWrapper(
       child: standardContainer(
         context: context,
         child: const Scaffold(
@@ -34,12 +41,6 @@ class _AddPageState extends State<AddPage> {
         ),
       ),
     );
-  }
-
-  @override
-  void dispose() {
-    FormStore.reset();
-    super.dispose();
   }
 }
 
@@ -64,11 +65,36 @@ class TopAppBar extends StatelessWidget implements PreferredSizeWidget {
       "添加日程",
       style: TextStyle(fontSize: 24, color: textColor(context)),
     );
-    // w右侧保存
+
+    onSave() async {
+      final formStore = AddPageStore.instance;
+
+      // 验证表单数据
+      formStore
+          .setIsNameWarning(formStore.name == null || formStore.name!.isEmpty);
+      formStore.setIsTimeWarning(formStore.datetime == null);
+      formStore.setIsTypeWarning(formStore.type == null);
+
+      // 如果有警告，直接返回
+      if (formStore.isNameWarning ||
+          formStore.isTimeWarning ||
+          formStore.isTypeWarning) {
+        return;
+      }
+
+      // 保存数据
+      await MatterService.insertMatterByForm(formStore);
+
+      // 只跳转到首页
+      // ignore: use_build_context_synchronously
+      Navigator.of(context).pop();
+
+      SystemStore.instance.setCurrentIndex(0);
+    }
+
+    // 右侧保存
     var textButton = TextButton(
-        onPressed: () {
-          Navigator.of(context).pop();
-        },
+        onPressed: onSave,
         child: Text("完成",
             style: TextStyle(fontSize: 18, color: textColor(context))));
 

@@ -1,6 +1,6 @@
 import 'package:buhuiwangshi/components/color_picker.dart';
 import 'package:buhuiwangshi/components/label.dart';
-import 'package:buhuiwangshi/store/add/store.dart';
+import 'package:buhuiwangshi/store/add_page_store.dart';
 import 'package:buhuiwangshi/utils/system.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_smart_dialog/flutter_smart_dialog.dart';
@@ -11,7 +11,7 @@ class StyleArea extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final formStore = Provider.of<FormStore>(context);
+    final formStore = Provider.of<AddPageStore>(context);
 
     var textButton = OutlinedButton(
       style: OutlinedButton.styleFrom(

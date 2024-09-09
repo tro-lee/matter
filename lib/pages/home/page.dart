@@ -1,5 +1,8 @@
 import 'dart:core';
 
+import 'package:buhuiwangshi/pages/home/top_layer.dart';
+import 'package:buhuiwangshi/store/home_page_store.dart';
+import 'package:buhuiwangshi/utils/standard.dart';
 import 'package:flutter/material.dart';
 import 'package:buhuiwangshi/utils/colors.dart';
 import 'package:buhuiwangshi/utils/date.dart';
@@ -145,54 +148,22 @@ class MiddlePage extends StatelessWidget {
   }
 }
 
-/// 时间线
-class TimeLine extends StatelessWidget {
-  const TimeLine({super.key});
-
-  @override
-  Widget build(BuildContext context) {
-    return Container(
-      margin: const EdgeInsets.fromLTRB(64, 148, 0, 0),
-      width: 4,
-      height: double.infinity,
-      color: middleContainerColor(context),
-    );
-  }
-}
-
-class TopPage extends StatelessWidget {
-  const TopPage({super.key});
-
-  @override
-  Widget build(BuildContext context) {
-    return Stack(
-      children: [
-        Container(
-          decoration: BoxDecoration(
-            borderRadius: const BorderRadius.vertical(top: Radius.circular(64)),
-            color: topContainerColor(context),
-          ),
-          margin: const EdgeInsets.fromLTRB(0, 148, 0, 0),
-          width: double.infinity,
-          height: double.infinity,
-        ),
-        const TimeLine()
-      ],
-    );
-  }
-}
-
 class HomePage extends StatelessWidget {
   const HomePage({super.key});
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      color: containerColor(context),
-      height: double.infinity,
-      width: double.infinity,
-      child: const Stack(
-        children: [UnderPage(), MiddlePage(), TopPage()],
+    return HomePageStoreWrapper(
+      child: standardContainer(
+        child: Container(
+          color: containerColor(context),
+          height: double.infinity,
+          width: double.infinity,
+          child: Stack(
+            children: [UnderPage(), MiddlePage(), TopLayer()],
+          ),
+        ),
+        context: context,
       ),
     );
   }

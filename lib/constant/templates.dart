@@ -33,3 +33,5 @@ List<Function> getTemplates() {
     _genTemplate(MatterType.sleep, getTime(21, 0), "睡觉"),
   ];
 }
+
+final templates = getTemplates();

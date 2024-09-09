@@ -1,7 +1,7 @@
 import 'package:buhuiwangshi/components/date_picker.dart';
 import 'package:buhuiwangshi/components/label.dart';
 import 'package:buhuiwangshi/components/place_holder.dart';
-import 'package:buhuiwangshi/store/add/store.dart';
+import 'package:buhuiwangshi/store/add_page_store.dart';
 import 'package:buhuiwangshi/utils/colors.dart';
 import 'package:buhuiwangshi/utils/standard.dart';
 import 'package:buhuiwangshi/utils/system.dart';
@@ -16,7 +16,7 @@ class TimeArea extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final formStore = Provider.of<FormStore>(context);
+    final formStore = Provider.of<AddPageStore>(context);
     final datetime = formStore.datetime;
 
     popupDatePicker() {
@@ -24,7 +24,10 @@ class TimeArea extends StatelessWidget {
     }
 
     var content = formStore.datetime == null
-        ? placeholder(onPressed: popupDatePicker, text: "请选择时间")
+        ? CustomPlaceholder(
+            onPressed: popupDatePicker,
+            text: "请选择时间",
+            isWarning: formStore.isTimeWarning)
         : Padding(
             padding: const EdgeInsets.fromLTRB(8.0, 0, 0, 0),
             child: Row(
@@ -50,7 +53,7 @@ class TimeArea extends StatelessWidget {
     return Label(text: "时间", child: content);
   }
 
-  showTimePicker(context, FormStore formStore) async {
+  showTimePicker(context, AddPageStore formStore) async {
     if (SystemUtils.hasFocus) {
       SystemUtils.hideKeyShowUnfocus();
       await Future.delayed(const Duration(milliseconds: 100));
@@ -76,7 +79,7 @@ class TimeArea extends StatelessWidget {
   }
 
   /// 呼出日期选择器
-  showDatePicker(FormStore formStore) async {
+  showDatePicker(AddPageStore formStore) async {
     if (SystemUtils.hasFocus) {
       SystemUtils.hideKeyShowUnfocus();
       await Future.delayed(const Duration(milliseconds: 100));
