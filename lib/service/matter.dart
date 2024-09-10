@@ -60,6 +60,9 @@ class MatterService {
     // 将新创建的 Matter 实例添加到返回列表中
     matters.addAll(newMatters);
 
+    // 排序
+    matters.sort((a, b) => a.time.compareTo(b.time));
+
     return matters;
   }
 

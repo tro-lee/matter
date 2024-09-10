@@ -1,3 +1,4 @@
+import 'package:buhuiwangshi/components/matter.dart';
 import 'package:buhuiwangshi/constant/candidates.dart';
 import 'package:buhuiwangshi/constant/templates.dart';
 import 'package:buhuiwangshi/store/add_page_store.dart';
@@ -74,9 +75,47 @@ class Body extends StatelessWidget {
     }
 
     return Container(
-        color: topContainerColor(context),
-        child: ListView(
-          children: [for (var matter in templates) matter(onFinish)],
-        ));
+      color: topContainerColor(context),
+      child: TemplateList(onFinish: onFinish),
+    );
+  }
+}
+
+class TemplateList extends StatelessWidget {
+  final Function(MatterType, DateTime, String) onFinish;
+
+  const TemplateList({super.key, required this.onFinish});
+
+  @override
+  Widget build(BuildContext context) {
+    final templates = getTemplates();
+
+    return ListView.builder(
+      itemCount: templates.length,
+      itemBuilder: (context, index) {
+        final template = templates[index];
+        return TextButton(
+          style: TextButton.styleFrom(padding: EdgeInsets.zero),
+          onPressed: () =>
+              onFinish(template.type, template.time, template.name),
+          child: Matter(
+            color: Color(template.type.color),
+            fontColor: Color(template.type.fontColor),
+            type: template.type,
+            levelIcon: Icons.notifications_off_outlined,
+            time: template.time,
+            name: template.name,
+            showTopLine: index != 0,
+            showBottomLine: index != templates.length - 1,
+            topLineColor: index > 0
+                ? Color(templates[index - 1].type.color)
+                : Colors.transparent,
+            bottomLineColor: index < templates.length - 1
+                ? Color(templates[index + 1].type.color)
+                : Colors.transparent,
+          ),
+        );
+      },
+    );
   }
 }

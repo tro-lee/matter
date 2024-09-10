@@ -10,20 +10,27 @@ class HomePageStore extends ChangeNotifier {
     return _instance!;
   }
 
+  bool isInitialized = false;
   List<MatterModel> _mattersList = [];
   List<MatterModel> get mattersList => _mattersList;
 
   Future<void> initializeMattersList() async {
+    if (isInitialized) {
+      return;
+    }
+
     if (_mattersList.isEmpty) {
       final matters = await MatterService.getMattersByDay(DateTime.now());
       _mattersList = matters;
       notifyListeners();
     }
+    isInitialized = true;
   }
 
   static Future<void> refresh() async {
     if (_instance != null) {
       final matters = await MatterService.getMattersByDay(DateTime.now());
+      // Sort matters by time
       _instance!._mattersList = matters;
       _instance!.notifyListeners();
     }
