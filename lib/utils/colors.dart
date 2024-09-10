@@ -28,7 +28,7 @@ Color topContainerColor(context) {
   return const Color(0xFFF5F8FF);
 }
 
-Color labelColor(context) {
+Color labelColor() {
   return Colors.black45;
 }
 

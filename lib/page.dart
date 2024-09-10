@@ -1,4 +1,5 @@
 import 'package:buhuiwangshi/pages/add/page.dart';
+import 'package:buhuiwangshi/pages/feature/page.dart';
 import 'package:buhuiwangshi/pages/home/page.dart';
 import 'package:buhuiwangshi/store/system_store.dart';
 import 'package:buhuiwangshi/utils/animate_route.dart';
@@ -33,7 +34,7 @@ class CurrentPageWidget extends StatelessWidget {
         final map = {
           0: const HomePage(),
           1: const Placeholder(),
-          2: const Placeholder()
+          2: const FeaturePage()
         };
 
         return map[currentIndex] ?? const HomePage();
