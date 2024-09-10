@@ -1,4 +1,6 @@
+import 'package:buhuiwangshi/pages/feature/buttons_area.dart';
 import 'package:buhuiwangshi/pages/feature/chart.dart';
+import 'package:buhuiwangshi/pages/feature/more_area.dart';
 import 'package:buhuiwangshi/utils/colors.dart';
 import 'package:buhuiwangshi/utils/standard.dart';
 import 'package:flutter/material.dart';
@@ -37,8 +39,11 @@ class TopPage extends StatelessWidget {
       width: double.infinity,
       margin: const EdgeInsets.fromLTRB(0, 100, 0, 0),
       child: const Column(children: [
-        SizedBox(height: 16),
         Chart(), // 图表
+        SizedBox(height: 32),
+        ButtonsArea(), // 按钮区
+        SizedBox(height: 32),
+        MoreArea() // 更多功能
       ]),
     );
   }

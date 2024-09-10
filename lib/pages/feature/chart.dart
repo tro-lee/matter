@@ -9,10 +9,14 @@ class Chart extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return const SizedBox(
+    return Container(
+      decoration: BoxDecoration(
+        color: topContainerColor(context),
+        borderRadius: const BorderRadius.vertical(top: Radius.circular(20)),
+      ),
       height: 256,
-      child: Padding(
-        padding: EdgeInsets.fromLTRB(28, 16, 28, 0),
+      child: const Padding(
+        padding: EdgeInsets.fromLTRB(28, 32, 28, 8),
         child: _ChartContent(),
       ),
     );
@@ -68,7 +72,7 @@ class _ChartContent extends StatelessWidget {
     final now = DateTime.now();
     return [
       _getLineChartBarData(
-        color: const Color(0xff376DF7),
+        color: const Color(0xffD1DCD7),
         spots: stats.map((stat) {
           final daysFromNow = now.difference(stat.date).inDays;
           return FlSpot(
@@ -76,7 +80,7 @@ class _ChartContent extends StatelessWidget {
         }).toList(),
       ),
       _getLineChartBarData(
-        color: const Color(0xffFFB6F6),
+        color: const Color(0xffF2C5C8),
         spots: stats.map((stat) {
           final daysFromNow = now.difference(stat.date).inDays;
           return FlSpot(
@@ -84,12 +88,6 @@ class _ChartContent extends StatelessWidget {
         }).toList(),
       ),
     ];
-  }
-
-  // 将日期转换为对应的星期几数字（1-7，其中1代表周一，7代表周日）
-  double _getWeekdayNumber(DateTime date) {
-    int weekday = date.weekday;
-    return weekday.toDouble();
   }
 
   /// 构建标题数据
@@ -101,9 +99,9 @@ class _ChartContent extends StatelessWidget {
         axisNameWidget: Row(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            _buildLegendItem(const Color(0xff376DF7), '已完成事项'),
+            _buildLegendItem(const Color(0xffD1DCD7), '已完成事项'),
             const SizedBox(width: 32),
-            _buildLegendItem(const Color(0xffFFB6F6), '未完成事项'),
+            _buildLegendItem(const Color(0xffF2C5C8), '未完成事项'),
           ],
         ),
         // 侧边标题
@@ -199,51 +197,54 @@ class _ChartContent extends StatelessWidget {
       ],
     );
   }
+}
 
-  /// 获取线条图表数据
-  LineChartBarData _getLineChartBarData({
-    required Color color,
-    required List<FlSpot> spots,
-  }) {
-    return LineChartBarData(
-        spots: spots,
-        barWidth: 2,
-        color: color,
-        preventCurveOverShooting: true,
-        belowBarData: BarAreaData(
-          show: true,
-          color: color.withOpacity(0.2),
-        ),
-        dotData: const FlDotData(show: false));
+/// 获取线条图表数据
+LineChartBarData _getLineChartBarData({
+  required Color color,
+  required List<FlSpot> spots,
+}) {
+  return LineChartBarData(
+      spots: spots,
+      barWidth: 6,
+      isCurved: true,
+      isStrokeCapRound: true,
+      isStrokeJoinRound: true,
+      color: color,
+      preventCurveOverShooting: true,
+      belowBarData: BarAreaData(
+        show: true,
+        color: color.withOpacity(0.2),
+      ),
+      dotData: const FlDotData(show: false));
+}
+
+/// 根据日期获取星期几
+String _getWeekdayFromDate(DateTime date) {
+  final now = DateTime.now();
+  final today = DateTime(now.year, now.month, now.day);
+  final targetDate = DateTime(date.year, date.month, date.day);
+
+  if (targetDate == today) {
+    return '今天';
   }
 
-  /// 根据日期获取星期几
-  String _getWeekdayFromDate(DateTime date) {
-    final now = DateTime.now();
-    final today = DateTime(now.year, now.month, now.day);
-    final targetDate = DateTime(date.year, date.month, date.day);
-
-    if (targetDate == today) {
-      return '今天';
-    }
-
-    switch (date.weekday) {
-      case 1:
-        return '周一';
-      case 2:
-        return '周二';
-      case 3:
-        return '周三';
-      case 4:
-        return '周四';
-      case 5:
-        return '周五';
-      case 6:
-        return '周六';
-      case 7:
-        return '周日';
-      default:
-        return '';
-    }
+  switch (date.weekday) {
+    case 1:
+      return '周一';
+    case 2:
+      return '周二';
+    case 3:
+      return '周三';
+    case 4:
+      return '周四';
+    case 5:
+      return '周五';
+    case 6:
+      return '周六';
+    case 7:
+      return '周日';
+    default:
+      return '';
   }
 }
