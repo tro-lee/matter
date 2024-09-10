@@ -91,7 +91,7 @@ class _CalItemState extends State<CalItem> {
     final now = DateTime.now();
     isSelected = widget.data[1] == now.day.toString();
 
-    var fontColor = isSelected ? textColor(context) : labelColor();
+    var fontColor = isSelected ? textColor(context) : labelColor;
 
     return Container(
       width: 36,

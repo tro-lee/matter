@@ -114,7 +114,7 @@ class _ChartContent extends StatelessWidget {
             final date = now.subtract(Duration(days: (6 - value).toInt()));
             return Text(
               _getWeekdayFromDate(date),
-              style: TextStyle(color: labelColor(), fontSize: 12),
+              style: TextStyle(color: labelColor, fontSize: 12),
             );
           },
           interval: 1,
@@ -127,7 +127,7 @@ class _ChartContent extends StatelessWidget {
           getTitlesWidget: (value, meta) {
             return Text(
               value.toInt().toString(),
-              style: TextStyle(color: labelColor(), fontSize: 12),
+              style: TextStyle(color: labelColor, fontSize: 12),
             );
           },
         ),
@@ -194,7 +194,7 @@ class _ChartContent extends StatelessWidget {
         const SizedBox(width: 4),
         Text(
           text,
-          style: TextStyle(color: labelColor(), fontSize: 12),
+          style: TextStyle(color: labelColor, fontSize: 12),
         ),
       ],
     );

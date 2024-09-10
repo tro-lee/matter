@@ -16,10 +16,6 @@ Color onPrimaryColor(context) {
   return Theme.of(context).colorScheme.onPrimary;
 }
 
-Color textColor(context) {
-  return Colors.black87;
-}
-
 Color middleContainerColor(context) {
   return const Color(0xFFEBF1FF);
 }
@@ -28,12 +24,13 @@ Color topContainerColor(context) {
   return const Color(0xFFF5F8FF);
 }
 
-Color labelColor() {
-  return Colors.black45;
+Color textColor(context) {
+  return Colors.black87;
 }
 
-Color opacityColor50() {
-  return Colors.white.withOpacity(0.5);
+// 明确标签色不需要上下文
+Color get labelColor {
+  return Colors.black45;
 }
 
 Color blendColors(Color color1, Color color2, double ratio) {
