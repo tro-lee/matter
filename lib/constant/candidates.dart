@@ -18,7 +18,7 @@ class MatterType {
     return MatterType(
         iconData: Icons.fastfood,
         name: "吃饭",
-        color: 0xffEED2C3,
+        color: 0xffF5E0D6,
         fontColor: Colors.black54.value);
   }
 
@@ -26,7 +26,7 @@ class MatterType {
     return MatterType(
         iconData: Icons.menu_book,
         name: "学习",
-        color: 0xffBECDC7,
+        color: 0xffD1DCD7,
         fontColor: Colors.black54.value);
   }
 
@@ -34,7 +34,7 @@ class MatterType {
     return MatterType(
         iconData: Icons.work,
         name: "工作",
-        color: 0xffBFCAD9,
+        color: 0xffD1D9E5,
         fontColor: Colors.black54.value);
   }
 
@@ -42,7 +42,7 @@ class MatterType {
     return MatterType(
         iconData: Icons.bed,
         name: "睡觉",
-        color: 0xffDECBD5,
+        color: 0xffE8DBE2,
         fontColor: Colors.black54.value);
   }
 
@@ -50,7 +50,7 @@ class MatterType {
     return MatterType(
         iconData: Icons.sports_handball,
         name: "运动",
-        color: 0xffEBB0B4,
+        color: 0xffF2C5C8,
         fontColor: Colors.black54.value);
   }
 
@@ -58,7 +58,7 @@ class MatterType {
     return MatterType(
         iconData: Icons.videogame_asset,
         name: "娱乐",
-        color: 0xffF3CAE9,
+        color: 0xffF7D9EF,
         fontColor: Colors.black54.value);
   }
 
@@ -67,7 +67,7 @@ class MatterType {
         iconData: Icons.edit,
         name: "新建",
         fontColor: Colors.black54.value,
-        color: 0xff415f91);
+        color: 0xff6B8AB8);
   }
 }
 

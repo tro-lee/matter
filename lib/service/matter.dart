@@ -60,6 +60,9 @@ class MatterService {
     // 将新创建的 Matter 实例添加到返回列表中
     matters.addAll(newMatters);
 
+    // 排序
+    matters.sort((a, b) => a.time.compareTo(b.time));
+
     return matters;
   }
 
@@ -100,4 +103,57 @@ class MatterService {
     // 刷新主页
     HomePageStore.refresh();
   }
+
+  /// 获取最近7天（包括今天）的事项统计
+  ///
+  /// 返回一个包含最近7天每天事项统计的列表，按日期倒序排列（最近的日期在前）
+  /// 每个统计项包含日期、已完成事项数量和未完成事项数量
+  /// 如果某天没有事项，对应的统计项的完成和未完成数量都为0
+  ///
+  /// 返回值类型: Future<List<DailyMatterStats>>
+  static Future<List<DailyMatterStats>> getLastSevenDaysStats() async {
+    final today =
+        DateTime(DateTime.now().year, DateTime.now().month, DateTime.now().day);
+    final sevenDaysAgo = today.subtract(const Duration(days: 6));
+
+    final stats = await MatterTable.getDailyStats(sevenDaysAgo, DateTime.now());
+
+    // 创建一个包含所有7天的List，初始值为0
+    final List<DailyMatterStats> dailyStats = List.generate(7, (index) {
+      final date = sevenDaysAgo.add(Duration(days: index));
+      return DailyMatterStats(
+        date: date,
+        completedCount: 0,
+        incompleteCount: 0,
+      );
+    });
+
+    // 用查询结果更新List
+    for (var stat in stats) {
+      final date = DateTime.parse(stat['date'] as String);
+      final index = date.difference(sevenDaysAgo).inDays;
+      if (index >= 0 && index < 7) {
+        dailyStats[index] = DailyMatterStats(
+          date: date,
+          completedCount: stat['completedCount'] as int,
+          incompleteCount: stat['incompleteCount'] as int,
+        );
+      }
+    }
+
+    return dailyStats.reversed.toList();
+  }
+}
+
+/// 日常事项统计模型
+class DailyMatterStats {
+  final DateTime date;
+  final int completedCount;
+  final int incompleteCount;
+
+  DailyMatterStats({
+    required this.date,
+    required this.completedCount,
+    required this.incompleteCount,
+  });
 }

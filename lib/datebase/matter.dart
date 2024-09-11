@@ -269,4 +269,28 @@ class MatterTable {
       }
     });
   }
+
+  /// 获取指定日期范围内的所有事项统计
+  static Future<List<Map<String, dynamic>>> getDailyStats(
+      DateTime startDate, DateTime endDate) async {
+    final db = await DB.instance;
+    final startDateStr =
+        DateTime(startDate.year, startDate.month, startDate.day)
+            .toIso8601String();
+    final endDateStr =
+        DateTime(endDate.year, endDate.month, endDate.day).toIso8601String();
+
+    final result = await db.rawQuery('''
+      SELECT 
+        DATE(time, 'start of day') as date,
+        SUM(CASE WHEN isDone = 1 THEN 1 ELSE 0 END) as completedCount,
+        SUM(CASE WHEN isDone = 0 THEN 1 ELSE 0 END) as incompleteCount
+      FROM matter
+      WHERE DATE(time, 'start of day') BETWEEN ? AND ?
+      GROUP BY DATE(time, 'start of day')
+      ORDER BY DATE(time, 'start of day')
+    ''', [startDateStr, endDateStr]);
+
+    return result;
+  }
 }

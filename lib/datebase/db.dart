@@ -10,7 +10,7 @@ class DB {
   static Future<Database> get instance async {
     _instance ??= await openDatabase(
       join(await getDatabasesPath(), "buhuiwangshi.db"),
-      version: 2,
+      version: 1,
       onCreate: (db, version) {
         db.execute(MatterTable.createTableSql());
         db.execute(MatterBuilderTable.createTableSql());

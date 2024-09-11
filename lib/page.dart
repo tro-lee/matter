@@ -1,4 +1,5 @@
 import 'package:buhuiwangshi/pages/add/page.dart';
+import 'package:buhuiwangshi/pages/feature/page.dart';
 import 'package:buhuiwangshi/pages/home/page.dart';
 import 'package:buhuiwangshi/store/system_store.dart';
 import 'package:buhuiwangshi/utils/animate_route.dart';
@@ -33,7 +34,7 @@ class CurrentPageWidget extends StatelessWidget {
         final map = {
           0: const HomePage(),
           1: const Placeholder(),
-          2: const Placeholder()
+          2: const FeaturePage()
         };
 
         return map[currentIndex] ?? const HomePage();
@@ -54,16 +55,16 @@ class BottomNavigationBarWidget extends StatelessWidget {
     // 定义底部导航栏项目
     var items = [
       CustomNavigationBarItem(
-        icon: const Icon(Icons.home_outlined),
-        selectedIcon: const Icon(Icons.home),
+        icon: const Icon(Icons.home_outlined, size: 28),
+        selectedIcon: const Icon(Icons.home, size: 28),
       ),
       CustomNavigationBarItem(
-        icon: const Icon(Icons.add_circle_outline),
-        selectedIcon: const Icon(Icons.add_circle),
+        icon: const Icon(Icons.add_circle_outline, size: 28),
+        selectedIcon: const Icon(Icons.add_circle, size: 28),
       ),
       CustomNavigationBarItem(
-        icon: const Icon(Icons.person_outline),
-        selectedIcon: const Icon(Icons.person),
+        icon: const Icon(Icons.interests_outlined, size: 28),
+        selectedIcon: const Icon(Icons.interests, size: 28),
       )
     ];
 

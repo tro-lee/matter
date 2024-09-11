@@ -7,34 +7,26 @@ import 'package:flutter/material.dart';
 import 'package:buhuiwangshi/utils/colors.dart';
 import 'package:buhuiwangshi/utils/date.dart';
 
-/// 头部区域
-class HeadArea extends StatelessWidget {
-  const HeadArea({super.key});
-
-  @override
-  Widget build(BuildContext context) {
-    return Container(
-      alignment: Alignment.bottomLeft,
-      height: 100,
-      child: Text(
-        "你好",
-        style: TextStyle(fontSize: 24, color: textColor(context)),
-      ),
-    );
-  }
-}
-
+/// 底部层
 class UnderPage extends StatelessWidget {
   const UnderPage({super.key});
 
   @override
   Widget build(BuildContext context) {
     return Container(
+      color: containerColor(context),
       padding: const EdgeInsets.fromLTRB(16, 0, 16, 0),
       width: double.infinity,
       height: double.infinity,
       alignment: Alignment.topLeft,
-      child: const HeadArea(),
+      child: Container(
+        alignment: Alignment.bottomLeft,
+        height: 100,
+        child: Text(
+          "你好",
+          style: TextStyle(fontSize: 24, color: primaryColor(context)),
+        ),
+      ),
     );
   }
 }
@@ -99,7 +91,7 @@ class _CalItemState extends State<CalItem> {
     final now = DateTime.now();
     isSelected = widget.data[1] == now.day.toString();
 
-    var fontColor = isSelected ? textColor(context) : labelColor(context);
+    var fontColor = isSelected ? textColor(context) : labelColor;
 
     return Container(
       width: 36,
@@ -155,13 +147,8 @@ class HomePage extends StatelessWidget {
   Widget build(BuildContext context) {
     return HomePageStoreWrapper(
       child: standardContainer(
-        child: Container(
-          color: containerColor(context),
-          height: double.infinity,
-          width: double.infinity,
-          child: Stack(
-            children: [UnderPage(), MiddlePage(), TopLayer()],
-          ),
+        child: const Stack(
+          children: [UnderPage(), MiddlePage(), TopLayer()],
         ),
         context: context,
       ),
