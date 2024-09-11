@@ -207,7 +207,6 @@ LineChartBarData _getLineChartBarData({
   return LineChartBarData(
       spots: spots,
       barWidth: 6,
-      isCurved: true,
       isStrokeCapRound: true,
       isStrokeJoinRound: true,
       color: color,

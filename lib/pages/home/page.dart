@@ -1,5 +1,6 @@
 import 'dart:core';
 
+import 'package:buhuiwangshi/components/under_page.dart';
 import 'package:buhuiwangshi/pages/home/top_layer.dart';
 import 'package:buhuiwangshi/store/home_page_store.dart';
 import 'package:buhuiwangshi/utils/standard.dart';
@@ -7,27 +8,16 @@ import 'package:flutter/material.dart';
 import 'package:buhuiwangshi/utils/colors.dart';
 import 'package:buhuiwangshi/utils/date.dart';
 
-/// 底部层
 class UnderPage extends StatelessWidget {
   const UnderPage({super.key});
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      color: containerColor(context),
-      padding: const EdgeInsets.fromLTRB(16, 0, 16, 0),
-      width: double.infinity,
-      height: double.infinity,
-      alignment: Alignment.topLeft,
-      child: Container(
-        alignment: Alignment.bottomLeft,
-        height: 100,
+    return const BottomLayer(
         child: Text(
-          "你好",
-          style: TextStyle(fontSize: 24, color: primaryColor(context)),
-        ),
-      ),
-    );
+      "😊 不会忘事~",
+      style: TextStyle(fontSize: 24),
+    ));
   }
 }
 

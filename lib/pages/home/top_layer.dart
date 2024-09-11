@@ -1,5 +1,7 @@
 import 'package:buhuiwangshi/components/matter.dart';
+import 'package:buhuiwangshi/pages/details/page.dart';
 import 'package:buhuiwangshi/store/home_page_store.dart';
+import 'package:buhuiwangshi/utils/animate_route.dart';
 import 'package:buhuiwangshi/utils/colors.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -38,16 +40,24 @@ class _TopLayerState extends State<TopLayer> {
                   padding: const EdgeInsets.only(top: 8),
                   itemCount: store.mattersList.length,
                   itemBuilder: (context, index) {
-                    return Matter.fromMatterModel(store.mattersList[index],
-                        showTopLine: index != 0,
-                        showBottomLine: index != store.mattersList.length - 1,
-                        topLineColor: Color(index - 1 >= 0
-                            ? store.mattersList[index - 1].color
-                            : 0),
-                        bottomLineColor: Color(
-                            index + 1 < store.mattersList.length
-                                ? store.mattersList[index + 1].color
-                                : 0));
+                    return Matter.fromMatterModel(
+                      store.mattersList[index],
+                      showTopLine: index != 0,
+                      showBottomLine: index != store.mattersList.length - 1,
+                      topLineColor: Color(index - 1 >= 0
+                          ? store.mattersList[index - 1].color
+                          : 0),
+                      bottomLineColor: Color(
+                          index + 1 < store.mattersList.length
+                              ? store.mattersList[index + 1].color
+                              : 0),
+                      onPressed: () {
+                        Navigator.of(context).push(animateRoute(
+                            direction: 'horizontal',
+                            child: DetailsPage(
+                                matterId: store.mattersList[index].id)));
+                      },
+                    );
                   },
                 );
               },
