@@ -1,6 +1,6 @@
 import 'package:buhuiwangshi/components/matter.dart';
 import 'package:buhuiwangshi/pages/details/page.dart';
-import 'package:buhuiwangshi/store/home_page_store.dart';
+import 'package:buhuiwangshi/pages/home/store.dart';
 import 'package:buhuiwangshi/utils/animate_route.dart';
 import 'package:buhuiwangshi/utils/colors.dart';
 import 'package:flutter/material.dart';

@@ -1,6 +1,6 @@
 import 'package:animated_toggle_switch/animated_toggle_switch.dart';
 import 'package:buhuiwangshi/components/label.dart';
-import 'package:buhuiwangshi/store/add_page_store.dart';
+import 'package:buhuiwangshi/pages/add/store.dart';
 import 'package:buhuiwangshi/utils/colors.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';

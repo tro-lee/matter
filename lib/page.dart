@@ -1,7 +1,7 @@
 import 'package:buhuiwangshi/pages/add/page.dart';
 import 'package:buhuiwangshi/pages/feature/page.dart';
 import 'package:buhuiwangshi/pages/home/page.dart';
-import 'package:buhuiwangshi/store/system_store.dart';
+import 'package:buhuiwangshi/store.dart';
 import 'package:buhuiwangshi/utils/animate_route.dart';
 import 'package:custom_navigation_bar/custom_navigation_bar.dart';
 import 'package:flutter/material.dart';

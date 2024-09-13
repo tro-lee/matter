@@ -10,12 +10,12 @@ import 'package:flutter/material.dart';
 class MatterModel extends MatterBuilderModel {
   final String builderId; // 所用构建器id
 
-  final bool isDone; // 是否完成
-  final DateTime? doneAt; // 完成时间
-  final bool isDelayed; // 是否延期
-  final DateTime? delayedAt; // 延期时间
-  final bool isDeleted; // 是否删除
-  final DateTime? deletedAt; // 删除时间
+  bool isDone; // 是否完成
+  DateTime? doneAt; // 完成时间
+  bool isDelayed; // 是否延期
+  DateTime? delayedAt; // 延期时间
+  bool isDeleted; // 是否取消，历史原因，就先用deleted代替
+  DateTime? deletedAt; // 取消时间
 
   MatterModel({
     required super.typeIcon,
@@ -202,7 +202,7 @@ class MatterTable {
   }
 
   // 根据 ID 查询一条 Matter 记录
-  static Future<MatterModel?> queryById(String id) async {
+  static Future<MatterModel?> getById(String id) async {
     final db = await DB.instance;
     final List<Map<String, dynamic>> maps = await db.query(
       'matter',

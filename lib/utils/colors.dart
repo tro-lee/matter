@@ -24,14 +24,9 @@ Color topContainerColor(context) {
   return const Color(0xFFF5F8FF);
 }
 
-Color textColor(context) {
-  return Colors.black87;
-}
+const textColor = Colors.black87;
 
-// 明确标签色不需要上下文
-Color get labelColor {
-  return Colors.black45;
-}
+const labelColor = Colors.black45;
 
 Color blendColors(Color color1, Color color2, double ratio) {
   final r = (color1.red + (color2.red - color1.red) * ratio).round();

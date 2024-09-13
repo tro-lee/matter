@@ -2,8 +2,8 @@ import 'package:buhuiwangshi/pages/add/area/remark_area.dart';
 import 'package:buhuiwangshi/pages/add/area/reminder_level_area.dart';
 import 'package:buhuiwangshi/pages/add/area/style_area.dart';
 import 'package:buhuiwangshi/service/matter.dart';
-import 'package:buhuiwangshi/store/add_page_store.dart';
-import 'package:buhuiwangshi/store/system_store.dart';
+import 'package:buhuiwangshi/pages/add/store.dart';
+import 'package:buhuiwangshi/store.dart';
 import 'package:flutter/material.dart';
 
 import 'package:buhuiwangshi/pages/add/area/name_area.dart';
@@ -57,13 +57,13 @@ class TopAppBar extends StatelessWidget implements PreferredSizeWidget {
       },
       icon: Icon(
         Icons.arrow_circle_left_outlined,
-        color: textColor(context),
+        color: textColor,
       ),
     );
     // 中间标题
     var text = Text(
       "添加日程",
-      style: TextStyle(fontSize: 24, color: textColor(context)),
+      style: TextStyle(fontSize: 24, color: textColor),
     );
 
     onSave() async {
@@ -95,8 +95,7 @@ class TopAppBar extends StatelessWidget implements PreferredSizeWidget {
     // 右侧保存
     var textButton = TextButton(
         onPressed: onSave,
-        child: Text("完成",
-            style: TextStyle(fontSize: 18, color: textColor(context))));
+        child: Text("完成", style: TextStyle(fontSize: 18, color: textColor)));
 
     return AppBar(
       backgroundColor: Colors.white,

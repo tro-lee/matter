@@ -1,14 +1,15 @@
 import 'package:buhuiwangshi/components/date_picker.dart';
 import 'package:buhuiwangshi/components/label.dart';
 import 'package:buhuiwangshi/components/place_holder.dart';
-import 'package:buhuiwangshi/store/add_page_store.dart';
+import 'package:buhuiwangshi/pages/add/store.dart';
 import 'package:buhuiwangshi/utils/colors.dart';
+import 'package:buhuiwangshi/utils/date.dart';
 import 'package:buhuiwangshi/utils/standard.dart';
 import 'package:buhuiwangshi/utils/system.dart';
+import 'package:buhuiwangshi/utils/time.dart';
 import 'package:day_night_time_picker/day_night_time_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_smart_dialog/flutter_smart_dialog.dart';
-import 'package:jiffy/jiffy.dart';
 import 'package:provider/provider.dart';
 
 class TimeArea extends StatelessWidget {
@@ -114,42 +115,6 @@ class TimeArea extends StatelessWidget {
         );
       },
     );
-  }
-
-  /// 日期文案
-  String getDateText(datetime, {bool? isRepeatWeek, bool? isRepeatDay}) {
-    if (datetime == null) {
-      return "";
-    }
-
-    var dateTimeJiffy = Jiffy.parseFromDateTime(datetime!).startOf(Unit.day);
-    var todayJiffy = Jiffy.now().startOf(Unit.day);
-
-    if (isRepeatDay != null && isRepeatDay) {
-      return "每天";
-    }
-
-    if (isRepeatWeek != null && isRepeatWeek) {
-      return "每${dateTimeJiffy.E}";
-    }
-
-    final daydiff = dateTimeJiffy.diff(todayJiffy, unit: Unit.day);
-    final map = {0: "今天", 1: "明天", 2: "后天"};
-    if (map.containsKey(daydiff)) {
-      return map[daydiff] ?? '';
-    }
-
-    return dateTimeJiffy.format(pattern: "MM/dd");
-  }
-
-  /// 时间文案
-  String getTimeText(datetime) {
-    if (datetime == null) {
-      return "";
-    }
-
-    var timeJiffy = Jiffy.parseFromDateTime(datetime!);
-    return timeJiffy.format(pattern: "HH:mm a");
   }
 
   /// 日期选择占位

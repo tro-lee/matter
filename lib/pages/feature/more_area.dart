@@ -61,7 +61,7 @@ class RectButton extends StatelessWidget {
           children: [
             Text(
               text,
-              style: TextStyle(fontSize: 18, color: textColor(context)),
+              style: const TextStyle(fontSize: 18, color: textColor),
             ),
             const Icon(Icons.chevron_right, size: 24)
           ],

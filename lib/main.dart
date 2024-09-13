@@ -1,5 +1,5 @@
 import 'package:buhuiwangshi/page.dart';
-import 'package:buhuiwangshi/store/system_store.dart';
+import 'package:buhuiwangshi/store.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_smart_dialog/flutter_smart_dialog.dart';

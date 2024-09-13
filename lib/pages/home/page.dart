@@ -2,7 +2,7 @@ import 'dart:core';
 
 import 'package:buhuiwangshi/components/under_page.dart';
 import 'package:buhuiwangshi/pages/home/top_layer.dart';
-import 'package:buhuiwangshi/store/home_page_store.dart';
+import 'package:buhuiwangshi/pages/home/store.dart';
 import 'package:buhuiwangshi/utils/standard.dart';
 import 'package:flutter/material.dart';
 import 'package:buhuiwangshi/utils/colors.dart';
@@ -81,7 +81,7 @@ class _CalItemState extends State<CalItem> {
     final now = DateTime.now();
     isSelected = widget.data[1] == now.day.toString();
 
-    var fontColor = isSelected ? textColor(context) : labelColor;
+    var fontColor = isSelected ? textColor : labelColor;
 
     return Container(
       width: 36,
