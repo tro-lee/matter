@@ -146,7 +146,6 @@ class _CheckCardState extends State<CheckCard> {
           _getTextButton(context, text: "重置", iconData: Icons.refresh,
               onPressed: () {
             store.resetMatter();
-            SmartDialog.showToast("重置打卡");
           }, color: topContainerColor(context)),
         ],
       ),
