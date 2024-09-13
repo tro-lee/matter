@@ -99,11 +99,11 @@ class _CheckCardState extends State<CheckCard> {
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              _getButton(context,
-                  text: "取消",
-                  iconData: Icons.cancel_outlined,
-                  onPressed: () => store.cancelMatter(),
-                  color: topContainerColor(context)),
+              _getButton(context, text: "取消", iconData: Icons.cancel_outlined,
+                  onPressed: () {
+                store.cancelMatter();
+                SmartDialog.showToast("取消打卡");
+              }, color: topContainerColor(context)),
               _getButton(context,
                   text: "完成",
                   iconData: Icons.check_circle_outline, onPressed: () {
@@ -143,11 +143,11 @@ class _CheckCardState extends State<CheckCard> {
               ),
             ],
           ),
-          _getTextButton(context,
-              text: "重置",
-              iconData: Icons.refresh,
-              onPressed: () => store.resetMatter(),
-              color: topContainerColor(context)),
+          _getTextButton(context, text: "重置", iconData: Icons.refresh,
+              onPressed: () {
+            store.resetMatter();
+            SmartDialog.showToast("重置打卡");
+          }, color: topContainerColor(context)),
         ],
       ),
     );
