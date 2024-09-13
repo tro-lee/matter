@@ -1,5 +1,7 @@
 import 'dart:core';
 
+import 'package:jiffy/jiffy.dart';
+
 List<List<int>> generateWeeksDates(int num) {
   DateTime now = DateTime.now();
   int year = now.year;
@@ -45,4 +47,33 @@ List<int> generateOneWeeksDates() {
 // 生成最近四周的日期数组
 List<List<int>> generateFourWeeksDates() {
   return generateWeeksDates(4);
+}
+
+/// 日期文案
+String getDateText(datetime,
+    {bool? isRepeatWeek, bool? isRepeatDay, bool isLocale = true}) {
+  if (datetime == null) {
+    return "";
+  }
+
+  var dateTimeJiffy = Jiffy.parseFromDateTime(datetime!).startOf(Unit.day);
+
+  if (isRepeatDay != null && isRepeatDay) {
+    return "每天";
+  }
+
+  if (isRepeatWeek != null && isRepeatWeek) {
+    return "每${dateTimeJiffy.E}";
+  }
+
+  if (isLocale) {
+    var todayJiffy = Jiffy.now().startOf(Unit.day);
+    final daydiff = dateTimeJiffy.diff(todayJiffy, unit: Unit.day);
+    final map = {0: "今天", 1: "明天", 2: "后天"};
+    if (map.containsKey(daydiff)) {
+      return map[daydiff] ?? '';
+    }
+  }
+
+  return dateTimeJiffy.format(pattern: "MM/dd");
 }

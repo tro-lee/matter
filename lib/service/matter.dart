@@ -1,7 +1,7 @@
 import 'package:buhuiwangshi/datebase/matter.dart';
 import 'package:buhuiwangshi/datebase/matter_builder.dart';
-import 'package:buhuiwangshi/store/add_page_store.dart';
-import 'package:buhuiwangshi/store/home_page_store.dart';
+import 'package:buhuiwangshi/pages/add/store.dart';
+import 'package:buhuiwangshi/pages/home/store.dart';
 import 'package:buhuiwangshi/utils/uuid.dart';
 import 'package:flutter_smart_dialog/flutter_smart_dialog.dart';
 
@@ -142,6 +142,21 @@ class MatterService {
     }
 
     return dailyStats.reversed.toList();
+  }
+
+  /// 根据ID获取特定的MatterModel
+  static Future<MatterModel?> getMatterById(String id) async {
+    try {
+      return await MatterTable.getById(id);
+    } catch (e) {
+      SmartDialog.showToast("获取事项失败");
+      return null;
+    }
+  }
+
+  /// 更新事项
+  static Future<void> updateMatter(MatterModel matter) async {
+    await MatterTable.update(matter);
   }
 }
 

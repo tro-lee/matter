@@ -1,7 +1,7 @@
 import 'package:buhuiwangshi/components/matter.dart';
 import 'package:buhuiwangshi/constant/candidates.dart';
 import 'package:buhuiwangshi/constant/templates.dart';
-import 'package:buhuiwangshi/store/add_page_store.dart';
+import 'package:buhuiwangshi/pages/add/store.dart';
 import 'package:buhuiwangshi/utils/colors.dart';
 import 'package:buhuiwangshi/utils/standard.dart';
 import 'package:flutter/material.dart';
@@ -33,13 +33,13 @@ class TopAppBar extends StatelessWidget implements PreferredSizeWidget {
       },
       icon: Icon(
         Icons.arrow_circle_left_outlined,
-        color: textColor(context),
+        color: textColor,
       ),
     );
     // 中间标题
     var text = Text(
       "选择模板",
-      style: TextStyle(fontSize: 24, color: textColor(context)),
+      style: TextStyle(fontSize: 24, color: textColor),
     );
 
     return AppBar(

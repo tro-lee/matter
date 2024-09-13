@@ -1,6 +1,6 @@
 import 'package:buhuiwangshi/components/label.dart';
 import 'package:buhuiwangshi/components/place_holder.dart';
-import 'package:buhuiwangshi/store/add_page_store.dart';
+import 'package:buhuiwangshi/pages/add/store.dart';
 import 'package:buhuiwangshi/utils/input_bottom_sheet.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';

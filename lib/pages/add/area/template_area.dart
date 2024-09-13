@@ -1,7 +1,7 @@
 import 'package:animations/animations.dart';
 import 'package:buhuiwangshi/components/matter.dart';
 import 'package:buhuiwangshi/constant/candidates.dart';
-import 'package:buhuiwangshi/store/add_page_store.dart';
+import 'package:buhuiwangshi/pages/add/store.dart';
 import 'package:buhuiwangshi/pages/matter_templates/page.dart';
 import 'package:buhuiwangshi/utils/colors.dart';
 import 'package:flutter/material.dart';

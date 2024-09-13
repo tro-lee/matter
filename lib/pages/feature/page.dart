@@ -1,3 +1,4 @@
+import 'package:buhuiwangshi/components/under_page.dart';
 import 'package:buhuiwangshi/pages/feature/buttons_area.dart';
 import 'package:buhuiwangshi/pages/feature/chart.dart';
 import 'package:buhuiwangshi/pages/feature/more_area.dart';
@@ -55,19 +56,10 @@ class UnderPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      color: containerColor(context),
-      padding: const EdgeInsets.fromLTRB(16, 0, 16, 0),
-      height: double.infinity,
-      width: double.infinity,
-      alignment: Alignment.topCenter,
-      child: Container(
-        alignment: Alignment.bottomLeft,
-        height: 100,
-        child: Text(
-          "👋 探索更多功能吧！~",
-          style: TextStyle(fontSize: 24, color: textColor(context)),
-        ),
+    return const BottomLayer(
+      child: Text(
+        "👋 探索更多功能吧！~",
+        style: TextStyle(fontSize: 24),
       ),
     );
   }

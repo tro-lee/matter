@@ -31,12 +31,10 @@ class DatePicker extends StatefulWidget {
 class _DatePickerState extends State<DatePicker> {
   @override
   Widget build(BuildContext context) {
-    var commonTextStyle = DayStyle(
+    var commonTextStyle = const DayStyle(
         dayStrStyle: TextStyle(color: labelColor, fontSize: 18),
         dayNumStyle: TextStyle(
-            color: textColor(context),
-            fontSize: 24,
-            fontWeight: FontWeight.bold),
+            color: textColor, fontSize: 24, fontWeight: FontWeight.bold),
         monthStrStyle: TextStyle(
           color: labelColor,
           fontSize: 12,
