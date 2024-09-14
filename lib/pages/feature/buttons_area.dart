@@ -19,9 +19,6 @@ class ButtonsArea extends StatelessWidget {
 
     return Container(
       padding: const EdgeInsets.all(8),
-      decoration: BoxDecoration(
-        color: topContainerColor(context),
-      ),
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceAround,
         children: [
@@ -70,7 +67,7 @@ class FeatureButton extends StatelessWidget {
         Container(
           decoration: BoxDecoration(
             color: containerColor(context),
-            shape: BoxShape.circle,
+            borderRadius: BorderRadius.circular(10),
           ),
           child: IconButton(
             iconSize: 32,

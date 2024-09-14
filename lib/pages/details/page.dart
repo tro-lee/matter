@@ -73,14 +73,16 @@ class _PageContainer extends StatelessWidget {
               color: color,
               child: const _BottomButtons(),
             ),
-            Container(
-              width: double.infinity,
-              margin: const EdgeInsets.only(top: 100),
-              decoration: BoxDecoration(
-                color: topContainerColor(context),
-                borderRadius: BorderRadius.circular(20),
+            SafeArea(
+              child: Container(
+                width: double.infinity,
+                margin: const EdgeInsets.only(top: 42),
+                decoration: BoxDecoration(
+                  color: topContainerColor(context),
+                  borderRadius: BorderRadius.circular(12),
+                ),
+                child: child,
               ),
-              child: child,
             ),
             const _HelpText(),
           ],

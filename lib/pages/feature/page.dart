@@ -31,21 +31,23 @@ class TopPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      decoration: BoxDecoration(
-        borderRadius: const BorderRadius.vertical(top: Radius.circular(20)),
-        color: middleContainerColor(context),
+    return SafeArea(
+      child: Container(
+        decoration: BoxDecoration(
+          borderRadius: const BorderRadius.vertical(top: Radius.circular(12)),
+          color: topContainerColor(context),
+        ),
+        height: double.infinity,
+        width: double.infinity,
+        margin: const EdgeInsets.fromLTRB(0, 42, 0, 0),
+        child: const Column(children: [
+          Chart(), // 图表
+          SizedBox(height: 32),
+          ButtonsArea(), // 按钮区
+          SizedBox(height: 32),
+          MoreArea() // 更多功能
+        ]),
       ),
-      height: double.infinity,
-      width: double.infinity,
-      margin: const EdgeInsets.fromLTRB(0, 100, 0, 0),
-      child: const Column(children: [
-        Chart(), // 图表
-        SizedBox(height: 32),
-        ButtonsArea(), // 按钮区
-        SizedBox(height: 32),
-        MoreArea() // 更多功能
-      ]),
     );
   }
 }
@@ -59,7 +61,7 @@ class UnderPage extends StatelessWidget {
     return const BottomLayer(
       child: Text(
         "👋 探索更多功能吧！~",
-        style: TextStyle(fontSize: 24),
+        style: TextStyle(fontSize: 22),
       ),
     );
   }

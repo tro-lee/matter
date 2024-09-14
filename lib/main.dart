@@ -1,5 +1,6 @@
 import 'package:buhuiwangshi/page.dart';
 import 'package:buhuiwangshi/store.dart';
+import 'package:buhuiwangshi/utils/standard.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_smart_dialog/flutter_smart_dialog.dart';
@@ -46,7 +47,7 @@ class _MyAppState extends State<MyApp> {
         fontFamily: "PingFang",
       ),
       // 设置主页
-      home: const Home(),
+      home: standardContainer(context: context, child: const Home()),
     );
   }
 }

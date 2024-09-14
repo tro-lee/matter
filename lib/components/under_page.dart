@@ -4,7 +4,7 @@ import 'package:flutter/material.dart';
 /// 底部层组件
 ///
 /// 这个组件用于创建一个可定制的底部层，通常用于页面的底部区域。
-/// 它可以接受一个自定义的颜色和子组件。
+/// 它可以接受一个自定义的颜色、子组件和高度margin。
 class BottomLayer extends StatelessWidget {
   /// 子组件，将被放置在底部层的内部容器中
   final Widget child;
@@ -26,22 +26,20 @@ class BottomLayer extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      // 使用提供的颜色或默认的容器颜色
       color: color ?? containerColor(context),
-      // 设置内边距，左右各16，上下为0
-      padding: const EdgeInsets.fromLTRB(16, 0, 16, 0),
-      // 设置宽度和高度为无限大，以填满可用空间
+      padding: const EdgeInsets.symmetric(horizontal: 16),
       width: double.infinity,
       height: double.infinity,
-      // 将内容对齐到顶部左侧
       alignment: Alignment.topLeft,
-      child: Container(
-        // 将子组件对齐到底部左侧
-        alignment: Alignment.bottomLeft,
-        // 设置内部容器的高度为100
-        height: 100,
-        // 放置传入的子组件
-        child: child,
+      child: SafeArea(
+        child: SizedBox(
+          height: 42,
+          width: double.infinity,
+          child: Align(
+            alignment: Alignment.centerLeft,
+            child: child,
+          ),
+        ),
       ),
     );
   }

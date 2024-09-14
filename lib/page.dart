@@ -30,14 +30,16 @@ class CurrentPageWidget extends StatelessWidget {
     return Consumer<SystemStore>(
       builder: (context, systemStore, child) {
         final currentIndex = systemStore.currentIndex;
-
-        final map = {
-          0: const HomePage(),
-          1: const Placeholder(),
-          2: const FeaturePage()
-        };
-
-        return map[currentIndex] ?? const HomePage();
+        switch (currentIndex) {
+          case 0:
+            return const HomePage();
+          case 1:
+            return const AddPage();
+          case 2:
+            return const FeaturePage();
+          default:
+            return const HomePage();
+        }
       },
     );
   }
@@ -81,20 +83,23 @@ class BottomNavigationBarWidget extends StatelessWidget {
         }
 
         // 创建自定义底部导航栏
-        return CustomNavigationBar(
-          // 动画设置
-          scaleCurve: Curves.fastEaseInToSlowEaseOut,
-          scaleFactor: 0.1,
-          iconSize: 28,
-          // 颜色设置
-          selectedColor: onBarContainer,
-          unSelectedColor: onBarContainer,
-          strokeColor: barContainer,
-          backgroundColor: barContainer,
-          // 导航项目和选择逻辑
-          items: items,
-          currentIndex: systemStore.currentIndex,
-          onTap: onTap,
+        return SizedBox(
+          height: 42,
+          child: CustomNavigationBar(
+            // 动画设置
+            scaleCurve: Curves.fastEaseInToSlowEaseOut,
+            scaleFactor: 0.1,
+            iconSize: 28,
+            // 颜色设置
+            selectedColor: onBarContainer,
+            unSelectedColor: onBarContainer,
+            strokeColor: Colors.transparent,
+            backgroundColor: barContainer,
+            // 导航项目和选择逻辑
+            items: items,
+            currentIndex: systemStore.currentIndex,
+            onTap: onTap,
+          ),
         );
       },
     );

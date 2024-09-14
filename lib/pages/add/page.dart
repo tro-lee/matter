@@ -55,13 +55,13 @@ class TopAppBar extends StatelessWidget implements PreferredSizeWidget {
       onPressed: () {
         Navigator.pop(context);
       },
-      icon: Icon(
+      icon: const Icon(
         Icons.arrow_circle_left_outlined,
         color: textColor,
       ),
     );
     // 中间标题
-    var text = Text(
+    var text = const Text(
       "添加日程",
       style: TextStyle(fontSize: 24, color: textColor),
     );
@@ -95,7 +95,8 @@ class TopAppBar extends StatelessWidget implements PreferredSizeWidget {
     // 右侧保存
     var textButton = TextButton(
         onPressed: onSave,
-        child: Text("完成", style: TextStyle(fontSize: 18, color: textColor)));
+        child:
+            const Text("完成", style: TextStyle(fontSize: 18, color: textColor)));
 
     return AppBar(
       backgroundColor: Colors.white,

@@ -25,7 +25,7 @@ class _TopLayerState extends State<TopLayer> {
     final homePageStore = Provider.of<HomePageStore>(context);
 
     var clipRRect = ClipRRect(
-      borderRadius: const BorderRadius.vertical(top: Radius.circular(64)),
+      borderRadius: const BorderRadius.vertical(top: Radius.circular(20)),
       child: FutureBuilder<void>(
         future: homePageStore.initializeMattersList(),
         builder: (context, snapshot) {
@@ -67,15 +67,17 @@ class _TopLayerState extends State<TopLayer> {
       ),
     );
 
-    return Container(
-      decoration: BoxDecoration(
-        borderRadius: const BorderRadius.vertical(top: Radius.circular(64)),
-        color: topContainerColor(context),
+    return SafeArea(
+      child: Container(
+        decoration: BoxDecoration(
+          borderRadius: const BorderRadius.vertical(top: Radius.circular(20)),
+          color: topContainerColor(context),
+        ),
+        margin: const EdgeInsets.only(top: 98),
+        width: double.infinity,
+        height: double.infinity,
+        child: clipRRect,
       ),
-      margin: const EdgeInsets.fromLTRB(0, 148, 0, 0),
-      width: double.infinity,
-      height: double.infinity,
-      child: clipRRect,
     );
   }
 }

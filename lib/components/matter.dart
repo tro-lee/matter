@@ -36,7 +36,7 @@ class Matter extends StatelessWidget {
     this.onPressed,
   })  : _nameStyle = TextStyle(
           color: fontColor,
-          fontSize: 24,
+          fontSize: 22,
         ),
         _timeStyle = TextStyle(
           fontSize: 18,
@@ -134,53 +134,55 @@ class Matter extends StatelessWidget {
 
   Widget _buildContent() {
     final formattedTime = _formatTime();
-    return Material(
-      color: color,
-      borderRadius: const BorderRadius.all(Radius.circular(120)),
-      child: InkWell(
-        onTap: onPressed == null
-            ? null
-            : () async {
-                // 等待一小段时间，让动画有机会显示
-                await Future.delayed(const Duration(milliseconds: 120));
-                onPressed?.call();
-              },
-        splashColor: Colors.white38,
-        highlightColor: Colors.white38,
-        borderRadius: BorderRadius.circular(120),
-        child: Container(
-          height: 64,
-          margin: const EdgeInsets.fromLTRB(20, 8, 32, 8),
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              Expanded(
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text(
-                      name.isEmpty ? "点我选择模板" : name,
-                      textScaler: const TextScaler.linear(1),
-                      maxLines: 1,
-                      overflow: TextOverflow.ellipsis,
-                      style: _nameStyle,
-                    ),
-                    if (formattedTime.isNotEmpty)
+    return Container(
+      margin: const EdgeInsets.fromLTRB(0, 0, 16, 0),
+      child: Material(
+        color: color,
+        borderRadius: BorderRadius.circular(20),
+        child: InkWell(
+          onTap: onPressed == null
+              ? null
+              : () async {
+                  // 等待一小段时间，让动画有机会显示
+                  await Future.delayed(const Duration(milliseconds: 120));
+                  onPressed?.call();
+                },
+          splashColor: Colors.white38,
+          highlightColor: Colors.white38,
+          child: Container(
+            height: 64,
+            margin: const EdgeInsets.fromLTRB(20, 8, 20, 8),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                Expanded(
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
                       Text(
-                        formattedTime,
+                        name.isEmpty ? "点我选择模板" : name,
                         textScaler: const TextScaler.linear(1),
-                        style: _timeStyle,
-                      )
-                  ],
+                        maxLines: 1,
+                        overflow: TextOverflow.ellipsis,
+                        style: _nameStyle,
+                      ),
+                      if (formattedTime.isNotEmpty)
+                        Text(
+                          formattedTime,
+                          textScaler: const TextScaler.linear(1),
+                          style: _timeStyle,
+                        )
+                    ],
+                  ),
                 ),
-              ),
-              Icon(
-                levelIcon,
-                color: fontColor,
-                size: 24,
-              )
-            ],
+                Icon(
+                  levelIcon,
+                  color: fontColor,
+                  size: 24,
+                )
+              ],
+            ),
           ),
         ),
       ),
