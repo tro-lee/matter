@@ -141,8 +141,18 @@ class MatterBuilderTable {
     final db = await DB.instance;
     final formattedDate =
         '${date.year}-${date.month.toString().padLeft(2, '0')}-${date.day.toString().padLeft(2, '0')}';
-    final List<Map<String, dynamic>> maps = await db.query('matter_builder',
-        where: 'time LIKE ?', whereArgs: ['%$formattedDate%']);
+    final weekday = date.weekday;
+
+    final List<Map<String, dynamic>> maps = await db.query(
+      'matter_builder',
+      where: '''
+        time LIKE ? OR 
+        (isWeeklyRepeat = 1 AND weeklyRepeatDays LIKE ?) OR
+        isDailyClusterRepeat = 1
+      ''',
+      whereArgs: ['%$formattedDate%', '%$weekday%'],
+    );
+
     return List.generate(maps.length, (i) {
       return MatterBuilderModel.fromMap(maps[i]);
     });

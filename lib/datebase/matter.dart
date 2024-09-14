@@ -127,13 +127,27 @@ class MatterModel extends MatterBuilderModel {
   }
 
   // 从 MatterBuilderModel 创建 MatterModel
-  factory MatterModel.fromMatterBuilder(MatterBuilderModel builder) {
+  factory MatterModel.fromMatterBuilder(MatterBuilderModel builder,
+      {DateTime? targetDate}) {
+    DateTime time = builder.time;
+    if (targetDate != null &&
+        (builder.isWeeklyRepeat || builder.isDailyClusterRepeat)) {
+      time = DateTime(
+        targetDate.year,
+        targetDate.month,
+        targetDate.day,
+        builder.time.hour,
+        builder.time.minute,
+        builder.time.second,
+      );
+    }
+
     return MatterModel(
       id: genUuid(),
       name: builder.name,
       type: builder.type,
       typeIcon: builder.typeIcon,
-      time: builder.time,
+      time: time,
       color: builder.color,
       fontColor: builder.fontColor,
       levelIcon: builder.levelIcon,

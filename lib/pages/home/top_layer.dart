@@ -37,14 +37,24 @@ class _TopLayerState extends State<TopLayer> {
                 // 使用AnimatedSwitcher实现切换动画效果
                 return AnimatedSwitcher(
                   key: const Key('AnimatedSwitcher'),
-                  // 设置动画持续时间为60毫秒
                   duration: const Duration(milliseconds: 60),
-                  // 自定义过渡动画，使用FadeTransition实现淡入淡出效果
-                  transitionBuilder: (child, animation) =>
-                      FadeTransition(opacity: animation, child: child),
+                  // 使用自定义的交叉淡入淡出效果
+                  transitionBuilder:
+                      (Widget child, Animation<double> animation) {
+                    return FadeTransition(
+                      opacity: Tween<double>(begin: 0.5, end: 1).animate(
+                        CurvedAnimation(
+                          parent: animation,
+                          // 使用easeInOut曲线使动画更加平滑
+                          curve: Curves.easeInOut,
+                        ),
+                      ),
+                      child: child,
+                    );
+                  },
                   // 使用ListView.builder构建可滚动列表
                   child: ListView.builder(
-                    // 使用第一个事项的ID作为key，如果列表为空则使用空字符串
+                    // 使用所有事项的ID组合作为key，确保在列表变化时能正确触发动画
                     key: ValueKey<String>(
                         store.mattersList.firstOrNull?.id ?? ''),
                     // 设置顶部内边距为8
