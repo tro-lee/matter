@@ -1,3 +1,4 @@
+import 'package:buhuiwangshi/pages/home/store.dart';
 import 'package:flutter/material.dart';
 import 'package:buhuiwangshi/utils/colors.dart';
 import 'package:buhuiwangshi/utils/date.dart';
@@ -108,6 +109,9 @@ class _CalAreaState extends State<_CalArea> {
   // 标记是否是初始滚动
   bool _isInitialScroll = true;
 
+  DateTime _selectedDate = getZeroTime(DateTime.now());
+  DateTime get selectedDate => _selectedDate;
+
   @override
   void initState() {
     super.initState();
@@ -204,6 +208,12 @@ class _CalAreaState extends State<_CalArea> {
     }
   }
 
+  // 获取星期几的中文表示
+  String _getWeekDay(DateTime date) {
+    final weekDays = ["一", "二", "三", "四", "五", "六", "日"];
+    return "周${weekDays[date.weekday - 1]}";
+  }
+
   @override
   Widget build(BuildContext context) {
     return SizedBox(
@@ -221,8 +231,14 @@ class _CalAreaState extends State<_CalArea> {
                   child: _CalItem(
                     data: [_getWeekDay(dates[index]), dates[index].toString()],
                     key: Key(dates[index].toString()),
-                    isSelected: dates[index].toString() ==
-                        getZeroTime(DateTime.now()).toString(),
+                    onPressed: (date) {
+                      setState(() {
+                        _selectedDate = date;
+                        HomePageStore.refresh(date: date);
+                      });
+                    },
+                    isSelected:
+                        _selectedDate.toString() == dates[index].toString(),
                   ),
                 );
               },
@@ -232,12 +248,6 @@ class _CalAreaState extends State<_CalArea> {
         ],
       ),
     );
-  }
-
-  // 获取星期几的中文表示
-  String _getWeekDay(DateTime date) {
-    final weekDays = ["一", "二", "三", "四", "五", "六", "日"];
-    return "周${weekDays[date.weekday - 1]}";
   }
 
   @override
@@ -251,9 +261,15 @@ class _CalAreaState extends State<_CalArea> {
 /// 日历项
 class _CalItem extends StatelessWidget {
   final List<String> data;
+  final Function(DateTime) onPressed;
   final bool isSelected;
 
-  const _CalItem({super.key, required this.data, required this.isSelected});
+  const _CalItem({
+    super.key,
+    required this.data,
+    required this.onPressed,
+    required this.isSelected,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -271,22 +287,31 @@ class _CalItem extends StatelessWidget {
               color: containerColor(context),
               borderRadius: const BorderRadius.all(Radius.circular(12)))
           : null,
-      child: Column(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: [
-          Text(
-            getDateText(DateTime.parse(data[1]),
-                pattern: "M/d", isLocale: false),
-            style: TextStyle(color: fontColor, fontSize: 12, height: 1),
-          ),
-          const SizedBox(
-            height: 4,
-          ),
-          Text(
-            data[0],
-            style: TextStyle(color: fontColor, fontSize: 16, height: 1),
-          ),
-        ],
+      child: TextButton(
+        style: TextButton.styleFrom(
+            padding: const EdgeInsets.all(0),
+            shape: const RoundedRectangleBorder(
+                borderRadius: BorderRadius.all(Radius.circular(12)))),
+        onPressed: () {
+          onPressed(DateTime.parse(data[1]));
+        },
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Text(
+              getDateText(DateTime.parse(data[1]),
+                  pattern: "M/d", isLocale: false),
+              style: TextStyle(color: fontColor, fontSize: 12, height: 1),
+            ),
+            const SizedBox(
+              height: 4,
+            ),
+            Text(
+              data[0],
+              style: TextStyle(color: fontColor, fontSize: 16, height: 1),
+            ),
+          ],
+        ),
       ),
     );
   }
