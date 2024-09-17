@@ -1,5 +1,5 @@
 import 'package:buhuiwangshi/constant/candidates.dart';
-import 'package:buhuiwangshi/datebase/matter.dart';
+import 'package:buhuiwangshi/models/matter_model.dart';
 import 'package:buhuiwangshi/utils/colors.dart';
 import 'package:flutter/material.dart';
 import 'package:jiffy/jiffy.dart';
@@ -100,6 +100,13 @@ class Matter extends StatelessWidget {
             decoration: BoxDecoration(
               color: color,
               shape: BoxShape.circle,
+              boxShadow: const [
+                BoxShadow(
+                  color: Colors.black12,
+                  offset: Offset(0, 2),
+                  blurRadius: 2,
+                ),
+              ],
             ),
             width: 64,
             height: 64,
@@ -137,6 +144,8 @@ class Matter extends StatelessWidget {
     return Container(
       margin: const EdgeInsets.fromLTRB(0, 0, 16, 0),
       child: Material(
+        elevation: 2,
+        shadowColor: Colors.black38,
         color: color,
         borderRadius: BorderRadius.circular(20),
         child: InkWell(
@@ -150,8 +159,8 @@ class Matter extends StatelessWidget {
           splashColor: Colors.white38,
           highlightColor: Colors.white38,
           child: Container(
-            height: 64,
-            margin: const EdgeInsets.fromLTRB(20, 8, 20, 8),
+            height: 80,
+            padding: const EdgeInsets.fromLTRB(20, 0, 20, 0),
             child: Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
@@ -176,11 +185,11 @@ class Matter extends StatelessWidget {
                     ],
                   ),
                 ),
-                Icon(
-                  levelIcon,
-                  color: fontColor,
-                  size: 24,
-                )
+                // Icon(
+                //   levelIcon,
+                //   color: fontColor,
+                //   size: 24,
+                // )
               ],
             ),
           ),

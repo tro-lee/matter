@@ -1,5 +1,5 @@
-import 'package:buhuiwangshi/components/under_page.dart';
-import 'package:buhuiwangshi/datebase/matter.dart';
+import 'package:buhuiwangshi/models/matter_model.dart';
+import 'package:buhuiwangshi/pages/home/bottom_layer.dart';
 import 'package:buhuiwangshi/pages/details/check_card.dart';
 import 'package:buhuiwangshi/pages/details/detail_card.dart';
 import 'package:buhuiwangshi/pages/details/store.dart';
@@ -78,7 +78,7 @@ class _PageContainer extends StatelessWidget {
                 width: double.infinity,
                 margin: const EdgeInsets.only(top: 42),
                 decoration: BoxDecoration(
-                  color: topContainerColor(context),
+                  color: surfaceColor,
                   borderRadius: BorderRadius.circular(12),
                 ),
                 child: child,

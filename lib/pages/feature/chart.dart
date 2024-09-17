@@ -1,4 +1,4 @@
-import 'package:buhuiwangshi/service/matter.dart';
+import 'package:buhuiwangshi/services/matter.dart';
 import 'package:buhuiwangshi/utils/colors.dart';
 import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/material.dart';
@@ -10,9 +10,9 @@ class Chart extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      decoration: BoxDecoration(
-        color: topContainerColor(context),
-        borderRadius: const BorderRadius.vertical(top: Radius.circular(20)),
+      decoration: const BoxDecoration(
+        color: surfaceColor,
+        borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
       ),
       height: 256,
       child: const Padding(

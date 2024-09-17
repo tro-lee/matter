@@ -1,4 +1,4 @@
-import 'package:buhuiwangshi/components/under_page.dart';
+import 'package:buhuiwangshi/pages/home/bottom_layer.dart';
 import 'package:buhuiwangshi/pages/feature/buttons_area.dart';
 import 'package:buhuiwangshi/pages/feature/chart.dart';
 import 'package:buhuiwangshi/pages/feature/more_area.dart';
@@ -15,7 +15,7 @@ class FeaturePage extends StatelessWidget {
       context: context,
       child: const Stack(
         children: [
-          UnderPage(),
+          BackgroundLayer(),
           TopPage(),
         ],
       ),
@@ -35,7 +35,7 @@ class TopPage extends StatelessWidget {
       child: Container(
         decoration: BoxDecoration(
           borderRadius: const BorderRadius.vertical(top: Radius.circular(12)),
-          color: topContainerColor(context),
+          color: surfaceColor,
         ),
         height: double.infinity,
         width: double.infinity,
@@ -53,8 +53,8 @@ class TopPage extends StatelessWidget {
 }
 
 /// 底部层
-class UnderPage extends StatelessWidget {
-  const UnderPage({super.key});
+class BackgroundLayer extends StatelessWidget {
+  const BackgroundLayer({super.key});
 
   @override
   Widget build(BuildContext context) {

@@ -1,15 +1,17 @@
-import 'package:buhuiwangshi/page.dart';
+import 'package:buhuiwangshi/pages/home/page.dart';
 import 'package:buhuiwangshi/store.dart';
 import 'package:buhuiwangshi/utils/standard.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:flutter_smart_dialog/flutter_smart_dialog.dart';
 import 'package:jiffy/jiffy.dart';
 
 import 'utils/theme.dart';
 
 /// 应用程序入口点
-void main() {
+void main() async {
+  await dotenv.load(fileName: ".env");
   runApp(
     const SystemStoreWrapper(child: MyApp()),
   );
@@ -47,7 +49,7 @@ class _MyAppState extends State<MyApp> {
         fontFamily: "PingFang",
       ),
       // 设置主页
-      home: standardContainer(context: context, child: const Home()),
+      home: standardContainer(context: context, child: const HomePage()),
     );
   }
 }

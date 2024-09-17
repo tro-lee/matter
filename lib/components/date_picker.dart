@@ -50,7 +50,7 @@ class _DatePickerState extends State<DatePicker> {
     var weekLabel = label(
       text: "是否周重复",
       child: Switch(
-        activeColor: primaryColor(context),
+        activeColor: primaryColor,
         value: widget.isRepeatWeek,
         onChanged: (value) {
           setState(() {
@@ -67,7 +67,7 @@ class _DatePickerState extends State<DatePicker> {
         ? label(
             text: "是否天重复",
             child: Switch(
-              activeColor: primaryColor(context),
+              activeColor: primaryColor,
               value: widget.isRepeatDay,
               onChanged: (value) {
                 setState(() {
@@ -86,8 +86,7 @@ class _DatePickerState extends State<DatePicker> {
           widget.onFinish(widget.dateTime ?? DateTime.now(),
               widget.isRepeatWeek, widget.isRepeatDay);
         },
-        style: ElevatedButton.styleFrom(
-            backgroundColor: middleContainerColor(context)),
+        style: ElevatedButton.styleFrom(backgroundColor: primaryContainerColor),
         child: const Text("更新", style: TextStyle(fontSize: 18)));
 
     return AnimatedContainer(
@@ -167,7 +166,7 @@ class _DatePickerState extends State<DatePicker> {
           monthStrStyle: commonTextStyle.monthStrStyle,
           borderRadius: 16,
           decoration: BoxDecoration(
-            color: middleContainerColor(context),
+            color: primaryContainerColor,
             borderRadius: const BorderRadius.all(Radius.circular(18)),
           ),
         ),

@@ -30,7 +30,7 @@ class _ColorPickerState extends State<ColorPicker> {
             Container(
               padding: const EdgeInsets.all(16),
               decoration: BoxDecoration(
-                  color: topContainerColor(context),
+                  color: surfaceColor,
                   borderRadius: const BorderRadius.all(Radius.circular(16))),
               height: 256,
               child: MaterialColorPicker(onColorChange: (Color color) {
@@ -47,9 +47,8 @@ class _ColorPickerState extends State<ColorPicker> {
                   }
                 },
                 style: ElevatedButton.styleFrom(
-                    backgroundColor: middleContainerColor(context)),
-                child:
-                    Text("更新", style: TextStyle(color: primaryColor(context))),
+                    backgroundColor: primaryContainerColor),
+                child: Text("更新", style: TextStyle(color: primaryColor)),
               ),
             )
           ],

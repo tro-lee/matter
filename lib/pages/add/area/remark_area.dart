@@ -37,7 +37,7 @@ class RemarkArea extends StatelessWidget {
 
     /// 壳子，预设的壳子无法满足要求
     return Container(
-      color: topContainerColor(context),
+      color: surfaceColor,
       child: Row(
         crossAxisAlignment: remark.isEmpty
             ? CrossAxisAlignment.center

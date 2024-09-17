@@ -1,7 +1,8 @@
-import 'package:buhuiwangshi/datebase/matter.dart';
-import 'package:buhuiwangshi/datebase/matter_builder.dart';
+import 'package:buhuiwangshi/datebase/matter_table.dart';
+import 'package:buhuiwangshi/datebase/matter_builder_table.dart';
+import 'package:buhuiwangshi/models/matter_builder_model.dart';
+import 'package:buhuiwangshi/models/matter_model.dart';
 import 'package:buhuiwangshi/pages/add/store.dart';
-import 'package:buhuiwangshi/pages/home/store.dart';
 import 'package:buhuiwangshi/utils/date.dart';
 import 'package:buhuiwangshi/utils/uuid.dart';
 import 'package:flutter_smart_dialog/flutter_smart_dialog.dart';
@@ -113,12 +114,6 @@ class MatterService {
 
     // 显示添加成功的提示
     SmartDialog.showToast("添加成功");
-
-    // 重置表单状态
-    AddPageStore.reset();
-
-    // 刷新主页
-    HomePageStore.refresh();
   }
 
   /// 获取最近7天（包括今天）的事项统计

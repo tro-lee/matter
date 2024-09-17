@@ -65,10 +65,10 @@ class TimeArea extends StatelessWidget {
 
     Navigator.of(context).push(
       showPicker(
-        backgroundColor: topContainerColor(context),
+        backgroundColor: surfaceColor,
         barrierColor: const Color.fromRGBO(0, 0, 0, 0.46),
         disableAutoFocusToNextInput: true,
-        accentColor: primaryColor(context),
+        accentColor: primaryColor,
         is24HrFormat: true,
         showCancelButton: false,
         okText: "更新",
@@ -108,7 +108,7 @@ class TimeArea extends StatelessWidget {
             margin: const EdgeInsets.fromLTRB(16, 0, 16, 0),
             padding: const EdgeInsets.all(6),
             decoration: BoxDecoration(
-                color: topContainerColor(context),
+                color: surfaceColor,
                 borderRadius: const BorderRadius.all(Radius.circular(16))),
             child: datePicker,
           ),

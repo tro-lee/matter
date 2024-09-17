@@ -1,5 +1,5 @@
-import 'package:buhuiwangshi/datebase/matter.dart';
-import 'package:buhuiwangshi/datebase/matter_builder.dart';
+import 'package:buhuiwangshi/datebase/matter_table.dart';
+import 'package:buhuiwangshi/datebase/matter_builder_table.dart';
 import 'package:sqflite/sqflite.dart';
 import 'package:path/path.dart';
 

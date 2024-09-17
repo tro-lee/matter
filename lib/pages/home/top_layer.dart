@@ -1,4 +1,5 @@
 import 'package:buhuiwangshi/components/matter.dart';
+import 'package:buhuiwangshi/models/matter_model.dart';
 import 'package:buhuiwangshi/pages/details/page.dart';
 import 'package:buhuiwangshi/pages/home/store.dart';
 import 'package:buhuiwangshi/utils/animate_route.dart';
@@ -32,8 +33,9 @@ class _TopLayerState extends State<TopLayer> {
             return Center(child: Text('Error: ${snapshot.error}'));
           } else {
             // 使用Consumer监听HomePageStore的变化
-            return Consumer<HomePageStore>(
-              builder: (context, store, child) {
+            return Selector<HomePageStore, List<MatterModel>>(
+              selector: (_, store) => store.mattersList,
+              builder: (context, mattersList, child) {
                 // 使用AnimatedSwitcher实现切换动画效果
                 return AnimatedSwitcher(
                   key: const Key('AnimatedSwitcher'),
@@ -55,37 +57,34 @@ class _TopLayerState extends State<TopLayer> {
                   // 使用ListView.builder构建可滚动列表
                   child: ListView.builder(
                     // 使用所有事项的ID组合作为key，确保在列表变化时能正确触发动画
-                    key: ValueKey<String>(
-                        store.mattersList.firstOrNull?.id ?? ''),
+                    key: ValueKey<String>(mattersList.firstOrNull?.id ?? ''),
                     // 设置顶部内边距为8
                     padding: const EdgeInsets.only(top: 8),
                     // 列表项数量为事项列表的长度
-                    itemCount: store.mattersList.length,
+                    itemCount: mattersList.length,
                     // 构建每个列表项
                     itemBuilder: (context, index) {
                       // 使用Matter.fromMatterModel创建Matter组件
                       return Matter.fromMatterModel(
-                        store.mattersList[index],
+                        mattersList[index],
                         // 除第一项外，其他项显示顶部线条
                         showTopLine: index != 0,
                         // 除最后一项外，其他项显示底部线条
-                        showBottomLine: index != store.mattersList.length - 1,
+                        showBottomLine: index != mattersList.length - 1,
                         // 设置顶部线条颜色，如果存在上一项则使用上一项的颜色，否则为透明
-                        topLineColor: Color(index - 1 >= 0
-                            ? store.mattersList[index - 1].color
-                            : 0),
+                        topLineColor: Color(
+                            index - 1 >= 0 ? mattersList[index - 1].color : 0),
                         // 设置底部线条颜色，如果存在下一项则使用下一项的颜色，否则为透明
-                        bottomLineColor: Color(
-                            index + 1 < store.mattersList.length
-                                ? store.mattersList[index + 1].color
-                                : 0),
+                        bottomLineColor: Color(index + 1 < mattersList.length
+                            ? mattersList[index + 1].color
+                            : 0),
                         // 点击事项时的回调函数
                         onPressed: () {
                           // 使用自定义的动画路由跳转到详情页面
                           Navigator.of(context).push(animateRoute(
                               direction: 'horizontal',
                               child: DetailsPage(
-                                  matterId: store.mattersList[index].id)));
+                                  matterId: mattersList[index].id)));
                         },
                       );
                     },
@@ -100,11 +99,17 @@ class _TopLayerState extends State<TopLayer> {
 
     return SafeArea(
       child: Container(
-        decoration: BoxDecoration(
-          borderRadius: const BorderRadius.vertical(top: Radius.circular(20)),
-          color: topContainerColor(context),
+        decoration: const BoxDecoration(
+          color: surfaceColor,
+          // boxShadow: [
+          //   BoxShadow(
+          //     blurRadius: 2,
+          //     color: Colors.black12,
+          //     offset: Offset(0, -1),
+          //   ),
+          // ],
         ),
-        margin: const EdgeInsets.only(top: 98),
+        margin: const EdgeInsets.only(top: 108),
         width: double.infinity,
         height: double.infinity,
         child: clipRRect,

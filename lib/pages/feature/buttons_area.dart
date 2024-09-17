@@ -71,7 +71,7 @@ class FeatureButton extends StatelessWidget {
           ),
           child: IconButton(
             iconSize: 32,
-            color: primaryColor(context),
+            color: primaryColor,
             onPressed: onPressed,
             icon: Icon(icon),
           ),

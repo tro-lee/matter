@@ -68,7 +68,7 @@ class TypeArea extends StatelessWidget {
             context: context,
             child: Container(
               decoration: BoxDecoration(
-                  color: topContainerColor(context),
+                  color: surfaceColor,
                   borderRadius: const BorderRadius.all(Radius.circular(24))),
               padding: const EdgeInsets.fromLTRB(28, 16, 28, 16),
               width: 256,
@@ -103,11 +103,10 @@ class TypeArea extends StatelessWidget {
               Icon(
                 icon,
                 size: 24,
-                color: primaryColor(context),
+                color: primaryColor,
               ),
               const SizedBox(width: 4),
-              Text(text,
-                  style: TextStyle(fontSize: 18, color: primaryColor(context))),
+              Text(text, style: TextStyle(fontSize: 18, color: primaryColor)),
             ],
           ),
         ),

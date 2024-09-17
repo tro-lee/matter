@@ -1,27 +1,25 @@
+import 'dart:ui';
+
 import 'package:buhuiwangshi/pages/home/store.dart';
 import 'package:flutter/material.dart';
 import 'package:buhuiwangshi/utils/colors.dart';
 import 'package:buhuiwangshi/utils/date.dart';
 import 'package:flutter/services.dart';
+import 'package:provider/provider.dart';
 
 /// 中间层
-class MiddlePage extends StatelessWidget {
-  const MiddlePage({super.key});
+class CalendarLayer extends StatelessWidget {
+  const CalendarLayer({super.key});
 
   @override
   Widget build(BuildContext context) {
     return SafeArea(
       child: Container(
-        decoration: BoxDecoration(
-          borderRadius: const BorderRadius.vertical(top: Radius.circular(12)),
-          color: middleContainerColor(context),
-        ),
-        margin: const EdgeInsets.only(top: 42),
-        alignment: Alignment.topCenter,
-        width: double.infinity,
-        height: 100,
-        child: const _CalArea(),
-      ),
+          margin: const EdgeInsets.only(top: 52),
+          alignment: Alignment.topCenter,
+          width: double.infinity,
+          height: double.infinity,
+          child: const _CalArea()),
     );
   }
 }
@@ -108,9 +106,6 @@ class _CalAreaState extends State<_CalArea> {
   int _lastVibratedIndex = -1;
   // 标记是否是初始滚动
   bool _isInitialScroll = true;
-
-  DateTime _selectedDate = getZeroTime(DateTime.now());
-  DateTime get selectedDate => _selectedDate;
 
   @override
   void initState() {
@@ -228,17 +223,22 @@ class _CalAreaState extends State<_CalArea> {
               (context, index) {
                 return Container(
                   margin: const EdgeInsets.symmetric(horizontal: 4),
-                  child: _CalItem(
-                    data: [_getWeekDay(dates[index]), dates[index].toString()],
-                    key: Key(dates[index].toString()),
-                    onPressed: (date) {
-                      setState(() {
-                        _selectedDate = date;
-                        HomePageStore.refresh(date: date);
-                      });
+                  child: Selector<HomePageStore, DateTime>(
+                    selector: (_, store) => store.selectedDate,
+                    builder: (context, selectedDate, child) {
+                      return _CalItem(
+                        data: [
+                          _getWeekDay(dates[index]),
+                          dates[index].toString()
+                        ],
+                        key: Key(dates[index].toString()),
+                        onPressed: (date) {
+                          HomePageStore.refresh(date: date);
+                        },
+                        isSelected:
+                            selectedDate.toString() == dates[index].toString(),
+                      );
                     },
-                    isSelected:
-                        _selectedDate.toString() == dates[index].toString(),
                   ),
                 );
               },
@@ -277,15 +277,15 @@ class _CalItem extends StatelessWidget {
       throw Exception("数据异常");
     }
 
-    var fontColor = isSelected ? textColor : labelColor;
+    final fontColor = isSelected ? textColor : labelColor;
 
     return Container(
       width: 48,
       margin: const EdgeInsets.fromLTRB(0, 4, 0, 4),
       decoration: isSelected
-          ? BoxDecoration(
-              color: containerColor(context),
-              borderRadius: const BorderRadius.all(Radius.circular(12)))
+          ? const BoxDecoration(
+              color: surfaceColor,
+              borderRadius: BorderRadius.all(Radius.circular(12)))
           : null,
       child: TextButton(
         style: TextButton.styleFrom(

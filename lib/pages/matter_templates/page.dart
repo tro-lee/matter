@@ -75,7 +75,7 @@ class Body extends StatelessWidget {
     }
 
     return Container(
-      color: topContainerColor(context),
+      color: surfaceColor,
       child: TemplateList(onFinish: onFinish),
     );
   }

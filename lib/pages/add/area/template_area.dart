@@ -28,7 +28,7 @@ class TemplateArea extends StatelessWidget {
         transitionDuration: const Duration(milliseconds: 400),
         transitionType: ContainerTransitionType.fadeThrough,
         closedElevation: 0,
-        closedColor: topContainerColor(context),
+        closedColor: surfaceColor,
         closedBuilder: (context, action) => Matter(
               fontColor: fontColor,
               color: color,

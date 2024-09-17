@@ -23,7 +23,7 @@ class MoreArea extends StatelessWidget {
           text: "帮助",
           onPressed: onPressed,
         ),
-        Container(height: 1, color: middleContainerColor(context)),
+        Container(height: 1, color: primaryContainerColor),
         RectButton(
           text: "关于我们",
           onPressed: onPressed,
@@ -47,7 +47,7 @@ class RectButton extends StatelessWidget {
   Widget build(BuildContext context) {
     return ElevatedButton(
       style: ElevatedButton.styleFrom(
-        backgroundColor: topContainerColor(context),
+        backgroundColor: surfaceColor,
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(0),
         ),

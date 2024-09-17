@@ -26,17 +26,20 @@ class BottomLayer extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      color: color ?? containerColor(context),
-      padding: const EdgeInsets.symmetric(horizontal: 16),
+      decoration: const BoxDecoration(
+        color: surfaceDimColor,
+        // gradient: LinearGradient(
+        //     colors: [Color(0xffc9def4), Color(0xfff5ccd4), Color(0xffb8a4c9)]),
+      ),
+      padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
       width: double.infinity,
       height: double.infinity,
       alignment: Alignment.topLeft,
       child: SafeArea(
         child: SizedBox(
-          height: 42,
           width: double.infinity,
           child: Align(
-            alignment: Alignment.centerLeft,
+            alignment: Alignment.bottomLeft,
             child: child,
           ),
         ),
