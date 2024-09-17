@@ -1,13 +1,13 @@
 import 'dart:async';
-import 'dart:convert';
 
 import 'package:buhuiwangshi/ai/ai.dart';
-import 'package:buhuiwangshi/models/matter_ai_model.dart';
 import 'package:flutter_smart_dialog/flutter_smart_dialog.dart';
 
+/// AI 服务
+/// 根据 输入，提供多种服务
 class AiService {
   static Future<void> use(
-      {required String prompt, required Function() onCallback}) async {
+      {required String prompt, Function()? onCallback}) async {
     try {
       // 获取生成内容
       final result = await AI.generateContent(messages: prompt);
@@ -17,9 +17,9 @@ class AiService {
         final matters = result['createMatters'];
         SmartDialog.showToast(matters.toString());
 
-        final matterAiJsons = jsonDecode(matters);
-        final matterAis =
-            matterAiJsons.map((e) => MatterAiModel.fromJson(e)).toList();
+        // final matterAiJsons = jsonDecode(matters);
+        // final matterAis =
+        //     matterAiJsons.map((e) => MatterAiModel.fromJson(e)).toList();
       }
 
       /// 判断为 其他
@@ -27,7 +27,7 @@ class AiService {
         SmartDialog.showToast(result['other'].toString());
       }
 
-      onCallback();
+      onCallback?.call();
     } catch (e) {
       print(e);
     }

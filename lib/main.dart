@@ -11,7 +11,12 @@ import 'utils/theme.dart';
 
 /// 应用程序入口点
 void main() async {
+  // 加载环境变量
   await dotenv.load(fileName: ".env");
+
+  // 设置Jiffy库的本地化
+  Jiffy.setLocale('zh_CN');
+
   runApp(
     const SystemStoreWrapper(child: MyApp()),
   );
@@ -34,9 +39,6 @@ class _MyAppState extends State<MyApp> {
       statusBarBrightness: Brightness.dark,
       statusBarIconBrightness: Brightness.dark,
     ));
-
-    // 设置Jiffy库的本地化
-    Jiffy.setLocale('zh_CN');
 
     return MaterialApp(
       // 添加SmartDialog观察者
