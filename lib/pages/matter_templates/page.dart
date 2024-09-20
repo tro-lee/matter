@@ -1,5 +1,5 @@
 import 'package:buhuiwangshi/components/matter.dart';
-import 'package:buhuiwangshi/constant/candidates.dart';
+import 'package:buhuiwangshi/constant/matter_type.dart';
 import 'package:buhuiwangshi/constant/templates.dart';
 import 'package:buhuiwangshi/pages/add/store.dart';
 import 'package:buhuiwangshi/utils/colors.dart';
@@ -31,13 +31,13 @@ class TopAppBar extends StatelessWidget implements PreferredSizeWidget {
       onPressed: () {
         Navigator.pop(context);
       },
-      icon: Icon(
+      icon: const Icon(
         Icons.arrow_circle_left_outlined,
         color: textColor,
       ),
     );
     // 中间标题
-    var text = Text(
+    var text = const Text(
       "选择模板",
       style: TextStyle(fontSize: 24, color: textColor),
     );
@@ -102,7 +102,6 @@ class TemplateList extends StatelessWidget {
             color: Color(template.type.color),
             fontColor: Color(template.type.fontColor),
             type: template.type,
-            levelIcon: Icons.notifications_off_outlined,
             time: template.time,
             name: template.name,
             showTopLine: index != 0,

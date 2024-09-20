@@ -1,6 +1,6 @@
 import 'package:buhuiwangshi/components/label.dart';
 import 'package:buhuiwangshi/components/place_holder.dart';
-import 'package:buhuiwangshi/constant/candidates.dart';
+import 'package:buhuiwangshi/constant/matter_type.dart';
 import 'package:buhuiwangshi/pages/add/store.dart';
 import 'package:buhuiwangshi/utils/colors.dart';
 import 'package:buhuiwangshi/utils/standard.dart';
@@ -67,13 +67,13 @@ class TypeArea extends StatelessWidget {
           return standardContainer(
             context: context,
             child: Container(
-              decoration: BoxDecoration(
+              decoration: const BoxDecoration(
                   color: surfaceColor,
-                  borderRadius: const BorderRadius.all(Radius.circular(24))),
+                  borderRadius: BorderRadius.all(Radius.circular(24))),
               padding: const EdgeInsets.fromLTRB(28, 16, 28, 16),
               width: 256,
               child: Wrap(alignment: WrapAlignment.spaceBetween, children: [
-                for (var item in matterTypeItems)
+                for (var item in MatterTypes.items)
                   typeLabel(context, matterType: item, onPressed: (type) async {
                     await Future.delayed(const Duration(milliseconds: 200));
                     SmartDialog.dismiss();

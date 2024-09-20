@@ -1,7 +1,9 @@
 import 'package:buhuiwangshi/services/ai.dart';
 import 'package:buhuiwangshi/services/speech_to_text.dart';
 import 'package:buhuiwangshi/utils/colors.dart';
+import 'package:buhuiwangshi/utils/system.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 
 class ChatLayer extends StatelessWidget {
   const ChatLayer({super.key});
@@ -77,6 +79,8 @@ class _ChatInputBarState extends State<ChatInputBar>
 
   // 处理文本提交
   Future<void> _handleSubmitted(String text) async {
+    SystemUtils.hideKeyShowUnfocus(); // 失焦
+
     _textController.clear();
     setState(() {
       _isComposing = false;
@@ -171,6 +175,7 @@ class _ChatInputBarState extends State<ChatInputBar>
   /// 语音输入
   // 开始语音识别
   Future<void> _onStartVoice() async {
+    HapticFeedback.heavyImpact();
     await SpeechToTextService.startListening((result) {
       setState(() {
         _lastVoiceWords = result.recognizedWords;

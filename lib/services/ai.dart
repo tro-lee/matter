@@ -1,6 +1,11 @@
 import 'dart:async';
+import 'dart:convert';
 
 import 'package:buhuiwangshi/ai/ai.dart';
+import 'package:buhuiwangshi/models/matter_ai_model.dart';
+import 'package:buhuiwangshi/models/matter_builder_model.dart';
+import 'package:buhuiwangshi/pages/home/store.dart';
+import 'package:buhuiwangshi/services/matter.dart';
 import 'package:flutter_smart_dialog/flutter_smart_dialog.dart';
 
 /// AI 服务
@@ -14,12 +19,23 @@ class AiService {
 
       /// 判断为 生成日程型
       if (result.containsKey('createMatters')) {
-        final matters = result['createMatters'];
-        SmartDialog.showToast(matters.toString());
+        final createMatters = jsonDecode(result['createMatters']);
 
-        // final matterAiJsons = jsonDecode(matters);
-        // final matterAis =
-        //     matterAiJsons.map((e) => MatterAiModel.fromJson(e)).toList();
+        final matters = createMatters['matters'];
+        final extraParams = createMatters['params'];
+        matters.forEach((e) {
+          e['isWeeklyRepeat'] = extraParams['isWeeklyRepeat'];
+          e['weeklyRepeatDays'] = extraParams['weeklyRepeatDays'];
+          e['isDailyClusterRepeat'] = extraParams['isDailyClusterRepeat'];
+        });
+
+        final matterBuilders = <MatterBuilderModel>[];
+        for (var e in matters) {
+          matterBuilders.add(MatterAiModel.fromJson(e).toMatterBuilderModel());
+        }
+
+        await MatterService.insertMatterBuilders(matterBuilders);
+        HomePageStore.refresh();
       }
 
       /// 判断为 其他

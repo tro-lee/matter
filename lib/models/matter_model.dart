@@ -1,4 +1,4 @@
-import 'package:buhuiwangshi/constant/candidates.dart';
+import 'package:buhuiwangshi/constant/matter_type.dart';
 import 'package:buhuiwangshi/models/matter_builder_model.dart';
 import 'package:buhuiwangshi/utils/uuid.dart';
 import 'package:flutter/material.dart';

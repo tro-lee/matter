@@ -19,18 +19,22 @@ class AI {
   /// 返回：
   ///  JSON格式
   /// {
-  ///   "createMatters": [
-  ///     {
-  ///       "name": "名称",
-  ///       "type": "类型",
-  ///       "time": "时间",
-  ///       "remark": "备注",
+  ///   "createMatters":
+  ///   {
+  ///     "matters": [
+  ///       {
+  ///         "name": "名称",
+  ///         "type": "类型",
+  ///         "time": "时间",
+  ///         "remark": "备注",
+  ///       }
+  ///     ],
+  ///     "extparams": {
   ///       "isWeeklyRepeat": "是否每周重复",
   ///       "weeklyRepeatDays": "每周重复的日期",
   ///       "isDailyClusterRepeat": "是否每天重复",
   ///     }
-  ///   ],
-  ///   "other":
+  ///   }
   /// }
   static Future<Map<String, dynamic>> generateContent({
     required String messages,
@@ -47,8 +51,11 @@ class AI {
       request.headers.set('Authorization', 'Bearer $apiKey');
       request.headers.set('Content-Type', 'application/json');
 
+      final newMessages =
+          "当前时间为${DateTime.now().toIso8601String()},请根据以上时间进行计算; 用户输入：$messages";
+
       final jsonBody = jsonEncode({
-        'input': {'prompt': messages}
+        'input': {'prompt': newMessages}
       });
       request.add(utf8.encode(jsonBody));
 
@@ -58,8 +65,12 @@ class AI {
 
       /// 请求结果
       if (response.statusCode == 200) {
-        final jsonResponse = jsonDecode(responseBody);
-        return jsonDecode(jsonResponse['output']['text']);
+        try {
+          final jsonResponse = jsonDecode(responseBody);
+          return jsonDecode(jsonResponse['output']['text']);
+        } catch (e) {
+          throw Exception('生成内容失败: $e');
+        }
       } else {
         throw Exception('生成内容失败: ${response.statusCode}\n错误: $responseBody');
       }

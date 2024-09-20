@@ -1,6 +1,6 @@
 import 'package:animations/animations.dart';
 import 'package:buhuiwangshi/components/matter.dart';
-import 'package:buhuiwangshi/constant/candidates.dart';
+import 'package:buhuiwangshi/constant/matter_type.dart';
 import 'package:buhuiwangshi/pages/add/store.dart';
 import 'package:buhuiwangshi/pages/matter_templates/page.dart';
 import 'package:buhuiwangshi/utils/colors.dart';
@@ -15,10 +15,7 @@ class TemplateArea extends StatelessWidget {
     final formStore = Provider.of<AddPageStore>(context);
     final name = formStore.name ?? '';
     final time = formStore.datetime;
-    final type = formStore.type ?? MatterType.newBuild;
-    final levelIcon = formStore.level == 'low'
-        ? Icons.notifications_off_outlined
-        : Icons.notifications_outlined;
+    final type = formStore.type ?? MatterTypes.newBuild;
 
     final color = Color(formStore.color);
     final fontColor = Color(formStore.fontColor);
@@ -35,7 +32,6 @@ class TemplateArea extends StatelessWidget {
               time: time,
               type: type,
               name: name,
-              levelIcon: levelIcon,
             ));
   }
 }

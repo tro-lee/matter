@@ -1,4 +1,4 @@
-import 'package:buhuiwangshi/constant/candidates.dart';
+import 'package:buhuiwangshi/constant/matter_type.dart';
 import 'package:flutter/material.dart';
 
 /// MatterBuilder 类用于构建 Matter 事项

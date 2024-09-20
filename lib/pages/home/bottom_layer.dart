@@ -2,6 +2,54 @@ import 'package:buhuiwangshi/utils/colors.dart';
 import 'package:flutter/material.dart';
 
 /// 底部层组件
+class BackgroundLayer extends StatelessWidget {
+  const BackgroundLayer({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return const BottomLayer(
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        children: [
+          Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Text(
+                "不会忘事",
+                style: TextStyle(
+                    fontSize: 24,
+                    fontWeight: FontWeight.bold,
+                    color: textColor,
+                    height: 1),
+              ),
+              Text(
+                "今天又是元气满满的一天",
+                style: TextStyle(fontSize: 16, color: labelColor, height: 1),
+              ),
+            ],
+          ),
+          // Column(
+          //   children: [
+          //     IconButton(
+          //       onPressed: () {
+          //         Navigator.of(context).push(
+          //           animateRoute(
+          //             child: const FeaturePage(),
+          //             direction: "horizontal",
+          //           ),
+          //         );
+          //       },
+          //       icon: const Icon(Icons.menu_open, size: 24, color: labelColor),
+          //     ),
+          //   ],
+          // )
+        ],
+      ),
+    );
+  }
+}
+
+/// 底部层组件
 ///
 /// 这个组件用于创建一个可定制的底部层，通常用于页面的底部区域。
 /// 它可以接受一个自定义的颜色、子组件和高度margin。

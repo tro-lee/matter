@@ -35,6 +35,22 @@ class MatterBuilderTable {
     return await db.insert('matter_builder', model.toMap());
   }
 
+  /// 批量插入多条 MatterBuilderModel 记录
+  ///
+  /// [models] 要插入的 MatterBuilderModel 对象列表
+  /// 返回插入的行数
+  static Future<int> batchInsert(List<MatterBuilderModel> models) async {
+    final db = await DB.instance;
+    final batch = db.batch();
+
+    for (var model in models) {
+      batch.insert('matter_builder', model.toMap());
+    }
+
+    final results = await batch.commit();
+    return results.length;
+  }
+
   /// 获取指定日期的所有 MatterBuilderModel 记录
   ///
   /// [date] 指定的日期

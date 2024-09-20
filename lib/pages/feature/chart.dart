@@ -10,9 +10,17 @@ class Chart extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      decoration: const BoxDecoration(
+      margin: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
+      decoration: BoxDecoration(
         color: surfaceColor,
-        borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
+        borderRadius: BorderRadius.circular(20),
+        boxShadow: const [
+          BoxShadow(
+            color: Colors.black12,
+            offset: Offset(0, 2),
+            blurRadius: 10,
+          ),
+        ],
       ),
       height: 256,
       child: const Padding(

@@ -1,7 +1,9 @@
-import 'package:buhuiwangshi/constant/candidates.dart';
+import 'package:buhuiwangshi/constant/matter_type.dart';
 import 'package:buhuiwangshi/models/matter_model.dart';
 import 'package:buhuiwangshi/utils/colors.dart';
+import 'package:buhuiwangshi/utils/system.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:jiffy/jiffy.dart';
 
 class Matter extends StatelessWidget {
@@ -10,38 +12,46 @@ class Matter extends StatelessWidget {
   final DateTime? time;
   final MatterType type;
   final String name;
-  final IconData levelIcon;
+  final String remark;
   final bool showTopLine;
   final bool showBottomLine;
   final Color? topLineColor;
   final Color? bottomLineColor;
   final VoidCallback? onPressed;
+  final VoidCallback? onIconPressed;
+  final bool isWeeklyRepeat;
+  final List<int> weeklyRepeatDays;
+  final bool isDailyClusterRepeat;
 
-  // 预计算的文本样式
-  final TextStyle _nameStyle;
-  final TextStyle _timeStyle;
+  TextStyle get _nameStyle => const TextStyle(
+        color: textColor,
+        fontSize: 18,
+        fontWeight: FontWeight.bold,
+      );
 
-  Matter({
+  TextStyle get _timeStyle => const TextStyle(
+        fontSize: 18,
+        color: textColor2,
+      );
+
+  const Matter({
     super.key,
     required this.type,
     required this.color,
     required this.fontColor,
     required this.time,
     required this.name,
-    required this.levelIcon,
+    this.remark = '',
     this.showTopLine = false,
     this.showBottomLine = false,
     this.topLineColor,
     this.bottomLineColor,
     this.onPressed,
-  })  : _nameStyle = TextStyle(
-          color: fontColor,
-          fontSize: 22,
-        ),
-        _timeStyle = TextStyle(
-          fontSize: 18,
-          color: fontColor,
-        );
+    this.onIconPressed,
+    this.isWeeklyRepeat = false,
+    this.weeklyRepeatDays = const [],
+    this.isDailyClusterRepeat = false,
+  });
 
   factory Matter.fromMatterModel(
     MatterModel model, {
@@ -50,6 +60,7 @@ class Matter extends StatelessWidget {
     Color? topLineColor,
     Color? bottomLineColor,
     VoidCallback? onPressed,
+    VoidCallback? onIconPressed,
   }) {
     return Matter(
       type: model.type,
@@ -57,21 +68,24 @@ class Matter extends StatelessWidget {
       fontColor: Color(model.fontColor),
       time: model.time,
       name: model.name,
-      levelIcon: model.levelIcon,
+      remark: model.remark,
       showTopLine: showTopLine,
       showBottomLine: showBottomLine,
       topLineColor: topLineColor,
       bottomLineColor: bottomLineColor,
       onPressed: onPressed,
+      onIconPressed: onIconPressed,
+      isWeeklyRepeat: model.isWeeklyRepeat,
+      weeklyRepeatDays: model.weeklyRepeatDays,
+      isDailyClusterRepeat: model.isDailyClusterRepeat,
     );
   }
 
   @override
   Widget build(BuildContext context) {
-    return SizedBox(
-      height: 96,
-      width: double.infinity,
+    return IntrinsicHeight(
       child: Row(
+        crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           _buildLine(),
           Expanded(child: _buildContent()),
@@ -84,112 +98,68 @@ class Matter extends StatelessWidget {
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 12),
       child: Stack(
-        alignment: Alignment.center,
+        alignment: Alignment.topCenter,
         children: [
-          SizedBox(
-            height: double.infinity,
-            child: Column(
-              children: [
-                _buildLineSegment(showTopLine, color, topLineColor, true),
-                _buildLineSegment(
-                    showBottomLine, color, bottomLineColor, false),
-              ],
-            ),
-          ),
-          Container(
-            decoration: BoxDecoration(
-              color: color,
-              shape: BoxShape.circle,
-              boxShadow: const [
-                BoxShadow(
-                  color: Colors.black12,
-                  offset: Offset(0, 2),
-                  blurRadius: 2,
-                ),
-              ],
-            ),
-            width: 64,
-            height: 64,
-            child: Icon(type.iconData, size: 32, color: fontColor),
-          ),
+          _buildVerticalLine(),
+          _buildIconButton(),
         ],
       ),
     );
   }
 
-  Widget _buildLineSegment(
-      bool showLine, Color backgroundColor, Color? lineColor, bool isTopLine) {
-    if (!showLine) return const Expanded(child: SizedBox.shrink());
-    return Expanded(
-      child: Container(
-        width: 8,
-        decoration: BoxDecoration(
-          gradient: LinearGradient(
-            begin: isTopLine ? Alignment.bottomCenter : Alignment.topCenter,
-            end: isTopLine ? Alignment.topCenter : Alignment.bottomCenter,
-            colors: [
-              backgroundColor,
-              backgroundColor,
-              blendColors(lineColor ?? backgroundColor, backgroundColor, 0.5),
-            ],
-            stops: const [0.1, 0.8, 1.0],
-          ),
+  Widget _buildVerticalLine() {
+    return SizedBox(
+      height: double.infinity,
+      child: Column(
+        children: [
+          _buildLineSegment(showBottomLine, color, bottomLineColor, false),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildIconButton() {
+    return Material(
+      color: color,
+      shape: const CircleBorder(),
+      child: InkWell(
+        splashColor: Colors.white24,
+        highlightColor: Colors.white24,
+        onTap: () {
+          HapticFeedback.lightImpact();
+          onIconPressed?.call();
+        },
+        customBorder: const CircleBorder(),
+        child: SizedBox(
+          width: 64,
+          height: 64,
+          child: Icon(type.iconData, size: 32, color: textColor),
         ),
       ),
     );
   }
 
   Widget _buildContent() {
-    final formattedTime = _formatTime();
     return Container(
-      margin: const EdgeInsets.fromLTRB(0, 0, 16, 0),
+      margin: const EdgeInsets.fromLTRB(0, 0, 16, 16),
       child: Material(
-        elevation: 2,
-        shadowColor: Colors.black38,
         color: color,
-        borderRadius: BorderRadius.circular(20),
+        borderRadius: BorderRadius.circular(16),
         child: InkWell(
-          onTap: onPressed == null
-              ? null
-              : () async {
-                  // 等待一小段时间，让动画有机会显示
-                  await Future.delayed(const Duration(milliseconds: 120));
-                  onPressed?.call();
-                },
-          splashColor: Colors.white38,
-          highlightColor: Colors.white38,
-          child: Container(
-            height: 80,
-            padding: const EdgeInsets.fromLTRB(20, 0, 20, 0),
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          borderRadius: BorderRadius.circular(16),
+          onLongPress: () => HapticFeedback.lightImpact(),
+          onTap: _handleTap,
+          splashColor: Colors.white24,
+          highlightColor: Colors.white24,
+          child: Padding(
+            padding: const EdgeInsets.fromLTRB(12, 8, 12, 8),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Expanded(
-                  child: Column(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Text(
-                        name.isEmpty ? "点我选择模板" : name,
-                        textScaler: const TextScaler.linear(1),
-                        maxLines: 1,
-                        overflow: TextOverflow.ellipsis,
-                        style: _nameStyle,
-                      ),
-                      if (formattedTime.isNotEmpty)
-                        Text(
-                          formattedTime,
-                          textScaler: const TextScaler.linear(1),
-                          style: _timeStyle,
-                        )
-                    ],
-                  ),
-                ),
-                // Icon(
-                //   levelIcon,
-                //   color: fontColor,
-                //   size: 24,
-                // )
+                _buildTitle(),
+                _buildTimeInfo(),
+                if (remark.isNotEmpty) const Divider(color: Colors.black12),
+                if (remark.isNotEmpty) _buildRemark(),
               ],
             ),
           ),
@@ -198,8 +168,121 @@ class Matter extends StatelessWidget {
     );
   }
 
+  Widget _buildTitle() {
+    return Text(
+      name.isEmpty ? "点我选择模板" : name,
+      textScaler: const TextScaler.linear(1),
+      maxLines: 1,
+      overflow: TextOverflow.ellipsis,
+      style: _nameStyle,
+    );
+  }
+
+  Widget _buildTimeInfo() {
+    return Row(
+      children: [
+        Expanded(
+          child: Row(
+            children: [
+              Text(
+                _formatTime(),
+                textScaler: const TextScaler.linear(1),
+                style: _timeStyle,
+              ),
+              const SizedBox(width: 8),
+              _buildRepeatInfo(),
+            ],
+          ),
+        ),
+      ],
+    );
+  }
+
+  Widget _buildRepeatInfo() {
+    if (isDailyClusterRepeat) {
+      return Text(
+        '每日',
+        textScaler: const TextScaler.linear(1),
+        style: _timeStyle,
+      );
+    } else if (isWeeklyRepeat) {
+      return Expanded(
+        child: Text(
+          '每${_formatWeeklyRepeatDays()}',
+          maxLines: 1,
+          overflow: TextOverflow.ellipsis,
+          textScaler: const TextScaler.linear(1),
+          style: _timeStyle,
+        ),
+      );
+    }
+    return const SizedBox.shrink();
+  }
+
+  Widget _buildRemark() {
+    return Text(
+      remark,
+      textScaler: const TextScaler.linear(1),
+      style: _timeStyle,
+    );
+  }
+
+  Future<void> _handleTap() async {
+    await Future.delayed(const Duration(milliseconds: 120));
+    HapticFeedback.lightImpact();
+    onPressed?.call();
+    SystemUtils.hideKeyShowUnfocus();
+  }
+
   String _formatTime() {
     if (time == null) return '';
     return Jiffy.parseFromDateTime(time!).format(pattern: "HH:mm a");
   }
+
+  String _formatWeeklyRepeatDays() {
+    return weeklyRepeatDays.map((day) {
+      switch (day) {
+        case 0:
+          return '周日';
+        case 1:
+          return '周一';
+        case 2:
+          return '周二';
+        case 3:
+          return '周三';
+        case 4:
+          return '周四';
+        case 5:
+          return '周五';
+        case 6:
+          return '周六';
+        default:
+          return '';
+      }
+    }).join(', ');
+  }
+}
+
+Widget _buildLineSegment(
+    bool showLine, Color backgroundColor, Color? lineColor, bool isTopLine) {
+  if (!showLine) return const Expanded(child: SizedBox.shrink());
+  return Expanded(
+    child: Container(
+      width: 8,
+      decoration: BoxDecoration(
+        gradient: LinearGradient(
+          begin: isTopLine ? Alignment.bottomCenter : Alignment.topCenter,
+          end: isTopLine ? Alignment.topCenter : Alignment.bottomCenter,
+          colors: [
+            backgroundColor,
+            backgroundColor,
+            blendColors(lineColor ?? backgroundColor, backgroundColor, 0.5),
+            lineColor ?? backgroundColor,
+            lineColor ?? backgroundColor,
+          ],
+          stops: const [0.1, 0.5, 0.7, 0.9, 1.0],
+        ),
+      ),
+    ),
+  );
 }

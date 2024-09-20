@@ -1,119 +1,98 @@
-import 'package:buhuiwangshi/components/matter.dart';
-import 'package:buhuiwangshi/models/matter_model.dart';
-import 'package:buhuiwangshi/pages/details/page.dart';
-import 'package:buhuiwangshi/pages/home/store.dart';
-import 'package:buhuiwangshi/utils/animate_route.dart';
-import 'package:buhuiwangshi/utils/colors.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:buhuiwangshi/components/matter.dart';
+import 'package:buhuiwangshi/models/matter_model.dart';
+import 'package:buhuiwangshi/pages/home/store.dart';
+import 'package:buhuiwangshi/utils/colors.dart';
 
-class TopLayer extends StatefulWidget {
+class TopLayer extends StatelessWidget {
   const TopLayer({super.key});
 
   @override
-  State<TopLayer> createState() => _TopLayerState();
-}
-
-class _TopLayerState extends State<TopLayer> {
-  @override
-  void initState() {
-    super.initState();
-  }
-
-  @override
   Widget build(BuildContext context) {
-    var clipRRect = ClipRRect(
-      borderRadius: const BorderRadius.vertical(top: Radius.circular(20)),
-      child: FutureBuilder<void>(
-        future: HomePageStore.initializeMattersList(),
-        builder: (context, snapshot) {
-          if (snapshot.connectionState == ConnectionState.waiting) {
-            return const Center(child: CircularProgressIndicator());
-          } else if (snapshot.hasError) {
-            return Center(child: Text('Error: ${snapshot.error}'));
-          } else {
-            // 使用Consumer监听HomePageStore的变化
-            return Selector<HomePageStore, List<MatterModel>>(
-              selector: (_, store) => store.mattersList,
-              builder: (context, mattersList, child) {
-                // 使用AnimatedSwitcher实现切换动画效果
-                return AnimatedSwitcher(
-                  key: const Key('AnimatedSwitcher'),
-                  duration: const Duration(milliseconds: 60),
-                  // 使用自定义的交叉淡入淡出效果
-                  transitionBuilder:
-                      (Widget child, Animation<double> animation) {
-                    return FadeTransition(
-                      opacity: Tween<double>(begin: 0.5, end: 1).animate(
-                        CurvedAnimation(
-                          parent: animation,
-                          // 使用easeInOut曲线使动画更加平滑
-                          curve: Curves.easeInOut,
-                        ),
-                      ),
-                      child: child,
-                    );
-                  },
-                  // 使用ListView.builder构建可滚动列表
-                  child: ListView.builder(
-                    // 使用所有事项的ID组合作为key，确保在列表变化时能正确触发动画
-                    key: ValueKey<String>(mattersList.firstOrNull?.id ?? ''),
-                    // 设置顶部内边距为8
-                    padding: const EdgeInsets.only(top: 8),
-                    // 列表项数量为事项列表的长度
-                    itemCount: mattersList.length,
-                    // 构建每个列表项
-                    itemBuilder: (context, index) {
-                      // 使用Matter.fromMatterModel创建Matter组件
-                      return Matter.fromMatterModel(
-                        mattersList[index],
-                        // 除第一项外，其他项显示顶部线条
-                        showTopLine: index != 0,
-                        // 除最后一项外，其他项显示底部线条
-                        showBottomLine: index != mattersList.length - 1,
-                        // 设置顶部线条颜色，如果存在上一项则使用上一项的颜色，否则为透明
-                        topLineColor: Color(
-                            index - 1 >= 0 ? mattersList[index - 1].color : 0),
-                        // 设置底部线条颜色，如果存在下一项则使用下一项的颜色，否则为透明
-                        bottomLineColor: Color(index + 1 < mattersList.length
-                            ? mattersList[index + 1].color
-                            : 0),
-                        // 点击事项时的回调函数
-                        onPressed: () {
-                          // 使用自定义的动画路由跳转到详情页面
-                          Navigator.of(context).push(animateRoute(
-                              direction: 'horizontal',
-                              child: DetailsPage(
-                                  matterId: mattersList[index].id)));
-                        },
-                      );
-                    },
-                  ),
-                );
-              },
-            );
-          }
-        },
-      ),
-    );
-
     return SafeArea(
       child: Container(
-        decoration: const BoxDecoration(
-          color: surfaceColor,
-          // boxShadow: [
-          //   BoxShadow(
-          //     blurRadius: 2,
-          //     color: Colors.black12,
-          //     offset: Offset(0, -1),
-          //   ),
-          // ],
-        ),
+        decoration: const BoxDecoration(color: surfaceColor),
         margin: const EdgeInsets.only(top: 108),
         width: double.infinity,
         height: double.infinity,
-        child: clipRRect,
+        child: _buildContent(),
       ),
     );
+  }
+
+  Widget _buildContent() {
+    return ClipRRect(
+      borderRadius: const BorderRadius.vertical(top: Radius.circular(20)),
+      child: FutureBuilder<void>(
+        future: HomePageStore.initializeMattersList(),
+        builder: (context, snapshot) => _buildFutureResult(context, snapshot),
+      ),
+    );
+  }
+
+  Widget _buildFutureResult(
+      BuildContext context, AsyncSnapshot<void> snapshot) {
+    if (snapshot.connectionState == ConnectionState.waiting) {
+      return const Center(child: CircularProgressIndicator());
+    } else if (snapshot.hasError) {
+      return Center(child: Text('Error: ${snapshot.error}'));
+    } else {
+      return _buildMattersList();
+    }
+  }
+
+  Widget _buildMattersList() {
+    return Selector<HomePageStore, List<MatterModel>>(
+      selector: (_, store) => store.mattersList,
+      builder: (context, mattersList, child) {
+        return AnimatedSwitcher(
+          key: const Key('AnimatedSwitcher'),
+          duration: const Duration(milliseconds: 60),
+          transitionBuilder: _buildTransition,
+          child: _buildListView(mattersList),
+        );
+      },
+    );
+  }
+
+  Widget _buildTransition(Widget child, Animation<double> animation) {
+    return FadeTransition(
+      opacity: Tween<double>(begin: 0.5, end: 1).animate(
+        CurvedAnimation(parent: animation, curve: Curves.easeInOut),
+      ),
+      child: child,
+    );
+  }
+
+  Widget _buildListView(List<MatterModel> mattersList) {
+    return ListView.builder(
+      key: ValueKey<String>(mattersList.firstOrNull?.id ?? ''),
+      padding: const EdgeInsets.only(top: 8),
+      itemCount: mattersList.length,
+      itemBuilder: (context, index) =>
+          _buildMatterItem(context, mattersList, index),
+    );
+  }
+
+  Widget _buildMatterItem(
+      BuildContext context, List<MatterModel> mattersList, int index) {
+    return Matter.fromMatterModel(
+      mattersList[index],
+      showTopLine: index != 0,
+      showBottomLine: index != mattersList.length - 1,
+      topLineColor: Color(index - 1 >= 0 ? mattersList[index - 1].color : 0),
+      bottomLineColor: Color(
+          index + 1 < mattersList.length ? mattersList[index + 1].color : 0),
+      onPressed: () => _onMatterPressed(context, mattersList[index].id),
+    );
+  }
+
+  void _onMatterPressed(BuildContext context, String matterId) {
+    // TODO: Implement navigation to details page
+    // Navigator.of(context).push(animateRoute(
+    //   direction: 'horizontal',
+    //   child: DetailsPage(matterId: matterId),
+    // ));
   }
 }

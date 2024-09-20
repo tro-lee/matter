@@ -116,6 +116,25 @@ class MatterService {
     SmartDialog.showToast("添加成功");
   }
 
+  /// 插入多个 MatterBuilder 实例到数据库
+  ///
+  /// 参数:
+  /// - matterBuilders: 要插入的 MatterBuilderModel 列表
+  ///
+  /// 返回值: Future<void>
+  ///
+  /// 如果插入成功，会显示成功提示；如果失败，会显示失败提示
+  static Future<void> insertMatterBuilders(
+      List<MatterBuilderModel> matterBuilders) async {
+    try {
+      // 批量插入 MatterBuilderModel 实例
+      await MatterBuilderTable.batchInsert(matterBuilders);
+    } catch (e) {
+      // 如果发生错误，显示添加失败的提示
+      SmartDialog.showToast("批量添加失败: ${e.toString()}");
+    }
+  }
+
   /// 获取最近7天（包括今天）的事项统计
   ///
   /// 返回一个包含最近7天每天事项统计的列表，按日期倒序排列（最近的日期在前）
