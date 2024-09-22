@@ -1,26 +1,8 @@
 import 'package:buhuiwangshi/pages/home/store.dart';
 import 'package:flutter/material.dart';
-import 'package:buhuiwangshi/utils/colors.dart';
 import 'package:buhuiwangshi/utils/date.dart';
 import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';
-
-/// 中间层
-class CalendarLayer extends StatelessWidget {
-  const CalendarLayer({super.key});
-
-  @override
-  Widget build(BuildContext context) {
-    return SafeArea(
-      child: Container(
-          margin: const EdgeInsets.only(top: 52),
-          alignment: Alignment.topCenter,
-          width: double.infinity,
-          height: double.infinity,
-          child: const _CalArea()),
-    );
-  }
-}
 
 /*
 刷新时间和显示逻辑流程图：
@@ -79,19 +61,19 @@ class CalendarLayer extends StatelessWidget {
 
 注意：
 - 日期的刷新是在用户滚动时触发的，而不是定时刷新。
-- 显示逻辑保证了日历始终居中于今天，并可以向前后无限滚动。
+- 显示逻辑保证了日历始终居中于今天��并可以向前后无限滚动。
 - 每次加载新日期后，都会重新构建界面以显示新数据。
 */
 
 /// 日历区域
-class _CalArea extends StatefulWidget {
-  const _CalArea();
+class CalendarArea extends StatefulWidget {
+  const CalendarArea({super.key});
 
   @override
-  State<_CalArea> createState() => _CalAreaState();
+  State<CalendarArea> createState() => CalendarAreaState();
 }
 
-class _CalAreaState extends State<_CalArea> {
+class CalendarAreaState extends State<CalendarArea> {
   // 滚动控制器，用于控制日历的滚动
   final ScrollController _scrollController = ScrollController();
   // 存储日期的列表
@@ -235,6 +217,9 @@ class _CalAreaState extends State<_CalArea> {
                         },
                         isSelected:
                             selectedDate.toString() == dates[index].toString(),
+                        primaryColor: Theme.of(context).colorScheme.primary,
+                        onPrimaryColor: Theme.of(context).colorScheme.onPrimary,
+                        onSurfaceColor: Theme.of(context).colorScheme.onSurface,
                       );
                     },
                   ),
@@ -261,12 +246,18 @@ class _CalItem extends StatelessWidget {
   final List<String> data;
   final Function(DateTime) onPressed;
   final bool isSelected;
+  final Color primaryColor;
+  final Color onPrimaryColor;
+  final Color onSurfaceColor;
 
   const _CalItem({
     super.key,
     required this.data,
     required this.onPressed,
     required this.isSelected,
+    required this.primaryColor,
+    required this.onPrimaryColor,
+    required this.onSurfaceColor,
   });
 
   @override
@@ -275,15 +266,15 @@ class _CalItem extends StatelessWidget {
       throw Exception("数据异常");
     }
 
-    final fontColor = isSelected ? textColor : labelColor;
+    final fontColor = isSelected ? onPrimaryColor : onSurfaceColor;
 
     return Container(
       width: 48,
       margin: const EdgeInsets.fromLTRB(0, 4, 0, 4),
       decoration: isSelected
-          ? const BoxDecoration(
-              color: surfaceColor,
-              borderRadius: BorderRadius.all(Radius.circular(12)))
+          ? BoxDecoration(
+              color: primaryColor,
+              borderRadius: const BorderRadius.all(Radius.circular(12)))
           : null,
       child: TextButton(
         style: TextButton.styleFrom(

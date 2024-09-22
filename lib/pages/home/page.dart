@@ -1,9 +1,8 @@
 import 'dart:core';
 
-import 'package:buhuiwangshi/pages/home/bottom_layer.dart';
-import 'package:buhuiwangshi/pages/home/chat_layer.dart';
-import 'package:buhuiwangshi/pages/home/calendar_layer.dart';
-import 'package:buhuiwangshi/pages/home/top_layer.dart';
+import 'package:buhuiwangshi/pages/home/head_layer.dart';
+import 'package:buhuiwangshi/pages/home/bottom_bar_layer.dart';
+import 'package:buhuiwangshi/pages/home/content_layer.dart';
 import 'package:buhuiwangshi/pages/home/store.dart';
 import 'package:buhuiwangshi/utils/standard.dart';
 
@@ -20,9 +19,12 @@ class HomePage extends StatelessWidget {
           body: Stack(
             /// 每层维护自身高度和交互逻辑，互不打扰
             /// 最上层是顶部层，中间是日历层，最下层是底部层
-            children: [BackgroundLayer(), CalendarLayer(), TopLayer()],
+            children: [
+              ContentLayer(),
+              HeadLayer(),
+              BottomBarLayer(),
+            ],
           ),
-          bottomNavigationBar: ChatLayer(),
         ),
         context: context,
       ),

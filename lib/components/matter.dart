@@ -1,6 +1,5 @@
 import 'package:buhuiwangshi/constant/matter_type.dart';
 import 'package:buhuiwangshi/models/matter_model.dart';
-import 'package:buhuiwangshi/utils/colors.dart';
 import 'package:buhuiwangshi/utils/system.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -23,15 +22,15 @@ class Matter extends StatelessWidget {
   final List<int> weeklyRepeatDays;
   final bool isDailyClusterRepeat;
 
-  TextStyle get _nameStyle => const TextStyle(
-        color: textColor,
+  TextStyle get _nameStyle => TextStyle(
+        color: fontColor,
         fontSize: 18,
         fontWeight: FontWeight.bold,
       );
 
-  TextStyle get _timeStyle => const TextStyle(
+  TextStyle get _timeStyle => TextStyle(
         fontSize: 18,
-        color: textColor2,
+        color: fontColor.withOpacity(0.8),
       );
 
   const Matter({
@@ -61,11 +60,13 @@ class Matter extends StatelessWidget {
     Color? bottomLineColor,
     VoidCallback? onPressed,
     VoidCallback? onIconPressed,
+    Color? color,
+    Color? fontColor,
   }) {
     return Matter(
       type: model.type,
-      color: Color(model.color),
-      fontColor: Color(model.fontColor),
+      color: color ?? Color(model.color),
+      fontColor: fontColor ?? Color(model.fontColor),
       time: model.time,
       name: model.name,
       remark: model.remark,
@@ -129,11 +130,10 @@ class Matter extends StatelessWidget {
           HapticFeedback.lightImpact();
           onIconPressed?.call();
         },
-        customBorder: const CircleBorder(),
         child: SizedBox(
           width: 64,
           height: 64,
-          child: Icon(type.iconData, size: 32, color: textColor),
+          child: Icon(type.iconData, size: 32, color: fontColor),
         ),
       ),
     );
@@ -142,11 +142,16 @@ class Matter extends StatelessWidget {
   Widget _buildContent() {
     return Container(
       margin: const EdgeInsets.fromLTRB(0, 0, 16, 16),
+      decoration: BoxDecoration(
+        borderRadius: BorderRadius.circular(16),
+      ),
       child: Material(
         color: color,
-        borderRadius: BorderRadius.circular(16),
+        borderRadius: BorderRadius.circular(12),
         child: InkWell(
-          borderRadius: BorderRadius.circular(16),
+          customBorder: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(12),
+          ),
           onLongPress: () => HapticFeedback.lightImpact(),
           onTap: _handleTap,
           splashColor: Colors.white24,
@@ -158,7 +163,8 @@ class Matter extends StatelessWidget {
               children: [
                 _buildTitle(),
                 _buildTimeInfo(),
-                if (remark.isNotEmpty) const Divider(color: Colors.black12),
+                if (remark.isNotEmpty)
+                  Divider(color: fontColor.withOpacity(0.2)),
                 if (remark.isNotEmpty) _buildRemark(),
               ],
             ),
@@ -270,18 +276,19 @@ Widget _buildLineSegment(
     child: Container(
       width: 8,
       decoration: BoxDecoration(
-        gradient: LinearGradient(
-          begin: isTopLine ? Alignment.bottomCenter : Alignment.topCenter,
-          end: isTopLine ? Alignment.topCenter : Alignment.bottomCenter,
-          colors: [
-            backgroundColor,
-            backgroundColor,
-            blendColors(lineColor ?? backgroundColor, backgroundColor, 0.5),
-            lineColor ?? backgroundColor,
-            lineColor ?? backgroundColor,
-          ],
-          stops: const [0.1, 0.5, 0.7, 0.9, 1.0],
-        ),
+        color: backgroundColor,
+        // gradient: LinearGradient(
+        //   begin: isTopLine ? Alignment.bottomCenter : Alignment.topCenter,
+        //   end: isTopLine ? Alignment.topCenter : Alignment.bottomCenter,
+        //   colors: [
+        //     backgroundColor,
+        //     backgroundColor,
+        //     blendColors(lineColor ?? backgroundColor, backgroundColor, 0.5),
+        //     lineColor ?? backgroundColor,
+        //     lineColor ?? backgroundColor,
+        //   ],
+        //   stops: const [0.1, 0.5, 0.7, 0.9, 1.0],
+        // ),
       ),
     ),
   );

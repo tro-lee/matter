@@ -7,8 +7,6 @@ import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:flutter_smart_dialog/flutter_smart_dialog.dart';
 import 'package:jiffy/jiffy.dart';
 
-import 'utils/theme.dart';
-
 /// 应用程序入口点
 void main() async {
   // 加载环境变量
@@ -40,6 +38,14 @@ class _MyAppState extends State<MyApp> {
       statusBarIconBrightness: Brightness.dark,
     ));
 
+    const TextTheme textTheme = TextTheme(
+      titleLarge: TextStyle(fontSize: 26),
+      titleMedium: TextStyle(fontSize: 24),
+      titleSmall: TextStyle(fontSize: 22),
+      bodyLarge: TextStyle(fontSize: 20),
+      bodyMedium: TextStyle(fontSize: 18),
+      bodySmall: TextStyle(fontSize: 16),
+    );
     return MaterialApp(
       // 添加SmartDialog观察者
       navigatorObservers: [FlutterSmartDialog.observer],
@@ -47,11 +53,37 @@ class _MyAppState extends State<MyApp> {
       builder: FlutterSmartDialog.init(),
       // 设置应用主题
       theme: ThemeData(
-        colorScheme: MaterialTheme.lightScheme(),
+        colorScheme: ColorScheme.fromSeed(
+          seedColor: Colors.pinkAccent,
+          dynamicSchemeVariant: DynamicSchemeVariant.fidelity,
+        ),
+        textTheme: textTheme,
         fontFamily: "PingFang",
       ),
+      // 设置暗色主题
+      darkTheme: ThemeData(
+        colorScheme: ColorScheme.fromSeed(
+          seedColor: Colors.black,
+          brightness: Brightness.dark,
+          dynamicSchemeVariant: DynamicSchemeVariant.fidelity,
+          contrastLevel: 0.08,
+        ),
+        textTheme: textTheme,
+        fontFamily: "PingFang",
+      ),
+      // 使用系统主题模式
+      themeMode: ThemeMode.system,
       // 设置主页
       home: standardContainer(context: context, child: const HomePage()),
     );
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    // 设置系统UI样式
+    SystemChrome.setSystemUIOverlayStyle(const SystemUiOverlayStyle(
+      statusBarColor: Colors.transparent,
+    ));
   }
 }

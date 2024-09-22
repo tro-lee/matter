@@ -1,5 +1,5 @@
 import 'package:buhuiwangshi/models/matter_model.dart';
-import 'package:buhuiwangshi/pages/home/bottom_layer.dart';
+import 'package:buhuiwangshi/pages/home/head_layer.dart';
 import 'package:buhuiwangshi/pages/details/check_card.dart';
 import 'package:buhuiwangshi/pages/details/detail_card.dart';
 import 'package:buhuiwangshi/pages/details/store.dart';

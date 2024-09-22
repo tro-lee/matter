@@ -3,21 +3,17 @@ import 'package:provider/provider.dart';
 import 'package:buhuiwangshi/components/matter.dart';
 import 'package:buhuiwangshi/models/matter_model.dart';
 import 'package:buhuiwangshi/pages/home/store.dart';
-import 'package:buhuiwangshi/utils/colors.dart';
 
-class TopLayer extends StatelessWidget {
-  const TopLayer({super.key});
+class ContentLayer extends StatelessWidget {
+  const ContentLayer({super.key});
 
   @override
   Widget build(BuildContext context) {
-    return SafeArea(
-      child: Container(
-        decoration: const BoxDecoration(color: surfaceColor),
-        margin: const EdgeInsets.only(top: 108),
-        width: double.infinity,
-        height: double.infinity,
-        child: _buildContent(),
-      ),
+    return Container(
+      color: Theme.of(context).colorScheme.surfaceContainer,
+      width: double.infinity,
+      height: double.infinity,
+      child: _buildContent(),
     );
   }
 
@@ -68,7 +64,7 @@ class TopLayer extends StatelessWidget {
   Widget _buildListView(List<MatterModel> mattersList) {
     return ListView.builder(
       key: ValueKey<String>(mattersList.firstOrNull?.id ?? ''),
-      padding: const EdgeInsets.only(top: 8),
+      padding: const EdgeInsets.only(top: 156, bottom: 100),
       itemCount: mattersList.length,
       itemBuilder: (context, index) =>
           _buildMatterItem(context, mattersList, index),
@@ -78,6 +74,8 @@ class TopLayer extends StatelessWidget {
   Widget _buildMatterItem(
       BuildContext context, List<MatterModel> mattersList, int index) {
     return Matter.fromMatterModel(
+      color: Theme.of(context).colorScheme.secondaryContainer,
+      fontColor: Theme.of(context).colorScheme.onSecondaryContainer,
       mattersList[index],
       showTopLine: index != 0,
       showBottomLine: index != mattersList.length - 1,

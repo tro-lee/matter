@@ -1,12 +1,13 @@
+import 'dart:ui';
+
 import 'package:buhuiwangshi/services/ai.dart';
 import 'package:buhuiwangshi/services/speech_to_text.dart';
-import 'package:buhuiwangshi/utils/colors.dart';
 import 'package:buhuiwangshi/utils/system.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
-class ChatLayer extends StatelessWidget {
-  const ChatLayer({super.key});
+class BottomBarLayer extends StatelessWidget {
+  const BottomBarLayer({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -15,15 +16,23 @@ class ChatLayer extends StatelessWidget {
     // 2. MediaQuery.of(context).viewInsets.bottom 获取键盘高度
     // 3. Padding 根据键盘高度调整底部内边距
     // 4. 当键盘弹出时，这些组合使得 ChatInputBar 能够自动上移，避免被键盘遮挡
-    return SingleChildScrollView(
-      reverse: true,
-      child: Padding(
-        padding: EdgeInsets.only(
-          bottom: MediaQuery.of(context).viewInsets.bottom,
-        ),
-        child: const Align(
-          alignment: Alignment.bottomCenter,
-          child: ChatInputBar(),
+    return Align(
+      alignment: Alignment.bottomCenter,
+      child: ClipRect(
+        child: BackdropFilter(
+          filter: ImageFilter.blur(sigmaX: 80, sigmaY: 40),
+          child: SingleChildScrollView(
+            reverse: true,
+            child: Padding(
+              padding: EdgeInsets.only(
+                bottom: MediaQuery.of(context).viewInsets.bottom,
+              ),
+              child: const Align(
+                alignment: Alignment.bottomCenter,
+                child: ChatInputBar(),
+              ),
+            ),
+          ),
         ),
       ),
     );
@@ -81,7 +90,6 @@ class _ChatInputBarState extends State<ChatInputBar>
   Future<void> _handleSubmitted(String text) async {
     SystemUtils.hideKeyShowUnfocus(); // 失焦
 
-    _textController.clear();
     setState(() {
       _isComposing = false;
       _isLoading = true;
@@ -95,6 +103,8 @@ class _ChatInputBarState extends State<ChatInputBar>
     setState(() {
       _isLoading = false;
     });
+
+    _textController.clear();
   }
 
   // 切换输入模式（文本/语音）
@@ -139,6 +149,7 @@ class _ChatInputBarState extends State<ChatInputBar>
     ];
 
     return TextField(
+      readOnly: _isLoading,
       controller: _textController,
       onChanged: (text) {
         setState(() {
@@ -148,26 +159,26 @@ class _ChatInputBarState extends State<ChatInputBar>
       onSubmitted: _handleSubmitted,
       decoration: InputDecoration(
         hintText: hintTexts[DateTime.now().microsecond % hintTexts.length],
-        hintStyle: const TextStyle(color: labelColor),
+        hintStyle: TextStyle(
+            color: Theme.of(context).colorScheme.secondary,
+            fontSize: Theme.of(context).textTheme.bodyMedium!.fontSize),
         prefixIcon: IconButton(
-          icon: const Icon(Icons.mic_none),
+          icon: Icon(Icons.mic_none,
+              color: Theme.of(context).colorScheme.secondary),
           onPressed: _toggleInputMode,
         ),
         enabledBorder: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(20.0),
-          borderSide: const BorderSide(width: 2, color: textColor2),
-        ),
+            borderRadius: BorderRadius.circular(20.0),
+            borderSide: BorderSide.none),
         focusedBorder: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(20.0),
-          borderSide: const BorderSide(
-            width: 2,
-            color: primaryColor,
-          ),
-        ),
+            borderRadius: BorderRadius.circular(20.0),
+            borderSide: BorderSide.none),
         contentPadding: const EdgeInsets.symmetric(
           vertical: 10.0,
           horizontal: 16.0,
         ),
+        filled: true,
+        fillColor: Theme.of(context).colorScheme.secondary.withOpacity(0.2),
       ),
     );
   }
@@ -237,15 +248,21 @@ class _ChatInputBarState extends State<ChatInputBar>
 
   // 构建语音输入容器
   Widget _buildVoiceInputContainer() {
+    Color color;
+    if (_isSpeaking) {
+      color = Theme.of(context).colorScheme.primary.withOpacity(0.5);
+      if (_isCancelled) {
+        color = Theme.of(context).colorScheme.error.withOpacity(0.5);
+      }
+    } else {
+      color = Theme.of(context).colorScheme.secondary.withOpacity(0.2);
+    }
+
     return AnimatedContainer(
       duration: const Duration(milliseconds: 300),
       height: 48,
       decoration: BoxDecoration(
-        color: _getContainerColor(),
-        border: Border.all(
-          color: _getBorderColor(),
-          width: 2,
-        ),
+        color: color,
         borderRadius: BorderRadius.circular(20.0),
       ),
       child: Row(
@@ -260,22 +277,6 @@ class _ChatInputBarState extends State<ChatInputBar>
 
   /// 其他样式配置
 
-  // 获取容器颜色
-  Color _getContainerColor() {
-    if (_isSpeaking) {
-      return _isCancelled ? Colors.red : inversePrimaryColor;
-    }
-    return Colors.transparent;
-  }
-
-  // 获取边框颜色
-  Color _getBorderColor() {
-    if (_isSpeaking) {
-      return _isCancelled ? Colors.red : inversePrimaryColor;
-    }
-    return textColor2;
-  }
-
   // 构建键盘图标
   Widget _buildKeyboardIcon() {
     return AnimatedOpacity(
@@ -283,7 +284,8 @@ class _ChatInputBarState extends State<ChatInputBar>
       opacity: _isSpeaking ? 0.0 : 1.0,
       child: IconButton(
         key: const ValueKey('keyboard'),
-        icon: const Icon(Icons.keyboard),
+        icon: Icon(Icons.keyboard,
+            color: Theme.of(context).colorScheme.secondary),
         onPressed: _toggleInputMode,
       ),
     );
@@ -297,7 +299,9 @@ class _ChatInputBarState extends State<ChatInputBar>
           _getVoiceInputText(),
           maxLines: 1,
           style: TextStyle(
-            color: _isSpeaking && _isCancelled ? surfaceColor : textColor,
+            color: _isSpeaking
+                ? Theme.of(context).colorScheme.surface
+                : Theme.of(context).colorScheme.secondary,
             fontSize: 18,
           ),
         ),
@@ -308,7 +312,7 @@ class _ChatInputBarState extends State<ChatInputBar>
   // 获取语音输入文本
   String _getVoiceInputText() {
     if (_isSpeaking) {
-      return _isCancelled ? "松开手指，取消发送" : "松开发送，上滑取消";
+      return _isCancelled ? "松开发送" : "松开取消";
     }
     return _lastVoiceWords.isNotEmpty ? _lastVoiceWords : "按住说话";
   }
@@ -336,6 +340,8 @@ class _ChatInputBarState extends State<ChatInputBar>
                       ),
                     )
                   : IconButton(
+                      disabledColor: Colors.black12,
+                      color: Theme.of(context).colorScheme.primary,
                       icon: const Icon(Icons.send),
                       onPressed: _isComposing
                           ? () => _handleSubmitted(_textController.text)
