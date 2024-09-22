@@ -1,5 +1,6 @@
 import 'package:buhuiwangshi/constant/matter_type.dart';
 import 'package:buhuiwangshi/models/matter_model.dart';
+import 'package:buhuiwangshi/utils/colors.dart';
 import 'package:buhuiwangshi/utils/system.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -276,19 +277,18 @@ Widget _buildLineSegment(
     child: Container(
       width: 8,
       decoration: BoxDecoration(
-        color: backgroundColor,
-        // gradient: LinearGradient(
-        //   begin: isTopLine ? Alignment.bottomCenter : Alignment.topCenter,
-        //   end: isTopLine ? Alignment.topCenter : Alignment.bottomCenter,
-        //   colors: [
-        //     backgroundColor,
-        //     backgroundColor,
-        //     blendColors(lineColor ?? backgroundColor, backgroundColor, 0.5),
-        //     lineColor ?? backgroundColor,
-        //     lineColor ?? backgroundColor,
-        //   ],
-        //   stops: const [0.1, 0.5, 0.7, 0.9, 1.0],
-        // ),
+        gradient: LinearGradient(
+          begin: isTopLine ? Alignment.bottomCenter : Alignment.topCenter,
+          end: isTopLine ? Alignment.topCenter : Alignment.bottomCenter,
+          colors: [
+            backgroundColor,
+            backgroundColor,
+            blendColors(lineColor ?? backgroundColor, backgroundColor, 0.5),
+            lineColor ?? backgroundColor,
+            lineColor ?? backgroundColor,
+          ],
+          stops: const [0.1, 0.5, 0.7, 0.9, 1.0],
+        ),
       ),
     ),
   );

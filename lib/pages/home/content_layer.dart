@@ -10,7 +10,7 @@ class ContentLayer extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      color: Theme.of(context).colorScheme.surfaceContainer,
+      color: Theme.of(context).colorScheme.surface,
       width: double.infinity,
       height: double.infinity,
       child: _buildContent(),
@@ -74,7 +74,6 @@ class ContentLayer extends StatelessWidget {
   Widget _buildMatterItem(
       BuildContext context, List<MatterModel> mattersList, int index) {
     return Matter.fromMatterModel(
-      color: Theme.of(context).colorScheme.secondaryContainer,
       fontColor: Theme.of(context).colorScheme.onSecondaryContainer,
       mattersList[index],
       showTopLine: index != 0,

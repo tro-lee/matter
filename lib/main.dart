@@ -54,19 +54,7 @@ class _MyAppState extends State<MyApp> {
       // 设置应用主题
       theme: ThemeData(
         colorScheme: ColorScheme.fromSeed(
-          seedColor: Colors.pinkAccent,
-          dynamicSchemeVariant: DynamicSchemeVariant.fidelity,
-        ),
-        textTheme: textTheme,
-        fontFamily: "PingFang",
-      ),
-      // 设置暗色主题
-      darkTheme: ThemeData(
-        colorScheme: ColorScheme.fromSeed(
-          seedColor: Colors.black,
-          brightness: Brightness.dark,
-          dynamicSchemeVariant: DynamicSchemeVariant.fidelity,
-          contrastLevel: 0.08,
+          seedColor: Colors.white,
         ),
         textTheme: textTheme,
         fontFamily: "PingFang",
