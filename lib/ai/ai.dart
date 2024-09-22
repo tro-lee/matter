@@ -59,9 +59,13 @@ class AI {
       });
       request.add(utf8.encode(jsonBody));
 
+      print(jsonBody);
+
       /// 请求发送
       final response = await request.close();
       final responseBody = await response.transform(utf8.decoder).join();
+
+      print(responseBody);
 
       /// 请求结果
       if (response.statusCode == 200) {

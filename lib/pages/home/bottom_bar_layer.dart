@@ -2,10 +2,11 @@ import 'dart:ui';
 
 import 'package:buhuiwangshi/services/ai.dart';
 import 'package:buhuiwangshi/services/speech_to_text.dart';
-import 'package:buhuiwangshi/utils/system.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
+/// 底部栏层
+/// 包含一个模糊背景和聊天输入栏
 class BottomBarLayer extends StatelessWidget {
   const BottomBarLayer({super.key});
 
@@ -39,9 +40,12 @@ class BottomBarLayer extends StatelessWidget {
   }
 }
 
-/// 聊天输入框
+/// 聊天输入栏
+/// 用于处理语音输入和文本输入，以及显示加载状态
 class ChatInputBar extends StatefulWidget {
-  const ChatInputBar({super.key});
+  final Function()? onSubmitted;
+
+  const ChatInputBar({super.key, this.onSubmitted});
 
   @override
   State<ChatInputBar> createState() => _ChatInputBarState();
@@ -49,98 +53,113 @@ class ChatInputBar extends StatefulWidget {
 
 class _ChatInputBarState extends State<ChatInputBar>
     with SingleTickerProviderStateMixin {
-  // 文本输入控制器
-  final TextEditingController _textController = TextEditingController();
+  // 是否处于语音输入模式
+  bool _isVoiceInput = false;
+  // 是否正在加载（处理用户输入）
+  bool _isLoading = false;
 
-  // 状态标志
-  bool _isComposing = false; // 是否正在输入文本
-  bool _isVoiceInput = false; // 是否处于语音输入模式
-  bool _isSpeaking = false; // 是否正在进行语音输入
-  bool _isLoading = false; // 是否正在加载（例如，等待AI响应）
-  bool _isCancelled = false; // 是否取消了语音输入
-  bool _needSendVoice = false; // 是否需要发送语音输入
-
-  // 存储最后识别的语音文本
-  String _lastVoiceWords = '';
-
-  // 动画控制器，用于输入模式切换动画
-  late AnimationController _animationController;
-
-  @override
-  void initState() {
-    super.initState();
-    // 初始化动画控制器
-    _animationController = AnimationController(
-      vsync: this,
-      duration: const Duration(milliseconds: 200),
-    );
-    // 初始化语音识别服务
-    SpeechToTextService.init();
-  }
-
-  @override
-  void dispose() {
-    // 释放资源
-    _textController.dispose();
-    _animationController.dispose();
-    super.dispose();
-  }
-
-  // 处理文本提交
-  Future<void> _handleSubmitted(String text) async {
-    SystemUtils.hideKeyShowUnfocus(); // 失焦
-
+  /// 切换输入模式（文本/语音）
+  void _toggleInputMode() {
     setState(() {
-      _isComposing = false;
+      _isVoiceInput = !_isVoiceInput;
+    });
+  }
+
+  /// 处理提交的输入（文本或语音）
+  Future<void> _handleSubmitted(String text, Function()? onSubmitted) async {
+    setState(() {
       _isLoading = true;
     });
 
-    // 调用AI服务处理输入
-    await AiService.use(
-      prompt: text,
-    );
+    await AiService.use(prompt: text);
 
     setState(() {
       _isLoading = false;
     });
 
-    _textController.clear();
-  }
-
-  // 切换输入模式（文本/语音）
-  void _toggleInputMode() {
-    setState(() {
-      _isVoiceInput = !_isVoiceInput;
-      if (_isVoiceInput) {
-        _animationController.forward();
-      } else {
-        _animationController.reverse();
-      }
-    });
+    onSubmitted?.call();
   }
 
   @override
   Widget build(BuildContext context) {
-    final showRightArea = _isVoiceInput && !_isLoading;
-    if (!_isVoiceInput) {
-      _lastVoiceWords = '';
-    }
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 8.0),
       child: Row(
         children: [
           Expanded(
-            child: _isVoiceInput ? _buildVoiceInput() : _buildTextInput(),
+            child: _isVoiceInput
+                ? VoiceInputBar(
+                    onToggleInputMode: _toggleInputMode,
+                    onSubmitted: _handleSubmitted,
+                    loading: _isLoading,
+                  )
+                : TextInputBar(
+                    onToggleInputMode: _toggleInputMode,
+                    onSubmitted: _handleSubmitted,
+                    loading: _isLoading,
+                  ),
           ),
-          _buildRightArea(showRightArea),
+          // 加载指示器
+          AnimatedContainer(
+            alignment: Alignment.center,
+            duration: const Duration(milliseconds: 120),
+            width: _isLoading ? 48 : 0,
+            child: const Center(
+              child: SizedBox(
+                width: 24,
+                height: 24,
+                child: CircularProgressIndicator(
+                  strokeWidth: 2,
+                ),
+              ),
+            ),
+          ),
         ],
       ),
     );
   }
+}
 
-  /// 文本输入
-  // 构建文本输入框
-  Widget _buildTextInput() {
+/// 文本输入栏
+/// 用于处理文本输入
+class TextInputBar extends StatefulWidget {
+  final VoidCallback onToggleInputMode;
+  final Function(String, Function()?) onSubmitted;
+  final bool loading;
+
+  const TextInputBar({
+    super.key,
+    required this.onToggleInputMode,
+    required this.onSubmitted,
+    required this.loading,
+  });
+
+  @override
+  State<TextInputBar> createState() => _TextInputBarState();
+}
+
+class _TextInputBarState extends State<TextInputBar> {
+  final TextEditingController _textController = TextEditingController();
+  bool _isComposing = false;
+
+  @override
+  void dispose() {
+    _textController.dispose();
+    super.dispose();
+  }
+
+  /// 处理文本提交
+  void _handleSubmitted(String text) {
+    widget.onSubmitted(text, () {
+      _textController.clear();
+    });
+    setState(() {
+      _isComposing = false;
+    });
+  }
+
+  @override
+  Widget build(BuildContext context) {
     final List<String> hintTexts = [
       '试试 "下午四点提醒我开会"',
       '试试 "安排明天我的娱乐活动"',
@@ -149,7 +168,6 @@ class _ChatInputBarState extends State<ChatInputBar>
     ];
 
     return TextField(
-      readOnly: _isLoading,
       controller: _textController,
       onChanged: (text) {
         setState(() {
@@ -162,11 +180,30 @@ class _ChatInputBarState extends State<ChatInputBar>
         hintStyle: TextStyle(
             color: Theme.of(context).colorScheme.secondary,
             fontSize: Theme.of(context).textTheme.bodyMedium!.fontSize),
-        prefixIcon: IconButton(
-          icon: Icon(Icons.mic_none,
-              color: Theme.of(context).colorScheme.secondary),
-          onPressed: _toggleInputMode,
-        ),
+        // 切换到语音输入的按钮
+        prefixIcon: !_isComposing && !widget.loading
+            ? IconButton(
+                icon: Icon(Icons.mic_none,
+                    color: Theme.of(context).colorScheme.secondary),
+                onPressed: widget.onToggleInputMode,
+              )
+            : null,
+        // 发送按钮
+        suffixIcon: widget.loading
+            ? null
+            : IconButton(
+                disabledColor:
+                    Theme.of(context).colorScheme.primary.withOpacity(0.2),
+                color: Theme.of(context).colorScheme.primary,
+                icon: const Icon(Icons.send),
+                onPressed: _isComposing
+                    ? () => _handleSubmitted(_textController.text)
+                    : null,
+              ),
+        enabled: !widget.loading,
+        disabledBorder: OutlineInputBorder(
+            borderRadius: BorderRadius.circular(20.0),
+            borderSide: BorderSide.none),
         enabledBorder: OutlineInputBorder(
             borderRadius: BorderRadius.circular(20.0),
             borderSide: BorderSide.none),
@@ -182,47 +219,68 @@ class _ChatInputBarState extends State<ChatInputBar>
       ),
     );
   }
+}
 
-  /// 语音输入
-  // 开始语音识别
-  Future<void> _onStartVoice() async {
+/// 语音输入栏
+/// 用于处理语音输入
+class VoiceInputBar extends StatefulWidget {
+  final VoidCallback onToggleInputMode;
+  final Function(String, Function()?) onSubmitted;
+  final bool loading;
+
+  const VoiceInputBar({
+    super.key,
+    required this.onToggleInputMode,
+    required this.onSubmitted,
+    required this.loading,
+  });
+
+  @override
+  State<VoiceInputBar> createState() => _VoiceInputBarState();
+}
+
+class _VoiceInputBarState extends State<VoiceInputBar> {
+  // 是否正在说话
+  bool _isSpeaking = false;
+  // 是否取消了语音输入
+  bool _isCancelled = false;
+  // 是否需要发送语音
+  bool _needSendVoice = false;
+  // 最后识别的语音文字
+  String _lastVoiceWords = '';
+
+  @override
+  void initState() {
+    super.initState();
+    // 初始化语音识别服务
+    SpeechToTextService.init();
+  }
+
+  /// 开始语音输入
+  Future<void> _onStartVoice(_) async {
+    setState(() {
+      _isSpeaking = true;
+      _isCancelled = false;
+      _needSendVoice = true;
+    });
+
+    // 触发震动反馈
     HapticFeedback.heavyImpact();
+
+    // 开始监听语音输入
     await SpeechToTextService.startListening((result) {
       setState(() {
         _lastVoiceWords = result.recognizedWords;
       });
+
+      // 如果需要发送语音，则调用回调函数
       if (_needSendVoice) {
-        _handleSubmitted(result.recognizedWords);
+        widget.onSubmitted(result.recognizedWords, () {});
       }
     });
   }
 
-  // 结束语音识别
-  Future<void> _onEndVoice() async {
-    await SpeechToTextService.stopListening();
-  }
-
-  // 构建语音输入界面
-  Widget _buildVoiceInput() {
-    return Material(
-      color: Colors.transparent,
-      child: GestureDetector(
-        onTapDown: (_) async {
-          setState(() {
-            _isSpeaking = true;
-            _isCancelled = false;
-          });
-          await _onStartVoice();
-        },
-        onPanUpdate: _handlePanUpdate,
-        onTapUp: _handleTapCancel,
-        onPanEnd: _handleTapCancel,
-        child: _buildVoiceInputContainer(),
-      ),
-    );
-  }
-
-  // 处理手势滑动更新
+  /// 处理手势更新（检测是否取消语音输入）
   void _handlePanUpdate(DragUpdateDetails details) {
     final RenderBox box = context.findRenderObject() as RenderBox;
     final Offset localPosition = box.globalToLocal(details.globalPosition);
@@ -233,27 +291,42 @@ class _ChatInputBarState extends State<ChatInputBar>
     });
   }
 
-  // 处理手势抬起或结束
-  void _handleTapCancel(_) {
-    if (!_isCancelled) {
-      _needSendVoice = true;
-    }
-    _onEndVoice();
+  /// 结束语音输入
+  Future<void> _onEndVoice(_) async {
+    // 如果取消，则不发送语音
+    _needSendVoice = !_isCancelled;
+
+    // 停止语音监听
+    await SpeechToTextService.stopListening();
 
     setState(() {
       _isSpeaking = false;
-      _isCancelled = false;
     });
   }
 
-  // 构建语音输入容器
+  @override
+  Widget build(BuildContext context) {
+    return Material(
+      color: Colors.transparent,
+      child: GestureDetector(
+        onTapDown: widget.loading ? null : _onStartVoice,
+        onPanUpdate: widget.loading ? null : _handlePanUpdate,
+        onTapUp: widget.loading ? null : _onEndVoice,
+        onPanEnd: widget.loading ? null : _onEndVoice,
+        child: _buildVoiceInputContainer(),
+      ),
+    );
+  }
+
+  /// 构建语音输入容器
   Widget _buildVoiceInputContainer() {
     Color color;
-    if (_isSpeaking) {
-      color = Theme.of(context).colorScheme.primary.withOpacity(0.5);
-      if (_isCancelled) {
-        color = Theme.of(context).colorScheme.error.withOpacity(0.5);
-      }
+    if (widget.loading) {
+      color = Theme.of(context).colorScheme.secondary.withOpacity(0.2);
+    } else if (_isSpeaking) {
+      color = _isCancelled
+          ? Theme.of(context).colorScheme.error.withOpacity(0.5)
+          : Theme.of(context).colorScheme.primary.withOpacity(0.5);
     } else {
       color = Theme.of(context).colorScheme.secondary.withOpacity(0.2);
     }
@@ -267,7 +340,7 @@ class _ChatInputBarState extends State<ChatInputBar>
       ),
       child: Row(
         children: [
-          _buildKeyboardIcon(),
+          if (!widget.loading) _buildKeyboardIcon(),
           _buildVoiceInputText(),
           const SizedBox(width: 16),
         ],
@@ -275,9 +348,7 @@ class _ChatInputBarState extends State<ChatInputBar>
     );
   }
 
-  /// 其他样式配置
-
-  // 构建键盘图标
+  /// 构建切换到键盘输入的图标
   Widget _buildKeyboardIcon() {
     return AnimatedOpacity(
       duration: const Duration(milliseconds: 300),
@@ -286,12 +357,12 @@ class _ChatInputBarState extends State<ChatInputBar>
         key: const ValueKey('keyboard'),
         icon: Icon(Icons.keyboard,
             color: Theme.of(context).colorScheme.secondary),
-        onPressed: _toggleInputMode,
+        onPressed: widget.onToggleInputMode,
       ),
     );
   }
 
-  // 构建语音输入文本
+  /// 构建语音输入文本显示
   Widget _buildVoiceInputText() {
     return Expanded(
       child: Center(
@@ -309,45 +380,13 @@ class _ChatInputBarState extends State<ChatInputBar>
     );
   }
 
-  // 获取语音输入文本
+  /// 获取语音输入文本
   String _getVoiceInputText() {
-    if (_isSpeaking) {
-      return _isCancelled ? "松开发送" : "松开取消";
+    if (widget.loading) {
+      return "⏳$_lastVoiceWords";
+    } else if (_isSpeaking) {
+      return _isCancelled ? "松开取消" : "松开发送";
     }
     return _lastVoiceWords.isNotEmpty ? _lastVoiceWords : "按住说话";
-  }
-
-  /// 右侧区域
-
-  // 构建右侧区域（发送按钮或加载指示器）
-  Widget _buildRightArea(bool showRightArea) {
-    return AnimatedContainer(
-      duration: const Duration(milliseconds: 200),
-      width: showRightArea ? 0 : 48,
-      height: 48,
-      child: showRightArea
-          ? null
-          : AnimatedSwitcher(
-              duration: const Duration(milliseconds: 200),
-              child: _isLoading
-                  ? const Center(
-                      child: SizedBox(
-                        width: 24,
-                        height: 24,
-                        child: CircularProgressIndicator(
-                          strokeWidth: 2,
-                        ),
-                      ),
-                    )
-                  : IconButton(
-                      disabledColor: Colors.black12,
-                      color: Theme.of(context).colorScheme.primary,
-                      icon: const Icon(Icons.send),
-                      onPressed: _isComposing
-                          ? () => _handleSubmitted(_textController.text)
-                          : null,
-                    ),
-            ),
-    );
   }
 }

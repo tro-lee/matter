@@ -104,11 +104,7 @@ class TemplateList extends StatelessWidget {
             type: template.type,
             time: template.time,
             name: template.name,
-            showTopLine: index != 0,
             showBottomLine: index != templates.length - 1,
-            topLineColor: index > 0
-                ? Color(templates[index - 1].type.color)
-                : Colors.transparent,
             bottomLineColor: index < templates.length - 1
                 ? Color(templates[index + 1].type.color)
                 : Colors.transparent,
