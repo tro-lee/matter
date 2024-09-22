@@ -1,4 +1,3 @@
-import 'dart:math';
 import 'package:buhuiwangshi/constant/matter_type.dart';
 import 'package:buhuiwangshi/models/matter_model.dart';
 import 'package:buhuiwangshi/utils/colors.dart';
@@ -13,6 +12,7 @@ class Matter extends StatefulWidget {
   final Color fontColor;
   final DateTime? time;
   final MatterType type;
+  final String id;
   final String name;
   final String remark;
   final bool showBottomLine;
@@ -28,6 +28,7 @@ class Matter extends StatefulWidget {
 
   const Matter({
     super.key,
+    required this.id,
     required this.type,
     required this.color,
     required this.fontColor,
@@ -57,6 +58,7 @@ class Matter extends StatefulWidget {
     Color? fontColor,
   }) {
     return Matter(
+      id: model.id,
       type: model.type,
       color: color ?? Color(model.color),
       fontColor: fontColor ?? Color(model.fontColor),
@@ -128,6 +130,7 @@ class _MatterState extends State<Matter> {
               ),
               Expanded(
                 child: MatterContent(
+                  id: widget.id,
                   color: widget.color,
                   fontColor: widget.fontColor,
                   time: widget.time,
@@ -240,6 +243,7 @@ class MatterLine extends StatelessWidget {
 }
 
 class MatterContent extends StatelessWidget {
+  final String id;
   final Color color;
   final Color fontColor;
   final DateTime? time;
@@ -254,6 +258,7 @@ class MatterContent extends StatelessWidget {
 
   const MatterContent({
     super.key,
+    required this.id,
     required this.color,
     required this.fontColor,
     required this.time,
@@ -357,7 +362,7 @@ class MatterContent extends StatelessWidget {
         ),
         if (isDone)
           Text(
-            _getRandomEmoji(),
+            _getEmoji(),
             style: const TextStyle(
               fontSize: 24,
               fontWeight: FontWeight.bold,
@@ -367,7 +372,7 @@ class MatterContent extends StatelessWidget {
     );
   }
 
-  String _getRandomEmoji() {
+  String _getEmoji() {
     final List<String> emojis = [
       '😀',
       '😎',
@@ -380,8 +385,7 @@ class MatterContent extends StatelessWidget {
       '👍',
       '💪'
     ];
-    final Random random = Random();
-    return emojis[random.nextInt(emojis.length)];
+    return emojis[id.hashCode % emojis.length];
   }
 
   Widget _buildRepeatInfo() {

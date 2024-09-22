@@ -4,6 +4,7 @@ import 'package:buhuiwangshi/constant/matter_type.dart';
 import 'package:buhuiwangshi/pages/add/store.dart';
 import 'package:buhuiwangshi/pages/matter_templates/page.dart';
 import 'package:buhuiwangshi/utils/colors.dart';
+import 'package:buhuiwangshi/utils/uuid.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
@@ -27,6 +28,7 @@ class TemplateArea extends StatelessWidget {
         closedElevation: 0,
         closedColor: surfaceColor,
         closedBuilder: (context, action) => Matter(
+              id: genUuid(),
               fontColor: fontColor,
               color: color,
               time: time,

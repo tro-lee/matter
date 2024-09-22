@@ -34,8 +34,15 @@ class AiService {
           matterBuilders.add(MatterAiModel.fromJson(e).toMatterBuilderModel());
         }
 
+        // 插入数据
         await MatterService.insertMatterBuilders(matterBuilders);
-        HomePageStore.refresh();
+
+        // 获取第一条数据的日期
+        if (matterBuilders.isNotEmpty) {
+          final firstMatterDate = matterBuilders.first.time;
+          // 刷新并跳转到第一条数据的日期
+          await HomePageStore.refresh(date: firstMatterDate);
+        }
       }
 
       /// 判断为 其他

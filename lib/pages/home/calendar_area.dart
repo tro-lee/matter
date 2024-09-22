@@ -185,6 +185,11 @@ class CalendarAreaState extends State<CalendarArea> {
 
   // 获取星期几的中文表示
   String _getWeekDay(DateTime date) {
+    if (date.year == DateTime.now().year &&
+        date.month == DateTime.now().month &&
+        date.day == DateTime.now().day) {
+      return "今天";
+    }
     final weekDays = ["一", "二", "三", "四", "五", "六", "日"];
     return "周${weekDays[date.weekday - 1]}";
   }

@@ -4,6 +4,7 @@ import 'package:buhuiwangshi/constant/templates.dart';
 import 'package:buhuiwangshi/pages/add/store.dart';
 import 'package:buhuiwangshi/utils/colors.dart';
 import 'package:buhuiwangshi/utils/standard.dart';
+import 'package:buhuiwangshi/utils/uuid.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
@@ -99,6 +100,7 @@ class TemplateList extends StatelessWidget {
           onPressed: () =>
               onFinish(template.type, template.time, template.name),
           child: Matter(
+            id: genUuid(),
             color: Color(template.type.color),
             fontColor: Color(template.type.fontColor),
             type: template.type,
