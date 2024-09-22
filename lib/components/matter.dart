@@ -1,38 +1,30 @@
+import 'dart:math';
 import 'package:buhuiwangshi/constant/matter_type.dart';
 import 'package:buhuiwangshi/models/matter_model.dart';
 import 'package:buhuiwangshi/utils/colors.dart';
 import 'package:buhuiwangshi/utils/system.dart';
+import 'package:confetti/confetti.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:jiffy/jiffy.dart';
 
-class Matter extends StatelessWidget {
+class Matter extends StatefulWidget {
   final Color color;
   final Color fontColor;
   final DateTime? time;
   final MatterType type;
   final String name;
   final String remark;
-  final bool showTopLine;
   final bool showBottomLine;
-  final Color? topLineColor;
   final Color? bottomLineColor;
   final VoidCallback? onPressed;
-  final VoidCallback? onIconPressed;
+  final VoidCallback? onFinish;
+  final VoidCallback? onCancel;
   final bool isWeeklyRepeat;
   final List<int> weeklyRepeatDays;
   final bool isDailyClusterRepeat;
-
-  TextStyle get _nameStyle => TextStyle(
-        color: fontColor,
-        fontSize: 18,
-        fontWeight: FontWeight.bold,
-      );
-
-  TextStyle get _timeStyle => TextStyle(
-        fontSize: 18,
-        color: fontColor.withOpacity(0.8),
-      );
+  final bool isDone;
+  final DateTime? doneAt;
 
   const Matter({
     super.key,
@@ -42,25 +34,25 @@ class Matter extends StatelessWidget {
     required this.time,
     required this.name,
     this.remark = '',
-    this.showTopLine = false,
     this.showBottomLine = false,
-    this.topLineColor,
     this.bottomLineColor,
     this.onPressed,
-    this.onIconPressed,
+    this.onFinish,
+    this.onCancel,
     this.isWeeklyRepeat = false,
     this.weeklyRepeatDays = const [],
     this.isDailyClusterRepeat = false,
+    this.isDone = false,
+    this.doneAt,
   });
 
   factory Matter.fromMatterModel(
     MatterModel model, {
-    bool showTopLine = false,
     bool showBottomLine = false,
-    Color? topLineColor,
     Color? bottomLineColor,
     VoidCallback? onPressed,
-    VoidCallback? onIconPressed,
+    VoidCallback? onFinish,
+    VoidCallback? onCancel,
     Color? color,
     Color? fontColor,
   }) {
@@ -71,32 +63,137 @@ class Matter extends StatelessWidget {
       time: model.time,
       name: model.name,
       remark: model.remark,
-      showTopLine: showTopLine,
       showBottomLine: showBottomLine,
-      topLineColor: topLineColor,
       bottomLineColor: bottomLineColor,
       onPressed: onPressed,
-      onIconPressed: onIconPressed,
+      onFinish: onFinish,
+      onCancel: onCancel,
       isWeeklyRepeat: model.isWeeklyRepeat,
       weeklyRepeatDays: model.weeklyRepeatDays,
       isDailyClusterRepeat: model.isDailyClusterRepeat,
+      isDone: model.isDone,
+      doneAt: model.doneAt,
     );
   }
 
   @override
-  Widget build(BuildContext context) {
-    return IntrinsicHeight(
-      child: Row(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          _buildLine(),
-          Expanded(child: _buildContent()),
-        ],
-      ),
-    );
+  State<Matter> createState() => _MatterState();
+}
+
+class _MatterState extends State<Matter> {
+  late ConfettiController _confettiController;
+
+  @override
+  void initState() {
+    super.initState();
+    _confettiController =
+        ConfettiController(duration: const Duration(seconds: 1));
   }
 
-  Widget _buildLine() {
+  @override
+  void dispose() {
+    _confettiController.dispose();
+    super.dispose();
+  }
+
+  void _handleFinish() {
+    HapticFeedback.lightImpact();
+    widget.onFinish?.call();
+    _confettiController.play();
+  }
+
+  void _handleCancel() {
+    HapticFeedback.lightImpact();
+    widget.onCancel?.call();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Stack(
+      clipBehavior: Clip.none,
+      children: [
+        IntrinsicHeight(
+          child: Row(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              MatterLine(
+                color: widget.color,
+                fontColor: widget.fontColor,
+                showBottomLine: widget.showBottomLine,
+                bottomLineColor: widget.bottomLineColor,
+                type: widget.type,
+                isDone: widget.isDone,
+                onFinish: _handleFinish,
+                onCancel: _handleCancel,
+              ),
+              Expanded(
+                child: MatterContent(
+                  color: widget.color,
+                  fontColor: widget.fontColor,
+                  time: widget.time,
+                  name: widget.name,
+                  remark: widget.remark,
+                  onPressed: widget.onPressed,
+                  isWeeklyRepeat: widget.isWeeklyRepeat,
+                  weeklyRepeatDays: widget.weeklyRepeatDays,
+                  isDailyClusterRepeat: widget.isDailyClusterRepeat,
+                  isDone: widget.isDone,
+                  doneAt: widget.doneAt,
+                ),
+              ),
+            ],
+          ),
+        ),
+        Positioned.fill(
+          child: Align(
+            alignment: Alignment.center,
+            child: ConfettiWidget(
+              confettiController: _confettiController,
+              blastDirectionality: BlastDirectionality.explosive,
+              particleDrag: 0.05,
+              emissionFrequency: 0,
+              numberOfParticles: 20,
+              gravity: 0.3,
+              shouldLoop: false,
+              colors: const [
+                Colors.green,
+                Colors.blue,
+                Colors.pink,
+                Colors.orange,
+                Colors.purple
+              ],
+            ),
+          ),
+        ),
+      ],
+    );
+  }
+}
+
+class MatterLine extends StatelessWidget {
+  final Color color;
+  final Color fontColor;
+  final bool showBottomLine;
+  final Color? bottomLineColor;
+  final MatterType type;
+  final VoidCallback? onFinish;
+  final VoidCallback? onCancel;
+  final bool isDone;
+
+  const MatterLine({
+    Key? key,
+    required this.color,
+    required this.fontColor,
+    required this.showBottomLine,
+    this.bottomLineColor,
+    required this.type,
+    this.onFinish,
+    this.onCancel,
+    required this.isDone,
+  }) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 12),
       child: Stack(
@@ -127,47 +224,101 @@ class Matter extends StatelessWidget {
       child: InkWell(
         splashColor: Colors.white24,
         highlightColor: Colors.white24,
-        onTap: () {
-          HapticFeedback.lightImpact();
-          onIconPressed?.call();
-        },
+        onTap: isDone ? onCancel : onFinish,
         child: SizedBox(
           width: 64,
           height: 64,
-          child: Icon(type.iconData, size: 32, color: fontColor),
+          child: Icon(
+            type.iconData,
+            size: 32,
+            color: fontColor,
+          ),
         ),
       ),
     );
   }
+}
 
-  Widget _buildContent() {
+class MatterContent extends StatelessWidget {
+  final Color color;
+  final Color fontColor;
+  final DateTime? time;
+  final String name;
+  final String remark;
+  final VoidCallback? onPressed;
+  final bool isWeeklyRepeat;
+  final List<int> weeklyRepeatDays;
+  final bool isDailyClusterRepeat;
+  final bool isDone;
+  final DateTime? doneAt;
+
+  const MatterContent({
+    super.key,
+    required this.color,
+    required this.fontColor,
+    required this.time,
+    required this.name,
+    required this.remark,
+    this.onPressed,
+    required this.isWeeklyRepeat,
+    required this.weeklyRepeatDays,
+    required this.isDailyClusterRepeat,
+    required this.isDone,
+    this.doneAt,
+  });
+
+  TextStyle get _nameStyle => TextStyle(
+        color: fontColor,
+        fontSize: 18,
+        fontWeight: FontWeight.bold,
+      );
+
+  TextStyle get _timeStyle => TextStyle(
+        fontSize: 16,
+        color: fontColor.withOpacity(0.8),
+      );
+
+  @override
+  Widget build(BuildContext context) {
     return Container(
       margin: const EdgeInsets.fromLTRB(0, 0, 16, 16),
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(16),
       ),
       child: Material(
-        color: color,
+        color: color.withOpacity(0.8),
         borderRadius: BorderRadius.circular(12),
         child: InkWell(
           customBorder: RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(12),
           ),
-          onLongPress: () => HapticFeedback.lightImpact(),
+          onLongPress: () => HapticFeedback.heavyImpact(),
           onTap: _handleTap,
           splashColor: Colors.white24,
           highlightColor: Colors.white24,
           child: Padding(
             padding: const EdgeInsets.fromLTRB(12, 8, 12, 8),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                _buildTitle(),
-                _buildTimeInfo(),
-                if (remark.isNotEmpty)
-                  Divider(color: fontColor.withOpacity(0.2)),
-                if (remark.isNotEmpty) _buildRemark(),
-              ],
+            child: AnimatedSwitcher(
+              duration: const Duration(milliseconds: 300),
+              transitionBuilder: (Widget child, Animation<double> animation) {
+                return SizeTransition(
+                  sizeFactor: CurvedAnimation(
+                    parent: animation,
+                    curve: Curves.easeInOut,
+                  ),
+                  child: child,
+                );
+              },
+              child: Column(
+                key: ValueKey<String>(isDone ? 'done' : 'content'),
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  _buildTitleAndEmoji(),
+                  if (!isDone && remark.isNotEmpty)
+                    Divider(color: fontColor.withOpacity(0.2)),
+                  if (!isDone && remark.isNotEmpty) _buildRemark(),
+                ],
+              ),
             ),
           ),
         ),
@@ -175,34 +326,62 @@ class Matter extends StatelessWidget {
     );
   }
 
-  Widget _buildTitle() {
-    return Text(
-      name.isEmpty ? "点我选择模板" : name,
-      textScaler: const TextScaler.linear(1),
-      maxLines: 1,
-      overflow: TextOverflow.ellipsis,
-      style: _nameStyle,
-    );
-  }
-
-  Widget _buildTimeInfo() {
+  Widget _buildTitleAndEmoji() {
     return Row(
+      crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Expanded(
-          child: Row(
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Text(
-                _formatTime(),
+                isDone ? "完成 $name" : name,
                 textScaler: const TextScaler.linear(1),
-                style: _timeStyle,
+                maxLines: 1,
+                overflow: TextOverflow.ellipsis,
+                style: _nameStyle,
               ),
-              const SizedBox(width: 8),
-              _buildRepeatInfo(),
+              Row(
+                children: [
+                  Text(
+                    _formatTime((isDone ? doneAt : time) ?? DateTime.now()),
+                    textScaler: const TextScaler.linear(1),
+                    style: _timeStyle,
+                  ),
+                  const SizedBox(width: 8),
+                  _buildRepeatInfo(),
+                ],
+              ),
             ],
           ),
         ),
+        if (isDone)
+          Text(
+            _getRandomEmoji(),
+            style: const TextStyle(
+              fontSize: 24,
+              fontWeight: FontWeight.bold,
+            ),
+          ),
       ],
     );
+  }
+
+  String _getRandomEmoji() {
+    final List<String> emojis = [
+      '😀',
+      '😎',
+      '🥳',
+      '🤩',
+      '😍',
+      '🥵',
+      '🤯',
+      '🎉',
+      '👍',
+      '💪'
+    ];
+    final Random random = Random();
+    return emojis[random.nextInt(emojis.length)];
   }
 
   Widget _buildRepeatInfo() {
@@ -227,10 +406,12 @@ class Matter extends StatelessWidget {
   }
 
   Widget _buildRemark() {
-    return Text(
-      remark,
-      textScaler: const TextScaler.linear(1),
-      style: _timeStyle,
+    return Flexible(
+      child: Text(
+        remark,
+        textScaler: const TextScaler.linear(1),
+        style: _timeStyle,
+      ),
     );
   }
 
@@ -241,9 +422,8 @@ class Matter extends StatelessWidget {
     SystemUtils.hideKeyShowUnfocus();
   }
 
-  String _formatTime() {
-    if (time == null) return '';
-    return Jiffy.parseFromDateTime(time!).format(pattern: "HH:mm a");
+  String _formatTime(DateTime time) {
+    return Jiffy.parseFromDateTime(time).format(pattern: "HH:mm a");
   }
 
   String _formatWeeklyRepeatDays() {

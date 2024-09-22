@@ -71,6 +71,50 @@ class HomePageStore extends ChangeNotifier {
       _instance!.notifyListeners();
     }
   }
+
+  /// 完成打卡事项
+  static Future<void> finishMatter(String matterId) async {
+    print("finishMatter: $matterId");
+    if (_instance == null) return;
+
+    // 查找指定 ID 的事项
+    final matterIndex =
+        _instance!._mattersList.indexWhere((m) => m.id == matterId);
+    if (matterIndex == -1) return;
+
+    // 更新事项状态
+    _instance!._mattersList[matterIndex].isDone = true;
+    _instance!._mattersList[matterIndex].isDeleted = false;
+    _instance!._mattersList[matterIndex].doneAt = DateTime.now();
+
+    // 更新数据库
+    await MatterService.updateMatter(_instance!._mattersList[matterIndex]);
+
+    // 通知监听器状态已更新
+    _instance!.notifyListeners();
+  }
+
+  // 取消完成事项
+  static Future<void> cancelMatter(String matterId) async {
+    print("cancelMatter: $matterId");
+    if (_instance == null) return;
+
+    // 查找指定 ID 的事项
+    final matterIndex =
+        _instance!._mattersList.indexWhere((m) => m.id == matterId);
+    if (matterIndex == -1) return;
+
+    // 更新事项状态
+    _instance!._mattersList[matterIndex].isDone = false;
+    _instance!._mattersList[matterIndex].isDeleted = false;
+    _instance!._mattersList[matterIndex].doneAt = null;
+
+    // 更新数据库
+    await MatterService.updateMatter(_instance!._mattersList[matterIndex]);
+
+    // 通知监听器状态已更新
+    _instance!.notifyListeners();
+  }
 }
 
 class HomePageStoreWrapper extends StatelessWidget {

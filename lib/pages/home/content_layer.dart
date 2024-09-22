@@ -39,14 +39,13 @@ class ContentLayer extends StatelessWidget {
   }
 
   Widget _buildMattersList() {
-    return Selector<HomePageStore, List<MatterModel>>(
-      selector: (_, store) => store.mattersList,
-      builder: (context, mattersList, child) {
+    return Consumer<HomePageStore>(
+      builder: (context, store, child) {
         return AnimatedSwitcher(
           key: const Key('AnimatedSwitcher'),
           duration: const Duration(milliseconds: 60),
           transitionBuilder: _buildTransition,
-          child: _buildListView(mattersList),
+          child: _buildListView(store.mattersList),
         );
       },
     );
@@ -76,12 +75,12 @@ class ContentLayer extends StatelessWidget {
     return Matter.fromMatterModel(
       fontColor: Theme.of(context).colorScheme.onSecondaryContainer,
       mattersList[index],
-      showTopLine: index != 0,
       showBottomLine: index != mattersList.length - 1,
-      topLineColor: Color(index - 1 >= 0 ? mattersList[index - 1].color : 0),
       bottomLineColor: Color(
           index + 1 < mattersList.length ? mattersList[index + 1].color : 0),
       onPressed: () => _onMatterPressed(context, mattersList[index].id),
+      onFinish: () => HomePageStore.finishMatter(mattersList[index].id),
+      onCancel: () => HomePageStore.cancelMatter(mattersList[index].id),
     );
   }
 
