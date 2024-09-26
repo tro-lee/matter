@@ -218,7 +218,7 @@ class CalendarAreaState extends State<CalendarArea> {
                         ],
                         key: Key(dates[index].toString()),
                         onPressed: (date) {
-                          HomePageStore.refresh(date: date);
+                          HomePageStore.selectDate(date);
                         },
                         isSelected:
                             selectedDate.toString() == dates[index].toString(),

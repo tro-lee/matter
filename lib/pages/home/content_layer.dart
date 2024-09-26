@@ -20,34 +20,21 @@ class ContentLayer extends StatelessWidget {
   Widget _buildContent() {
     return ClipRRect(
       borderRadius: const BorderRadius.vertical(top: Radius.circular(20)),
-      child: FutureBuilder<void>(
-        future: HomePageStore.initializeMattersList(),
-        builder: (context, snapshot) => _buildFutureResult(context, snapshot),
+      child: Consumer<HomePageStore>(
+        builder: (context, store, child) {
+          return AnimatedSwitcher(
+            key: ValueKey<DateTime>(store.selectedDate),
+            duration: const Duration(milliseconds: 60),
+            transitionBuilder: _buildTransition,
+            child: store.isLoading
+                ? const Center(
+                    key: ValueKey<String>('loading'),
+                    child: CircularProgressIndicator(),
+                  )
+                : _buildMattersList(store.mattersList),
+          );
+        },
       ),
-    );
-  }
-
-  Widget _buildFutureResult(
-      BuildContext context, AsyncSnapshot<void> snapshot) {
-    if (snapshot.connectionState == ConnectionState.waiting) {
-      return const Center(child: CircularProgressIndicator());
-    } else if (snapshot.hasError) {
-      return Center(child: Text('Error: ${snapshot.error}'));
-    } else {
-      return _buildMattersList();
-    }
-  }
-
-  Widget _buildMattersList() {
-    return Consumer<HomePageStore>(
-      builder: (context, store, child) {
-        return AnimatedSwitcher(
-          key: const Key('AnimatedSwitcher'),
-          duration: const Duration(milliseconds: 60),
-          transitionBuilder: _buildTransition,
-          child: _buildListView(store.mattersList),
-        );
-      },
     );
   }
 
@@ -60,9 +47,13 @@ class ContentLayer extends StatelessWidget {
     );
   }
 
-  Widget _buildListView(List<MatterModel> mattersList) {
+  Widget _buildMattersList(List<MatterModel> mattersList) {
+    if (mattersList.isEmpty) {
+      return const Center(child: Text('暂无事项'));
+    }
+
     return ListView.builder(
-      key: ValueKey<String>(mattersList.firstOrNull?.id ?? ''),
+      key: ValueKey<String>(mattersList.first.id),
       padding: const EdgeInsets.only(top: 156, bottom: 100),
       itemCount: mattersList.length,
       itemBuilder: (context, index) =>
