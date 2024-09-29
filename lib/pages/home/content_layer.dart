@@ -1,3 +1,4 @@
+import 'package:buhuiwangshi/services/notification.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:buhuiwangshi/components/matter.dart';
@@ -63,19 +64,22 @@ class ContentLayer extends StatelessWidget {
 
   Widget _buildMatterItem(
       BuildContext context, List<MatterModel> mattersList, int index) {
-    return Matter.fromMatterModel(
-      fontColor: Theme.of(context).colorScheme.onSecondaryContainer,
-      mattersList[index],
-      showBottomLine: index != mattersList.length - 1,
-      bottomLineColor: Color(
-          index + 1 < mattersList.length ? mattersList[index + 1].color : 0),
-      onPressed: () => _onMatterPressed(context, mattersList[index].id),
-      onFinish: () => HomePageStore.finishMatter(mattersList[index].id),
-      onCancel: () => HomePageStore.cancelMatter(mattersList[index].id),
+    return RepaintBoundary(
+      child: Matter.fromMatterModel(
+        fontColor: Theme.of(context).colorScheme.onSecondaryContainer,
+        mattersList[index],
+        showBottomLine: index != mattersList.length - 1,
+        bottomLineColor: Color(
+            index + 1 < mattersList.length ? mattersList[index + 1].color : 0),
+        onPressed: () => _onMatterPressed(context, mattersList[index].id),
+        onFinish: () => HomePageStore.finishMatter(mattersList[index].id),
+        onCancel: () => HomePageStore.cancelMatter(mattersList[index].id),
+      ),
     );
   }
 
   void _onMatterPressed(BuildContext context, String matterId) {
+    NotificationService.showNotification('事项提醒', '事项提醒');
     // TODO: Implement navigation to details page
     // Navigator.of(context).push(animateRoute(
     //   direction: 'horizontal',

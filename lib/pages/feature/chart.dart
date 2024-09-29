@@ -9,24 +9,9 @@ class Chart extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      margin: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
-      decoration: BoxDecoration(
-        color: surfaceColor,
-        borderRadius: BorderRadius.circular(20),
-        boxShadow: const [
-          BoxShadow(
-            color: Colors.black12,
-            offset: Offset(0, 2),
-            blurRadius: 10,
-          ),
-        ],
-      ),
-      height: 256,
-      child: const Padding(
-        padding: EdgeInsets.fromLTRB(28, 32, 28, 8),
-        child: _ChartContent(),
-      ),
+    return const SizedBox(
+      height: 146,
+      child: _ChartContent(),
     );
   }
 }
@@ -107,9 +92,9 @@ class _ChartContent extends StatelessWidget {
         axisNameWidget: Row(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            _buildLegendItem(const Color(0xffD1DCD7), '已完成事项'),
+            _buildLegendItem(const Color(0xffD1DCD7), '已完成'),
             const SizedBox(width: 32),
-            _buildLegendItem(const Color(0xffF2C5C8), '未完成事项'),
+            _buildLegendItem(const Color(0xffF2C5C8), '未完成'),
           ],
         ),
         // 侧边标题
@@ -133,7 +118,10 @@ class _ChartContent extends StatelessWidget {
           getTitlesWidget: (value, meta) {
             return Text(
               value.toInt().toString(),
-              style: TextStyle(color: labelColor, fontSize: 12),
+              style: const TextStyle(
+                color: labelColor,
+                fontSize: 12,
+              ),
             );
           },
         ),
@@ -169,19 +157,19 @@ class _ChartContent extends StatelessWidget {
 
   /// 构建网格数据
   FlGridData _buildGridData(BuildContext context) {
-    return FlGridData(
-      show: true,
-      drawHorizontalLine: true,
-      drawVerticalLine: false,
-      getDrawingHorizontalLine: (value) {
-        return FlLine(
-          color: containerColor(context),
-          strokeWidth: 1,
-          dashArray: const [5, 10],
-        );
-      },
-      horizontalInterval: 1,
-      verticalInterval: 1,
+    return const FlGridData(
+      show: false,
+      // drawHorizontalLine: true,
+      // drawVerticalLine: false,
+      // getDrawingHorizontalLine: (value) {
+      //   return FlLine(
+      //     color: containerColor(context),
+      //     strokeWidth: 1,
+      //     dashArray: const [5, 10],
+      //   );
+      // },
+      // horizontalInterval: 1,
+      // verticalInterval: 1,
     );
   }
 
@@ -200,7 +188,7 @@ class _ChartContent extends StatelessWidget {
         const SizedBox(width: 4),
         Text(
           text,
-          style: TextStyle(color: labelColor, fontSize: 12),
+          style: const TextStyle(color: labelColor, fontSize: 12),
         ),
       ],
     );
@@ -221,7 +209,10 @@ LineChartBarData _getLineChartBarData({
       preventCurveOverShooting: true,
       belowBarData: BarAreaData(
         show: true,
-        color: color.withOpacity(0.2),
+        gradient: LinearGradient(
+            colors: [color, color.withOpacity(0.3)],
+            begin: Alignment.topCenter,
+            end: Alignment.bottomCenter),
       ),
       dotData: const FlDotData(show: false));
 }
@@ -233,24 +224,24 @@ String _getWeekdayFromDate(DateTime date) {
   final targetDate = DateTime(date.year, date.month, date.day);
 
   if (targetDate == today) {
-    return '今天';
+    return '今';
   }
 
   switch (date.weekday) {
     case 1:
-      return '周一';
+      return '一';
     case 2:
-      return '周二';
+      return '二';
     case 3:
-      return '周三';
+      return '三';
     case 4:
-      return '周四';
+      return '四';
     case 5:
-      return '周五';
+      return '五';
     case 6:
-      return '周六';
+      return '六';
     case 7:
-      return '周日';
+      return '日';
     default:
       return '';
   }

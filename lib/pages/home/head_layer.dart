@@ -1,6 +1,8 @@
 import 'dart:ui';
 
+import 'package:buhuiwangshi/pages/feature/page.dart';
 import 'package:buhuiwangshi/pages/home/calendar_area.dart';
+import 'package:buhuiwangshi/utils/animate_route.dart';
 import 'package:flutter/material.dart';
 
 /// 底部层组件
@@ -11,27 +13,40 @@ class HeadLayer extends StatelessWidget {
   Widget build(BuildContext context) {
     return ClipRect(
       child: BackdropFilter(
-        filter: ImageFilter.blur(sigmaX: 80, sigmaY: 40),
+        filter: ImageFilter.blur(sigmaX: 80, sigmaY: 80),
         child: SafeArea(
           child: IntrinsicHeight(
             child: Padding(
               padding: const EdgeInsets.only(left: 12.0),
               child: Column(
                 children: [
-                  const SizedBox(height: 12),
-                  Align(
-                    alignment: Alignment.centerLeft,
-                    child: Text(
-                      "不会忘事",
-                      style: TextStyle(
-                          fontSize:
-                              Theme.of(context).textTheme.titleLarge!.fontSize,
-                          fontWeight: FontWeight.bold,
-                          color: Theme.of(context).colorScheme.secondary,
-                          height: 1),
-                    ),
+                  Row(
+                    children: [
+                      Align(
+                        alignment: Alignment.centerLeft,
+                        child: Text(
+                          "不会忘事",
+                          style: TextStyle(
+                              fontSize: Theme.of(context)
+                                  .textTheme
+                                  .titleLarge!
+                                  .fontSize,
+                              fontWeight: FontWeight.bold,
+                              color: Theme.of(context).colorScheme.secondary,
+                              height: 1),
+                        ),
+                      ),
+                      const Spacer(),
+                      IconButton(
+                        onPressed: () {
+                          Navigator.of(context).push(animateRoute(
+                              child: const FeaturePage(),
+                              direction: 'horizontal'));
+                        },
+                        icon: const Icon(Icons.menu),
+                      ),
+                    ],
                   ),
-                  const SizedBox(height: 8),
                   const CalendarArea(),
                   const SizedBox(height: 8),
                 ],

@@ -41,7 +41,7 @@ class AiService {
         if (matterBuilders.isNotEmpty) {
           final firstMatterDate = matterBuilders.first.time;
           // 刷新并跳转到第一条数据的日期
-          await HomePageStore.refresh(date: firstMatterDate);
+          await HomePageStore.selectDate(firstMatterDate);
         }
       }
 

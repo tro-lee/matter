@@ -18,11 +18,7 @@ Route animateRoute({required Widget child, String direction = 'vertical'}) {
       final tween =
           Tween(begin: begin, end: end).chain(CurveTween(curve: curve));
       final offsetAnimation = animation.drive(tween);
-
       return SlideTransition(position: offsetAnimation, child: child);
-    },
-    transitionsBuilder: (context, animation, secondaryAnimation, child) {
-      return child;
     },
   );
 }

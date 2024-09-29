@@ -26,15 +26,20 @@ class _HomePageState extends State<HomePage> {
   Widget build(BuildContext context) {
     return HomePageStoreWrapper(
       child: standardContainer(
-        child: const Scaffold(
-          body: Stack(
-            /// 每层维护自身高度和交互逻辑，互不打扰
-            /// 最上层是顶部层，中间是日历层，最下层是底部层
-            children: [
-              ContentLayer(),
-              HeadLayer(),
-              BottomBarLayer(),
-            ],
+        child: Scaffold(
+          body: GestureDetector(
+            onTap: () {
+              FocusScope.of(context).unfocus();
+            },
+            child: const Stack(
+              /// 每层维护自身高度和交互逻辑，互不打扰
+              /// 最上层是顶部层，中间是日历层，最下层是底部层
+              children: [
+                ContentLayer(),
+                HeadLayer(),
+                BottomBarLayer(),
+              ],
+            ),
           ),
         ),
         context: context,
