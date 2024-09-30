@@ -51,7 +51,10 @@ List<List<int>> generateFourWeeksDates() {
 
 /// 日期文案
 String getDateText(datetime,
-    {bool? isRepeatWeek, bool? isRepeatDay, bool isLocale = true}) {
+    {bool? isRepeatWeek,
+    bool? isRepeatDay,
+    bool isLocale = true,
+    String? pattern}) {
   if (datetime == null) {
     return "";
   }
@@ -75,5 +78,10 @@ String getDateText(datetime,
     }
   }
 
-  return dateTimeJiffy.format(pattern: "MM/dd");
+  return dateTimeJiffy.format(pattern: pattern ?? "MM/dd");
+}
+
+/// 获取当天零时
+DateTime getZeroTime(DateTime datetime) {
+  return DateTime(datetime.year, datetime.month, datetime.day);
 }

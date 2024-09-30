@@ -1,9 +1,10 @@
 import 'package:buhuiwangshi/components/matter.dart';
-import 'package:buhuiwangshi/constant/candidates.dart';
+import 'package:buhuiwangshi/constant/matter_type.dart';
 import 'package:buhuiwangshi/constant/templates.dart';
 import 'package:buhuiwangshi/pages/add/store.dart';
 import 'package:buhuiwangshi/utils/colors.dart';
 import 'package:buhuiwangshi/utils/standard.dart';
+import 'package:buhuiwangshi/utils/uuid.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
@@ -31,13 +32,13 @@ class TopAppBar extends StatelessWidget implements PreferredSizeWidget {
       onPressed: () {
         Navigator.pop(context);
       },
-      icon: Icon(
+      icon: const Icon(
         Icons.arrow_circle_left_outlined,
         color: textColor,
       ),
     );
     // 中间标题
-    var text = Text(
+    var text = const Text(
       "选择模板",
       style: TextStyle(fontSize: 24, color: textColor),
     );
@@ -75,7 +76,7 @@ class Body extends StatelessWidget {
     }
 
     return Container(
-      color: topContainerColor(context),
+      color: surfaceColor,
       child: TemplateList(onFinish: onFinish),
     );
   }
@@ -99,17 +100,13 @@ class TemplateList extends StatelessWidget {
           onPressed: () =>
               onFinish(template.type, template.time, template.name),
           child: Matter(
+            id: genUuid(),
             color: Color(template.type.color),
             fontColor: Color(template.type.fontColor),
             type: template.type,
-            levelIcon: Icons.notifications_off_outlined,
             time: template.time,
             name: template.name,
-            showTopLine: index != 0,
             showBottomLine: index != templates.length - 1,
-            topLineColor: index > 0
-                ? Color(templates[index - 1].type.color)
-                : Colors.transparent,
             bottomLineColor: index < templates.length - 1
                 ? Color(templates[index + 1].type.color)
                 : Colors.transparent,

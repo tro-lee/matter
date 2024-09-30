@@ -9,10 +9,10 @@ class SystemStore extends ChangeNotifier {
 
   int get currentIndex => _currentIndex;
 
-  void setCurrentIndex(int index) {
-    if (_currentIndex != index) {
-      _currentIndex = index;
-      notifyListeners();
+  static void setCurrentIndex(int index) {
+    if (_instance._currentIndex != index) {
+      _instance._currentIndex = index;
+      _instance.notifyListeners();
     }
   }
 }

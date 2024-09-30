@@ -1,5 +1,4 @@
 import 'package:buhuiwangshi/utils/animate_route.dart';
-import 'package:buhuiwangshi/utils/colors.dart';
 import 'package:flutter/material.dart';
 
 class MoreArea extends StatelessWidget {
@@ -23,9 +22,9 @@ class MoreArea extends StatelessWidget {
           text: "帮助",
           onPressed: onPressed,
         ),
-        Container(height: 1, color: middleContainerColor(context)),
+        const SizedBox(height: 16),
         RectButton(
-          text: "关于我们",
+          text: "了解我们",
           onPressed: onPressed,
         ),
       ],
@@ -45,25 +44,41 @@ class RectButton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return ElevatedButton(
-      style: ElevatedButton.styleFrom(
-        backgroundColor: topContainerColor(context),
-        shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(0),
+    final fontColor =
+        Theme.of(context).colorScheme.onSecondaryContainer.withOpacity(0.6);
+    return Padding(
+      padding: const EdgeInsets.symmetric(horizontal: 12),
+      child: ElevatedButton(
+        style: ElevatedButton.styleFrom(
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(20),
+          ),
+          backgroundColor:
+              Theme.of(context).colorScheme.secondaryContainer.withOpacity(0.5),
+          shadowColor: Colors.transparent,
         ),
-        shadowColor: Colors.transparent,
-      ),
-      onPressed: onPressed,
-      child: SizedBox(
-        height: 48,
+        onPressed: onPressed,
         child: Row(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
-            Text(
-              text,
-              style: const TextStyle(fontSize: 18, color: textColor),
+            SizedBox(
+              height: 56,
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Icon(Icons.info, size: 24, color: fontColor),
+                  const SizedBox(width: 4),
+                  Text(
+                    text,
+                    style: TextStyle(
+                      fontSize: Theme.of(context).textTheme.bodySmall!.fontSize,
+                      color: fontColor,
+                    ),
+                  ),
+                ],
+              ),
             ),
-            const Icon(Icons.chevron_right, size: 24)
+            const Spacer(),
+            Icon(Icons.chevron_right, size: 24, color: fontColor)
           ],
         ),
       ),

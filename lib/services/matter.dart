@@ -1,11 +1,14 @@
-import 'package:buhuiwangshi/datebase/matter.dart';
-import 'package:buhuiwangshi/datebase/matter_builder.dart';
+import 'package:buhuiwangshi/datebase/matter_table.dart';
+import 'package:buhuiwangshi/datebase/matter_builder_table.dart';
+import 'package:buhuiwangshi/models/matter_builder_model.dart';
+import 'package:buhuiwangshi/models/matter_model.dart';
 import 'package:buhuiwangshi/pages/add/store.dart';
-import 'package:buhuiwangshi/pages/home/store.dart';
+import 'package:buhuiwangshi/utils/date.dart';
 import 'package:buhuiwangshi/utils/uuid.dart';
 import 'package:flutter_smart_dialog/flutter_smart_dialog.dart';
 
 class MatterService {
+  /// 先判断要查询的日期是否在当天之后，如果不是，则直接返回，如果是，则向后创建。
   /// 更新日程实例时，判断日程建造者在当天是否存在日程实例，若有，则判断两者最近的编辑时间，哪个近就删除哪个。
   ///
   /// 创建日程实例时，应该判断日程建造者 在当天是否存在日程实例，若没有则创建。
@@ -13,12 +16,23 @@ class MatterService {
   /// 顺序应该是先更新日程，再创建日程
   ///
   static Future<List<MatterModel>> getMattersByDay(DateTime date) async {
-    // 获取当天所有日程建造者
-    final matterBuilders = await MatterBuilderTable.getByDay(date);
+    /// 以下是直接查询日程部分 ==============================
     // 获取当天所有日程实例
     var matters = await MatterTable.getByDay(date);
 
+    // 日程建造者应只能创建在当天之后的事项
+    if (date.isBefore(getZeroTime(DateTime.now()))) {
+      matters.sort((a, b) => a.time.compareTo(b.time));
+      return matters;
+    }
+
+    /// 以下是日程建造者处理日程部分 ==============================
+
+    // 获取当天所有日程建造者
+    final matterBuilders = await MatterBuilderTable.getByDay(date);
+
     /// 以下是删除部分 ==============================
+    /// 删除信息过期日程
     ///
     // 创建一个 Map 来存储每个 builderId 对应的 MatterBuilder
     Map<String, MatterBuilderModel> builderMap = {
@@ -42,16 +56,19 @@ class MatterService {
     await MatterTable.batchDelete(mattersToDelete);
 
     /// 以下是创建部分 ==============================
+    /// 创建原先没有的日程
     ///
     // 获取需要创建实例的日程建造者
     List<MatterBuilderModel> buildersToCreate = matterBuilders.where((builder) {
-      // 检查是否已存在对应的 Matter 实例
-      return !matters.any((matter) => matter.builderId == builder.id);
+      // 检查是否已存在对应的 Matter 实例，日程建造者只创建一次，有则说明不用创建
+      bool noExistingMatter =
+          !matters.any((matter) => matter.builderId == builder.id);
+      return noExistingMatter;
     }).toList();
 
     // 为需要创建的日程建造者创建 Matter 实例
     List<MatterModel> newMatters = buildersToCreate.map((builder) {
-      return MatterModel.fromMatterBuilder(builder);
+      return MatterModel.fromMatterBuilder(builder, targetDate: date);
     }).toList();
 
     // 批量插入新创建的 Matter 实例
@@ -83,7 +100,8 @@ class MatterService {
       updatedAt: DateTime.now(),
       remark: formStore.remark,
       isWeeklyRepeat: formStore.isRepeatWeek,
-      weeklyRepeatDays: formStore.isRepeatDay ? formStore.weeklyRepeatDays : [],
+      weeklyRepeatDays:
+          formStore.isRepeatWeek ? formStore.weeklyRepeatDays : [],
       isDailyClusterRepeat: formStore.isRepeatDay,
     );
 
@@ -96,12 +114,25 @@ class MatterService {
 
     // 显示添加成功的提示
     SmartDialog.showToast("添加成功");
+  }
 
-    // 重置表单状态
-    AddPageStore.reset();
-
-    // 刷新主页
-    HomePageStore.refresh();
+  /// 插入多个 MatterBuilder 实例到数据库
+  ///
+  /// 参数:
+  /// - matterBuilders: 要插入的 MatterBuilderModel 列表
+  ///
+  /// 返回值: Future<void>
+  ///
+  /// 如果插入成功，会显示成功提示；如果失败，会显示失败提示
+  static Future<void> insertMatterBuilders(
+      List<MatterBuilderModel> matterBuilders) async {
+    try {
+      // 批量插入 MatterBuilderModel 实例
+      await MatterBuilderTable.batchInsert(matterBuilders);
+    } catch (e) {
+      // 如果发生错误，显示添加失败的提示
+      SmartDialog.showToast("批量添加失败: ${e.toString()}");
+    }
   }
 
   /// 获取最近7天（包括今天）的事项统计

@@ -1,5 +1,5 @@
-import 'package:buhuiwangshi/datebase/matter.dart';
-import 'package:buhuiwangshi/service/matter.dart';
+import 'package:buhuiwangshi/models/matter_model.dart';
+import 'package:buhuiwangshi/services/matter.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/services.dart';
 

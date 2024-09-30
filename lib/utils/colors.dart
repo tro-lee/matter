@@ -8,25 +8,22 @@ Color onContainerColor(context) {
   return Theme.of(context).colorScheme.onPrimaryContainer;
 }
 
-Color primaryColor(context) {
-  return Theme.of(context).colorScheme.primary;
-}
+const inversePrimaryColor = Color(0xffaac7ff);
+const onInversePrimaryColor = Color(0xff44474e);
 
-Color onPrimaryColor(context) {
-  return Theme.of(context).colorScheme.onPrimary;
-}
+const primaryColor = Color(0xff415f91); // primary
+const onPrimaryColor = Color(0xffffffff); // on primary
 
-Color middleContainerColor(context) {
-  return const Color(0xFFEBF1FF);
-}
+const primaryContainerColor = Color(0xFFd6e3ff); // primary container
+const onPrimaryContainerColor = Color(0xff001b3e); // on primary container
 
-Color topContainerColor(context) {
-  return const Color(0xFFF5F8FF);
-}
+const surfaceColor = Color(0xFFf9f9ff); // surface
+const onSurfaceColor = Color(0xff191c20); // on surface
+const surfaceDimColor = Color(0xfff3f3fa); // on surface
 
-const textColor = Colors.black87;
-
-const labelColor = Colors.black45;
+const textColor = Color(0xff191c20); // on surface
+const textColor2 = Color(0xff44474e); // on surface
+const labelColor = Color(0xff74777f); // outline
 
 Color blendColors(Color color1, Color color2, double ratio) {
   final r = (color1.red + (color2.red - color1.red) * ratio).round();

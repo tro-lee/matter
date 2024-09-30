@@ -1,7 +1,8 @@
 import 'package:buhuiwangshi/pages/add/area/remark_area.dart';
 import 'package:buhuiwangshi/pages/add/area/reminder_level_area.dart';
 import 'package:buhuiwangshi/pages/add/area/style_area.dart';
-import 'package:buhuiwangshi/service/matter.dart';
+import 'package:buhuiwangshi/pages/home/store.dart';
+import 'package:buhuiwangshi/services/matter.dart';
 import 'package:buhuiwangshi/pages/add/store.dart';
 import 'package:buhuiwangshi/store.dart';
 import 'package:flutter/material.dart';
@@ -48,6 +49,38 @@ class _AddPageState extends State<AddPage> {
 class TopAppBar extends StatelessWidget implements PreferredSizeWidget {
   const TopAppBar({super.key});
 
+  onSave(BuildContext context) async {
+    final formStore = AddPageStore.instance;
+
+    // 验证表单数据
+    formStore
+        .setIsNameWarning(formStore.name == null || formStore.name!.isEmpty);
+    formStore.setIsTimeWarning(formStore.datetime == null);
+    formStore.setIsTypeWarning(formStore.type == null);
+
+    // 如果有警告，直接返回
+    if (formStore.isNameWarning ||
+        formStore.isTimeWarning ||
+        formStore.isTypeWarning) {
+      return;
+    }
+
+    // 保存数据
+    await MatterService.insertMatterByForm(formStore);
+
+    // 回退
+    // ignore: use_build_context_synchronously
+    Navigator.of(context).pop();
+    // 跳转主页
+    SystemStore.setCurrentIndex(0);
+
+    // 刷新主页
+    await HomePageStore.refresh(date: formStore.datetime);
+
+    // 重置表单状态
+    AddPageStore.reset();
+  }
+
   @override
   Widget build(BuildContext context) {
     // 左侧按钮
@@ -55,47 +88,21 @@ class TopAppBar extends StatelessWidget implements PreferredSizeWidget {
       onPressed: () {
         Navigator.pop(context);
       },
-      icon: Icon(
+      icon: const Icon(
         Icons.arrow_circle_left_outlined,
         color: textColor,
       ),
     );
     // 中间标题
-    var text = Text(
+    var text = const Text(
       "添加日程",
       style: TextStyle(fontSize: 24, color: textColor),
     );
-
-    onSave() async {
-      final formStore = AddPageStore.instance;
-
-      // 验证表单数据
-      formStore
-          .setIsNameWarning(formStore.name == null || formStore.name!.isEmpty);
-      formStore.setIsTimeWarning(formStore.datetime == null);
-      formStore.setIsTypeWarning(formStore.type == null);
-
-      // 如果有警告，直接返回
-      if (formStore.isNameWarning ||
-          formStore.isTimeWarning ||
-          formStore.isTypeWarning) {
-        return;
-      }
-
-      // 保存数据
-      await MatterService.insertMatterByForm(formStore);
-
-      // 只跳转到首页
-      // ignore: use_build_context_synchronously
-      Navigator.of(context).pop();
-
-      SystemStore.instance.setCurrentIndex(0);
-    }
-
     // 右侧保存
     var textButton = TextButton(
-        onPressed: onSave,
-        child: Text("完成", style: TextStyle(fontSize: 18, color: textColor)));
+        onPressed: () => onSave(context),
+        child:
+            const Text("完成", style: TextStyle(fontSize: 18, color: textColor)));
 
     return AppBar(
       backgroundColor: Colors.white,

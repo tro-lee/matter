@@ -37,8 +37,7 @@ class ReminderLevelArea extends StatelessWidget {
               first: "low",
               second: "high",
               onChanged: setLevel,
-              iconBuilder: (value) =>
-                  Icon(icon, color: onPrimaryColor(context)),
+              iconBuilder: (value) => Icon(icon, color: onPrimaryColor),
               textBuilder: (value) => Text(text,
                   style: TextStyle(color: indicatorColor, fontSize: 18))),
         ));
