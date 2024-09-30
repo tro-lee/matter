@@ -1,5 +1,3 @@
-import 'dart:ui';
-
 import 'package:buhuiwangshi/pages/feature/buttons_area.dart';
 import 'package:buhuiwangshi/pages/feature/chart.dart';
 import 'package:buhuiwangshi/pages/feature/custom_area.dart';
@@ -33,24 +31,25 @@ class Page extends StatelessWidget {
       ),
       height: double.infinity,
       width: double.infinity,
-      child: const Stack(
+      child: const Column(
         children: [
-          Column(children: [
-            SizedBox(height: 256), // 头部高度
-            LabelTitle(text: "探索"),
-            ButtonsArea(),
-            SizedBox(height: 16),
-            LabelTitle(text: "我的"),
-            CustomArea(),
-            LabelTitle(text: "关于"),
-            MoreArea()
-          ]),
-          Positioned(
-            top: 0,
-            left: 0,
-            right: 0,
-            child: Head(),
+          Head(),
+          LabelTitle(text: "数据"),
+          Padding(
+            padding: EdgeInsets.symmetric(horizontal: 24.0, vertical: 8),
+            child: Chart(),
           ),
+          // 探索
+          LabelTitle(text: "探索"),
+          ButtonsArea(),
+          // 我的
+          SizedBox(height: 16),
+          LabelTitle(text: "我的"),
+          CustomArea(),
+          // 关于
+          SizedBox(height: 16),
+          LabelTitle(text: "关于"),
+          MoreArea()
         ],
       ),
     );
@@ -93,29 +92,12 @@ class Head extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return ClipRect(
-      child: BackdropFilter(
-        filter: ImageFilter.blur(sigmaX: 80, sigmaY: 120),
-        child: SizedBox(
-          height: 256,
-          child: SafeArea(
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                IconButton(
-                  onPressed: () {
-                    Navigator.of(context).pop();
-                  },
-                  icon: const Icon(Icons.arrow_circle_left_outlined),
-                ),
-                const Padding(
-                  padding: EdgeInsets.all(12.0),
-                  child: Chart(),
-                ),
-              ],
-            ),
-          ),
+    return AppBar(
+      toolbarHeight: 48,
+      leading: IconButton(
+        onPressed: () => Navigator.pop(context),
+        icon: const Icon(
+          Icons.arrow_back,
         ),
       ),
     );

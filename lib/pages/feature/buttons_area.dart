@@ -1,3 +1,4 @@
+import 'package:buhuiwangshi/pages/add/page.dart';
 import 'package:buhuiwangshi/utils/animate_route.dart';
 import 'package:flutter/material.dart';
 
@@ -16,12 +17,26 @@ class ButtonsArea extends StatelessWidget {
           )));
     }
 
+    onPressedAdd() {
+      Navigator.of(context).push(animateRoute(
+        direction: "horizontal",
+        child: const AddPage(),
+      ));
+    }
+
     return SizedBox(
       height: 96,
       child: ListView(
         scrollDirection: Axis.horizontal,
+        padding: const EdgeInsets.symmetric(horizontal: 24),
         children: [
-          const SizedBox(width: 24),
+          FeatureButton(
+            text: "添加",
+            subText: "✋",
+            bottomText: "手动添加事项",
+            onPressed: onPressedAdd,
+          ),
+          const SizedBox(width: 16), // Add spacing between buttons
           FeatureButton(
             text: "专注",
             subText: "⌛",

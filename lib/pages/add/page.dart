@@ -106,7 +106,7 @@ class TopAppBar extends StatelessWidget implements PreferredSizeWidget {
 
     return AppBar(
       backgroundColor: Colors.white,
-      toolbarHeight: 64,
+      toolbarHeight: 58,
       leading: iconButton,
       centerTitle: true,
       title: text,

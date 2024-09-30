@@ -53,8 +53,6 @@ class RectButton extends StatelessWidget {
           shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(20),
           ),
-          backgroundColor:
-              Theme.of(context).colorScheme.secondaryContainer.withOpacity(0.5),
           shadowColor: Colors.transparent,
         ),
         onPressed: onPressed,

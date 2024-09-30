@@ -32,7 +32,7 @@ class HeadLayer extends StatelessWidget {
                                   .titleLarge!
                                   .fontSize,
                               fontWeight: FontWeight.bold,
-                              color: Theme.of(context).colorScheme.secondary,
+                              color: Theme.of(context).colorScheme.primary,
                               height: 1),
                         ),
                       ),

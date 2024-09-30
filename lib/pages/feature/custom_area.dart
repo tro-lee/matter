@@ -1,3 +1,5 @@
+import 'package:buhuiwangshi/pages/permission/page.dart';
+import 'package:buhuiwangshi/utils/animate_route.dart';
 import 'package:flutter/material.dart';
 
 class CustomArea extends StatelessWidget {
@@ -11,33 +13,13 @@ class CustomArea extends StatelessWidget {
       height: 56,
       child: ListView(
         scrollDirection: Axis.horizontal,
+        padding: const EdgeInsets.symmetric(horizontal: 24),
         children: [
-          const SizedBox(width: 24),
           _CustomButton(
-            leftChild: Container(
-              width: 32,
-              height: 32,
-              decoration: BoxDecoration(
-                color: Theme.of(context).colorScheme.primary,
-                borderRadius: BorderRadius.circular(12),
-              ),
-            ),
-            text: "主题色设置",
-          ),
-          const SizedBox(width: 16),
-          _CustomButton(
-            leftChild: Icon(
-              Icons.settings,
-              size: 28,
-              color: Theme.of(context)
-                  .colorScheme
-                  .onSecondaryContainer
-                  .withOpacity(0.8),
-            ),
-            text: "类型设置",
-          ),
-          const SizedBox(width: 16),
-          _CustomButton(
+            onPressed: () => Navigator.of(context).push(animateRoute(
+              direction: "horizontal",
+              child: const PermissionPage(),
+            )),
             leftChild: Icon(
               Icons.phone_android,
               size: 28,
@@ -47,6 +29,40 @@ class CustomArea extends StatelessWidget {
                   .withOpacity(0.8),
             ),
             text: "系统权限",
+          ),
+          const SizedBox(width: 16),
+          _CustomButton(
+            onPressed: () => Navigator.of(context).push(animateRoute(
+                direction: "horizontal",
+                child: Container(
+                  color: Colors.white,
+                ))),
+            leftChild: Icon(
+              Icons.color_lens,
+              size: 28,
+              color: Theme.of(context)
+                  .colorScheme
+                  .onSecondaryContainer
+                  .withOpacity(0.8),
+            ),
+            text: "主题色设置",
+          ),
+          const SizedBox(width: 16),
+          _CustomButton(
+            onPressed: () => Navigator.of(context).push(animateRoute(
+                direction: "horizontal",
+                child: Container(
+                  color: Colors.white,
+                ))),
+            leftChild: Icon(
+              Icons.settings,
+              size: 28,
+              color: Theme.of(context)
+                  .colorScheme
+                  .onSecondaryContainer
+                  .withOpacity(0.8),
+            ),
+            text: "类型设置",
           ),
           const SizedBox(width: 16),
         ],
@@ -60,18 +76,21 @@ class _CustomButton extends StatelessWidget {
     super.key,
     required this.text,
     required this.leftChild,
+    required this.onPressed,
   });
 
   final String text;
   final Widget leftChild;
+  final VoidCallback onPressed;
 
   @override
   Widget build(BuildContext context) {
     return Material(
       borderRadius: BorderRadius.circular(12),
-      color: Theme.of(context).colorScheme.secondaryContainer.withOpacity(0.8),
+      color: Theme.of(context).colorScheme.secondaryContainer,
       child: InkWell(
         borderRadius: BorderRadius.circular(12),
+        onTap: onPressed,
         child: SizedBox(
           width: 128,
           child: Padding(
