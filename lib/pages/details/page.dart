@@ -1,11 +1,7 @@
 import 'package:buhuiwangshi/models/matter_model.dart';
-import 'package:buhuiwangshi/pages/home/head_layer.dart';
 import 'package:buhuiwangshi/pages/details/check_card.dart';
 import 'package:buhuiwangshi/pages/details/detail_card.dart';
 import 'package:buhuiwangshi/pages/details/store.dart';
-import 'package:buhuiwangshi/pages/edit/page.dart';
-import 'package:buhuiwangshi/utils/animate_route.dart';
-import 'package:buhuiwangshi/utils/colors.dart';
 import 'package:buhuiwangshi/utils/standard.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -18,6 +14,7 @@ class DetailsPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return ChangeNotifierProvider(
+      key: const Key("DetailsPage"),
       create: (_) => DetailsPageStore(),
       child: _DetailsPageContent(matterId: matterId),
     );
@@ -33,6 +30,7 @@ class _DetailsPageContent extends StatelessWidget {
   Widget build(BuildContext context) {
     final store = Provider.of<DetailsPageStore>(context, listen: false);
     return standardContainer(
+      context: context,
       child: FutureBuilder<MatterModel?>(
         future: store.loadData(matterId),
         builder: (context, snapshot) {
@@ -41,100 +39,29 @@ class _DetailsPageContent extends StatelessWidget {
           } else if (snapshot.hasError || snapshot.data == null) {
             return const Center(child: Text("获取事项失败"));
           } else {
-            return const _PageContainer();
+            return const _Page();
           }
         },
       ),
-      context: context,
     );
   }
 }
 
-class _PageContainer extends StatelessWidget {
-  const _PageContainer();
+class _Page extends StatelessWidget {
+  const _Page();
 
   @override
   Widget build(BuildContext context) {
-    return Consumer<DetailsPageStore>(
-      child: const Column(
-        children: [
-          SizedBox(height: 16),
-          DetailCard(),
-          SizedBox(height: 16),
-          CheckCard(),
-        ],
-      ),
-      builder: (context, store, child) {
-        final color = Color(store.data!.color);
-
-        return Stack(
-          children: [
-            BottomLayer(
-              color: color,
-              child: const _BottomButtons(),
-            ),
-            SafeArea(
-              child: Container(
-                width: double.infinity,
-                margin: const EdgeInsets.only(top: 42),
-                decoration: BoxDecoration(
-                  color: surfaceColor,
-                  borderRadius: BorderRadius.circular(12),
-                ),
-                child: child,
-              ),
-            ),
-            const _HelpText(),
-          ],
-        );
-      },
-    );
-  }
-}
-
-class _BottomButtons extends StatelessWidget {
-  const _BottomButtons();
-
-  @override
-  Widget build(BuildContext context) {
-    final store = Provider.of<DetailsPageStore>(context, listen: false);
-    final matterId = store.data!.id;
-    return Row(
-      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+    return const Column(
       children: [
-        IconButton(
-          onPressed: () => Navigator.of(context).pop(),
-          icon: const Icon(Icons.arrow_circle_left_outlined, color: textColor),
+        Padding(
+          padding: EdgeInsets.symmetric(vertical: 4),
+          child: Icon(Icons.drag_handle, size: 32),
         ),
-        TextButton(
-          onPressed: () {
-            // 实现编辑功能
-            Navigator.of(context).push(animateRoute(
-                child: EditPage(matterId: matterId), direction: "horizontal"));
-          },
-          child: const Text(
-            "编辑",
-            style: TextStyle(fontSize: 18, color: textColor),
-          ),
-        )
+        DetailCard(),
+        SizedBox(height: 16),
+        CheckCard(),
       ],
-    );
-  }
-}
-
-class _HelpText extends StatelessWidget {
-  const _HelpText();
-
-  @override
-  Widget build(BuildContext context) {
-    return const Positioned(
-      left: 0,
-      right: 0,
-      bottom: 16,
-      child: Center(
-        child: Text("选择不同类型，探索更多模块",
-            style: TextStyle(fontSize: 14, color: Colors.black26)),
-      ),
     );
   }
 }

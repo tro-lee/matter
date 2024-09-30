@@ -1,4 +1,4 @@
-import 'package:buhuiwangshi/services/notification.dart';
+import 'package:buhuiwangshi/pages/details/page.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:buhuiwangshi/components/matter.dart';
@@ -79,7 +79,26 @@ class ContentLayer extends StatelessWidget {
   }
 
   void _onMatterPressed(BuildContext context, String matterId) {
-    NotificationService.showNotification('事项提醒', '事项提醒');
+    showModalBottomSheet(
+      backgroundColor: Theme.of(context).colorScheme.surface,
+      context: context,
+      isScrollControlled: true,
+      builder: (context) {
+        return DraggableScrollableSheet(
+          initialChildSize: 0.8,
+          minChildSize: 0.5,
+          maxChildSize: 1.0,
+          expand: false,
+          builder: (context, scrollController) {
+            return SingleChildScrollView(
+              controller: scrollController,
+              child: DetailsPage(matterId: matterId),
+            );
+          },
+        );
+      },
+    );
+    // NotificationService.showNotification('事项提醒', '事项提醒');
     // TODO: Implement navigation to details page
     // Navigator.of(context).push(animateRoute(
     //   direction: 'horizontal',

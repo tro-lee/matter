@@ -61,7 +61,7 @@ class RectButton extends StatelessWidget {
         child: Row(
           children: [
             SizedBox(
-              height: 58,
+              height: 56,
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
